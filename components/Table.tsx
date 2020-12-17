@@ -24,7 +24,7 @@ export class TableModul extends React.Component<{
                 margin: 10,
                 borderWidth: 2,
                 borderRadius: 30,
-                borderColor: 'gray'
+                borderColor: this.props.game ? 'transparent' : 'gray'
             },
             TextStyle: {
                 fontSize: 100

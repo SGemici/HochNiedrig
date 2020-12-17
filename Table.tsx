@@ -8,7 +8,18 @@ export class TableModul extends React.Component<{
     game: boolean,
     handleCardClicked: () => void
 }> {
+
+
+    _checkGameState() {
+        if (this.props.game) {
+            alert('Spiel beginnt');
+        }
+
+    }
+
+
     render() {
+
 
 
         const ImageModulStyles = StyleSheet.create({
@@ -26,15 +37,16 @@ export class TableModul extends React.Component<{
 
             },
             TextStyle: {
-                fontSize: 100
+                fontSize: 100,
             }
 
         });
 
 
         return (
+
             <TouchableOpacity style={ImageModulStyles.imageModul} onPress={() => this.props.handleCardClicked()}>
-                <Text style={ImageModulStyles.TextStyle} > {this.props.game ? '🃏' : 'Start'}</Text>
+                <Text style={ImageModulStyles.TextStyle} > {this.props.game ? '🃏' : 'Spiel start'}</Text>
             </TouchableOpacity>
         );
     }

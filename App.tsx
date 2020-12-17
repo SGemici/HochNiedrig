@@ -1,26 +1,38 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { PlayerControls } from './components/PlayerControls';
 import { PlayerStatistics } from './components/PlayerStatistics';
 import { TableModul } from './components/Table';
 
 
-export default function App() {
-  return (
-    <View style={styles.container}>
 
-      <PlayerControls inverseOrder={false} transformRotateZ={'180deg'} />
+export default class App extends React.Component {
 
-      <PlayerStatistics transformRotateZ={'180deg'} />
+  state = { game: false };
 
-      <TableModul />
+  startGame() {
+    //this.setState({ game: !this.state.game })
+    this.setState({ game: true })
+  }
 
-      <PlayerStatistics transformRotateZ={'0deg'} />
+  render() {
 
-      <PlayerControls inverseOrder={false} transformRotateZ={'0deg'} />
+    return (
+      <View style={styles.container} >
 
-    </View>
-  );
+        <PlayerControls inverseOrder={false} transformRotateZ={'180deg'} gameState={this.state.game} />
+
+        <PlayerStatistics transformRotateZ={'180deg'} GameState={this.state.game} />
+
+        <TableModul game={this.state.game} handleCardClicked={() => this.startGame()} />
+
+        <PlayerStatistics transformRotateZ={'0deg'} GameState={this.state.game} />
+
+        <PlayerControls inverseOrder={false} transformRotateZ={'0deg'} gameState={this.state.game} />
+
+      </View>
+    );
+  }
 }
 
 

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { GleichButton, HochButton, NiedrigerButton } from './Buttons';
+import { GleichButton, HochButton, NiedrigerButton } from './buttons';
 
 
 // STEUER-ELEMENT
@@ -45,9 +45,9 @@ export class PlayerControls extends React.Component<ControlElementProps> {
                     flexDirection: flexDirection, transform: [{ rotateZ: rotate }]
                 }]} >
                 {/* <NiedrigerButton GameState={this.props.gameState} /> */}
-                <NiedrigerButton GameState={this.props.gameState} />
-                <GleichButton GameState={this.props.gameState} />
-                <HochButton GameState={this.props.gameState} />
+                <NiedrigerButton />
+                <GleichButton />
+                <HochButton />
             </View>
         );
 

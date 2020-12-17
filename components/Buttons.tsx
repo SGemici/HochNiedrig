@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Button, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 
@@ -27,19 +27,23 @@ const ButtonElementsStyle = StyleSheet.create({
     },
 });
 
-export class NiedrigerButton extends Button {
+type ButtonProps = {
+    GameState: boolean;
+}
+
+export class NiedrigerButton extends React.Component<ButtonProps>{
     render() {
         return (
-            <TouchableOpacity onPress={() => alert('Niedriger geklickt!')}>
+            <TouchableOpacity onPress={() => this.props.GameState && alert('Niedriger geklickt!')}>
                 <Text style={[ButtonElementsStyle.ButtonStyle, {}]}>⬇️</Text>
             </TouchableOpacity>
         );
     }
 }
-export class GleichButton extends Button {
+export class GleichButton extends React.Component<ButtonProps>{
     render() {
         return (
-            <TouchableOpacity onPress={() => alert('Gleich geklickt!')}>
+            <TouchableOpacity onPress={() => this.props.GameState && alert('Gleich geklickt!')}>
                 <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={ButtonElementsStyle.linearGradient}>
                     <Text style={[ButtonElementsStyle.ButtonStyleExtra, {}]}>
                         =
@@ -51,10 +55,10 @@ export class GleichButton extends Button {
         );
     }
 }
-export class HochButton extends Button {
+export class HochButton extends React.Component<ButtonProps>{
     render() {
         return (
-            <TouchableOpacity onPress={() => alert('Höher geklickt!')}>
+            <TouchableOpacity onPress={() => this.props.GameState && alert('Höher geklickt!')}>
                 <Text style={[ButtonElementsStyle.ButtonStyle, {}]}>⬆️</Text>
             </TouchableOpacity>
         );

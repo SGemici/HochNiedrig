@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { PlayerAction } from '../business/types';
 import { GleichButton, HochButton, NiedrigerButton } from './Buttons';
 
 
@@ -9,6 +10,7 @@ type ControlElementProps = {
     inverseOrder: boolean;
     transformRotateZ: string;
     gameState: boolean;
+    handlePlayerAction: (action: PlayerAction) => void
 }
 export class PlayerControls extends React.Component<ControlElementProps> {
 
@@ -45,9 +47,9 @@ export class PlayerControls extends React.Component<ControlElementProps> {
                     flexDirection: flexDirection, transform: [{ rotateZ: rotate }]
                 }]} >
                 {/* <NiedrigerButton GameState={this.props.gameState} /> */}
-                <NiedrigerButton GameState={this.props.gameState} />
-                <GleichButton GameState={this.props.gameState} />
-                <HochButton GameState={this.props.gameState} />
+                <NiedrigerButton GameState={this.props.gameState} handleClick={() => this.props.handlePlayerAction(PlayerAction.CHOOSE_LOWER)} />
+                <GleichButton GameState={this.props.gameState} handleClick={() => this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)} />
+                <HochButton GameState={this.props.gameState} handleClick={() => this.props.handlePlayerAction(PlayerAction.CHOOSE_HIGHER)} />
             </View>
         );
 

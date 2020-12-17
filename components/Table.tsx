@@ -1,11 +1,13 @@
 
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, GestureResponderEvent } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, GestureResponderEvent, ImageSourcePropType } from 'react-native';
+import { CardDeck } from './CardDeck';
 
 // Karte-Element
 
 export class TableModul extends React.Component<{
     game: boolean,
+    card: ImageSourcePropType,
     handleCardClicked: () => void
 }> {
     render() {
@@ -22,8 +24,7 @@ export class TableModul extends React.Component<{
                 margin: 10,
                 borderWidth: 2,
                 borderRadius: 30,
-                borderColor: 'gray',
-
+                borderColor: 'gray'
             },
             TextStyle: {
                 fontSize: 100
@@ -34,7 +35,17 @@ export class TableModul extends React.Component<{
 
         return (
             <TouchableOpacity style={ImageModulStyles.imageModul} onPress={() => this.props.handleCardClicked()}>
-                <Text style={ImageModulStyles.TextStyle} > {this.props.game ? '🃏' : 'Start'}</Text>
+
+                {
+                    this.props.game ?
+                        <CardDeck card={this.props.card} />
+                        :
+                        <Text style={ImageModulStyles.TextStyle} > Start </Text>
+
+                }
+
+
+
             </TouchableOpacity>
         );
     }

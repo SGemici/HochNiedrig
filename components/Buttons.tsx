@@ -29,12 +29,13 @@ const ButtonElementsStyle = StyleSheet.create({
 
 type ButtonProps = {
     GameState: boolean;
+    handleClick: Function;
 }
 
 export class NiedrigerButton extends React.Component<ButtonProps>{
     render() {
         return (
-            <TouchableOpacity onPress={() => this.props.GameState && alert('Niedriger geklickt!')}>
+            <TouchableOpacity onPress={() => this.props.handleClick()}>
                 <Text style={[ButtonElementsStyle.ButtonStyle, {}]}>⬇️</Text>
             </TouchableOpacity>
         );
@@ -43,7 +44,7 @@ export class NiedrigerButton extends React.Component<ButtonProps>{
 export class GleichButton extends React.Component<ButtonProps>{
     render() {
         return (
-            <TouchableOpacity onPress={() => this.props.GameState && alert('Gleich geklickt!')}>
+            <TouchableOpacity onPress={() => this.props.handleClick()}>
                 <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={ButtonElementsStyle.linearGradient}>
                     <Text style={[ButtonElementsStyle.ButtonStyleExtra, {}]}>
                         =
@@ -58,7 +59,7 @@ export class GleichButton extends React.Component<ButtonProps>{
 export class HochButton extends React.Component<ButtonProps>{
     render() {
         return (
-            <TouchableOpacity onPress={() => this.props.GameState && alert('Höher geklickt!')}>
+            <TouchableOpacity onPress={() => this.props.handleClick()}>
                 <Text style={[ButtonElementsStyle.ButtonStyle, {}]}>⬆️</Text>
             </TouchableOpacity>
         );

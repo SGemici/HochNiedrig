@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 // BUTTON-ELEMENTE
@@ -48,7 +48,7 @@ export class GleichButton extends React.Component<ButtonProps>{
                 <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={ButtonElementsStyle.linearGradient}>
                     <Text style={[ButtonElementsStyle.ButtonStyleExtra, {}]}>
                         =
-            </Text>
+                    </Text>
                 </LinearGradient>
 
 

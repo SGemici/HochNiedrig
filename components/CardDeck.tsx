@@ -1,22 +1,21 @@
 import React from "react";
-import { Text, View, Image, ImageSourcePropType } from "react-native";
+import { View, Image, ImageSourcePropType } from "react-native";
 
 type Props = {
-    card: ImageSourcePropType;
-}
+  card: ImageSourcePropType;
+};
 
 export class CardDeck extends React.Component<Props> {
-    render() {
+  render() {
+    const width = 300;
 
-        const width = 300;
+    const ratio = 726 / 500;
+    const height = width * ratio;
 
-        const ratio = 726 / 500;
-        const height = width * ratio;
-
-        return (
-            <View>
-                <Image source={this.props.card} style={{ width, height }} />
-            </View>
-        )
-    }
+    return (
+      <View>
+        <Image source={this.props.card} style={{ width, height }} />
+      </View>
+    );
+  }
 }

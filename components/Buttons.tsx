@@ -31,12 +31,16 @@ const ButtonElementsStyle = StyleSheet.create({
 type ButtonProps = {
   GameState: boolean;
   handleClick: Function;
+  disabled: boolean;
 };
 
 export class NiedrigerButton extends React.Component<ButtonProps> {
   render() {
     return (
-      <TouchableOpacity onPress={() => this.props.handleClick()}>
+      <TouchableOpacity
+        disabled={this.props.disabled}
+        onPress={() => this.props.handleClick()}
+      >
         <Text style={[ButtonElementsStyle.ButtonStyle, {}]}>⬇️</Text>
       </TouchableOpacity>
     );
@@ -45,7 +49,10 @@ export class NiedrigerButton extends React.Component<ButtonProps> {
 export class GleichButton extends React.Component<ButtonProps> {
   render() {
     return (
-      <TouchableOpacity onPress={() => this.props.handleClick()}>
+      <TouchableOpacity
+        disabled={this.props.disabled}
+        onPress={() => this.props.handleClick()}
+      >
         <LinearGradient
           colors={["#4c669f", "#3b5998", "#192f6a"]}
           style={ButtonElementsStyle.linearGradient}
@@ -59,7 +66,10 @@ export class GleichButton extends React.Component<ButtonProps> {
 export class HochButton extends React.Component<ButtonProps> {
   render() {
     return (
-      <TouchableOpacity onPress={() => this.props.handleClick()}>
+      <TouchableOpacity
+        disabled={this.props.disabled}
+        onPress={() => this.props.handleClick()}
+      >
         <Text style={[ButtonElementsStyle.ButtonStyle, {}]}>⬆️</Text>
       </TouchableOpacity>
     );

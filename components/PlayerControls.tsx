@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { PlayerAction } from "../business/types";
+import { Player, PlayerAction } from "../business/types";
 import { GleichButton, HochButton, NiedrigerButton } from "./Buttons";
 
 // STEUER-ELEMENT
@@ -9,10 +9,20 @@ type ControlElementProps = {
   transformRotateZ: string;
   gameState: boolean;
   handlePlayerAction: (action: PlayerAction) => void;
+  activePlayer: Player;
+  ownerPlayerOfTheControl: Player;
 };
 export class PlayerControls extends React.Component<ControlElementProps> {
   render() {
-    const opacityValue = this.props.gameState ? 1 : 0.2;
+    const ownerIsActivePlayer =
+      this.props.ownerPlayerOfTheControl == this.props.activePlayer
+        ? true
+        : false;
+
+    const disableButton =
+      this.props.gameState && ownerIsActivePlayer ? false : true;
+
+    const opacityValue = this.props.gameState && ownerIsActivePlayer ? 1 : 0.2;
 
     const borderColor = "gray";
 
@@ -50,18 +60,21 @@ export class PlayerControls extends React.Component<ControlElementProps> {
           handleClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_LOWER)
           }
+          disabled={disableButton}
         />
         <GleichButton
           GameState={this.props.gameState}
           handleClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
           }
+          disabled={disableButton}
         />
         <HochButton
           GameState={this.props.gameState}
           handleClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_HIGHER)
           }
+          disabled={disableButton}
         />
       </View>
     );

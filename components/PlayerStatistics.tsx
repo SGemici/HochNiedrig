@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { Player } from "../business/types";
 
 // INFO-Bereich
 type InfoElementProps = {
   transformRotateZ: string;
   GameState: boolean;
+  Player: Player;
 };
 export class PlayerStatistics extends React.Component<InfoElementProps> {
   render() {
@@ -26,7 +28,7 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
           { transform: [{ rotateZ: this.props.transformRotateZ }] },
         ]}
       >
-        <Text>🍺 0</Text>
+        <Text>🍺 {this.props.Player.statisticDrinkNumber} </Text>
       </View>
     );
   }

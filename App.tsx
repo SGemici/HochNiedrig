@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, ColorPropType, StyleSheet, Text, View } from "react-native";
-import { cards, CardsValue } from "./business/cards";
+import { cards } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
 import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";

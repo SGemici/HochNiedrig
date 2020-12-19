@@ -1,6 +1,6 @@
-import React from "react";
-import { TouchableOpacity, StyleSheet, Text } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React from 'react';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const color = "white";
 
@@ -46,6 +46,7 @@ export class NiedrigerButton extends React.Component<ButtonProps> {
     );
   }
 }
+
 export class GleichButton extends React.Component<ButtonProps> {
   render() {
     return (
@@ -63,6 +64,7 @@ export class GleichButton extends React.Component<ButtonProps> {
     );
   }
 }
+
 export class HochButton extends React.Component<ButtonProps> {
   render() {
     return (

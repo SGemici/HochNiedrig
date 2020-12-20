@@ -2,12 +2,13 @@ import React from "react";
 import {
   Button,
   ColorPropType,
+  DevSettings,
   ImageSourcePropType,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import { cards } from "./business/cards";
+import { cardProperties, cards } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
 import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";
@@ -26,23 +27,25 @@ function getPlayer(
 }
 
 const players = [getPlayer("clb", 0, 0), getPlayer("sgm", 1, 0)];
-let shuffleCards = cards;
+var shuffleCards = cards;
 export default class App extends React.Component {
   state = {
     game: false,
     activePlayer: players[0],
-    activeCard: this.getFirstCard(),
-    PreviousCard: 0,
-    cardIndex: 1,
+    activeCard: shuffleCards[0],
+    previousCard: shuffleCards[0],
+    cardIndex: 0,
   };
 
+  //#region Start Game
   resetStates() {
+    shuffleCards = this.shuffle(cards);
     this.setState({
       game: false,
       activePlayer: players[0],
-      activeCard: this.getFirstCard(),
-      PreviousCard: 0,
-      cardIndex: 1,
+      activeCard: shuffleCards[0],
+      previousCard: shuffleCards[0],
+      cardIndex: 0,
     });
   }
   resetStatistics() {
@@ -53,11 +56,14 @@ export default class App extends React.Component {
   }
 
   startGame() {
-    //this.setState({ game: !this.state.game })
+    this.resetStates();
+    console.log("Start GAME ");
     this.setState({ game: true });
   }
+  //#endregion
 
-  shuffle(arra1: Array<ImageSourcePropType>) {
+  //#region Card Actions
+  shuffle(arra1: Array<cardProperties>) {
     var ctr = arra1.length,
       temp,
       index;
@@ -74,66 +80,83 @@ export default class App extends React.Component {
     }
     return arra1;
   }
+  //#endregion
 
-  getFirstCard() {
-    shuffleCards = this.shuffle(cards);
-    return cards[0];
-  }
-  getRandomCard() {
-    // const i = Math.floor(Math.random() * cards.length);
-    // return cards[i];
-    console.log("Cardindex: " + this.state.cardIndex);
-    return shuffleCards[this.state.cardIndex];
-  }
-
-  nextPlayer() {
+  //#region Nächster Player
+  getNextPlayer() {
     const currentPlayerIndex = this.state.activePlayer.index;
     const maxLength = players.length - 1;
     if (maxLength == currentPlayerIndex) {
-      this.setState({ activePlayer: players[0] });
+      return players[0];
     } else {
-      this.setState({ activePlayer: players[currentPlayerIndex + 1] });
+      return players[currentPlayerIndex + 1];
     }
   }
+  //#endregion
 
-  checkPlayerAction(action: PlayerAction) {
+  checkPlayerAction(
+    action: PlayerAction,
+    cardA: cardProperties,
+    cardB: cardProperties
+  ) {
     // Wertzuweisung
-    console.log("Prüfung:");
+    let CorrectAction = false;
     // Richtige Operationen
-    // ( ACTION = CHOOSE_EQUAL ) && ( PreviousCard ==  activeCard )
-    // ( ACTION = CHOOSE_LOWER ) && ( PreviousCard > activeCard )
-    // ( ACTION = CHOOSE_HIGHER ) && ( PreviousCard <  activeCard )
+    if (
+      // ( ACTION = CHOOSE_EQUAL ) && ( PreviousCard ==  activeCard )
+      action == PlayerAction.CHOOSE_EQUAL &&
+      cardB.rang == cardA.rang
+    ) {
+      CorrectAction = true;
+    } else if (
+      // ( ACTION = CHOOSE_LOWER ) && ( PreviousCard > activeCard )
+      action == PlayerAction.CHOOSE_LOWER &&
+      cardB.rang < cardA.rang
+    ) {
+      CorrectAction = true;
+    } else if (
+      // ( ACTION = CHOOSE_HIGHER ) && ( PreviousCard <  activeCard )
+      action == PlayerAction.CHOOSE_HIGHER &&
+      cardB.rang > cardA.rang
+    ) {
+      CorrectAction = true;
+    }
+
     // -----------
     // Ausgabe wenn die Operation falsch war
-
-    return false;
+    console.log("Action from player: ", CorrectAction);
+    return CorrectAction;
     // -----------
-  }
-
-  nextCard() {
-    const newCardIndex = this.state.cardIndex + 1;
-    this.setState({
-      cardIndex: newCardIndex,
-      activeCard: this.getRandomCard(),
-    });
-    this.nextPlayer();
   }
 
   onPlayerAction(action: PlayerAction, player: Player) {
+    console.log("-------------------");
     console.log("Start Action");
 
-    const message = `Player: ${player.name} pressed action ${action}`;
-    console.log(message);
-    this.setState({ PreviousCard: this.state.activeCard });
-    console.log("Alte Karte: " + this.state.PreviousCard);
-    this.nextCard();
-    console.log("Neue Karte: " + this.state.activeCard);
-    if (!this.checkPlayerAction(action)) {
-      players[player.index].statisticDrinkNumber =
-        players[player.index].statisticDrinkNumber + 1;
-    }
+    console.log(
+      `Player: ${player.name} pressed Action: ` + PlayerAction[action]
+    ); // ${action});
 
-    if (this.state.cardIndex == shuffleCards.length) {
+    const previousCard = shuffleCards[this.state.cardIndex];
+    const activeCard = shuffleCards[this.state.cardIndex + 1];
+    const cardIndex = this.state.cardIndex + 1;
+    const currentPlayer = this.state.activePlayer;
+    const activePlayer = this.getNextPlayer();
+
+    this.setState({
+      previousCard,
+      cardIndex,
+      activeCard,
+      activePlayer,
+    });
+
+    if (!this.checkPlayerAction(action, previousCard, activeCard)) {
+      alert("falsch");
+      currentPlayer.statisticDrinkNumber =
+        currentPlayer.statisticDrinkNumber + 1;
+    }
+    if (cardIndex == shuffleCards.length - 1) {
+      alert("Ende");
       this.resetStatistics();
       this.resetStates();
     }
@@ -164,7 +187,7 @@ export default class App extends React.Component {
         <TableModul
           game={this.state.game}
           handleCardClicked={() => this.startGame()}
-          card={this.state.activeCard}
+          card={this.state.activeCard.image}
         />
 
         <PlayerStatistics

@@ -57,7 +57,7 @@ export default class App extends React.Component {
 
   startGame() {
     this.resetStates();
-    console.log("Start GAME ");
+    console.log("Start GAME =  First Card: ", shuffleCards[0].name);
     this.setState({ game: true });
   }
   //#endregion
@@ -94,7 +94,7 @@ export default class App extends React.Component {
   }
   //#endregion
 
-  checkPlayerAction(
+  checkCards(
     action: PlayerAction,
     cardA: cardProperties,
     cardB: cardProperties
@@ -124,7 +124,14 @@ export default class App extends React.Component {
 
     // -----------
     // Ausgabe wenn die Operation falsch war
-    console.log("Action from player: ", CorrectAction);
+    console.log(
+      "Action from player: ",
+      CorrectAction,
+      " = PreviousCard: ",
+      cardA.name,
+      " - ActiveCard: ",
+      cardB.name
+    );
     return CorrectAction;
     // -----------
   }
@@ -150,7 +157,7 @@ export default class App extends React.Component {
       activePlayer,
     });
 
-    if (!this.checkPlayerAction(action, previousCard, activeCard)) {
+    if (!this.checkCards(action, previousCard, activeCard)) {
       alert("falsch");
       currentPlayer.statisticDrinkNumber =
         currentPlayer.statisticDrinkNumber + 1;

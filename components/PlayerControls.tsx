@@ -29,7 +29,7 @@ export class PlayerControls extends React.Component<ControlElementProps> {
     const ControlElementsStyle = StyleSheet.create({
       // Steuer-Bereich
       controlModul: {
-        margin: "5%",
+        margin: "10%",
         justifyContent: "space-evenly",
         width: "100%",
         flexDirection: "row",

@@ -25,7 +25,7 @@ export class TableModul extends React.Component<{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        margin: 10,
+        margin: 3,
         borderWidth: 2,
         borderRadius: 30,
         borderColor,

@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from "react-native";
 
-enum cardType {
+export enum cardType {
   red,
   black,
 }

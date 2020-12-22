@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { cardProperties, cards } from "./business/cards";
+import { cardProperties, cards, cardType } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
 import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";
@@ -109,6 +109,8 @@ export default class App extends React.Component {
     cardA: cardProperties,
     cardB: cardProperties
   ) {
+    // CARDA = PREVIOUSCARD
+    // CARDB = ACTIVE
     // Wertzuweisung
     let CorrectAction = false;
     // Richtige Operationen
@@ -128,6 +130,18 @@ export default class App extends React.Component {
       // ( ACTION = CHOOSE_HIGHER ) && ( PreviousCard <  activeCard )
       action == PlayerAction.CHOOSE_HIGHER &&
       cardB.rang > cardA.rang
+    ) {
+      CorrectAction = true;
+    } else if (
+      // ACTION == CHOOSE_RED &&  activeCard.Type == red
+      action == PlayerAction.CHOOSE_RED &&
+      cardB.type == cardType.red
+    ) {
+      CorrectAction = true;
+    } else if (
+      // ACTION == CHOOSE_BLACK &&  activeCard.Type == BLACK
+      action == PlayerAction.CHOOSE_BLACK &&
+      cardB.type == cardType.black
     ) {
       CorrectAction = true;
     }
@@ -200,8 +214,10 @@ export default class App extends React.Component {
     const displayPopupEndgame = this.state.showRestartPopup;
     //const displayPopupEndgame = true;
     const opacityValue = displayPopup || displayPopupEndgame ? 0.25 : 1;
-
     //const displayPopupEndgame = true;
+
+    const opacityValuePlayerSpecials = this.state.game ? 1 : 0.2;
+
     return (
       <View>
         <View style={[styles.container, { opacity: opacityValue }]}>
@@ -222,11 +238,55 @@ export default class App extends React.Component {
             Player={players[1]}
           />
 
-          <TableModul
-            game={this.state.game}
-            handleCardClicked={() => this.startGame()}
-            card={this.state.activeCard.image}
-          />
+          <View style={styles.ContainerCenter}>
+            <View
+              style={[
+                styles.PlayerSpecials,
+                {
+                  opacity: opacityValuePlayerSpecials,
+                },
+              ]}
+            >
+              <TouchableOpacity
+                disabled={!this.state.game}
+                onPress={() =>
+                  this.onPlayerAction(
+                    PlayerAction.CHOOSE_RED,
+                    this.state.activePlayer
+                  )
+                }
+              >
+                <Text style={styles.ButtonRedBlack}>🔴</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TableModul
+              game={this.state.game}
+              handleCardClicked={() => this.startGame()}
+              card={this.state.activeCard.image}
+            />
+
+            <View
+              style={[
+                styles.PlayerSpecials,
+                {
+                  opacity: opacityValuePlayerSpecials,
+                },
+              ]}
+            >
+              <TouchableOpacity
+                disabled={!this.state.game}
+                onPress={() =>
+                  this.onPlayerAction(
+                    PlayerAction.CHOOSE_BLACK,
+                    this.state.activePlayer
+                  )
+                }
+              >
+                <Text style={styles.ButtonRedBlack}>⚫️</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <PlayerStatistics
             transformRotateZ={"0deg"}
@@ -307,7 +367,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#ADD8E6",
     alignItems: "center",
-    padding: 30,
+    padding: 20,
     flexDirection: "column",
     //borderColor: 'red',
     //borderWidth: 2
@@ -319,5 +379,31 @@ const styles = StyleSheet.create({
   },
   popupPlay: {
     fontSize: 80,
+  },
+
+  ContainerCenter: {
+    alignSelf: "stretch",
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flexDirection: "row",
+    // borderWidth: 2,
+    // borderRadius: 30,
+  },
+
+  PlayerSpecials: {
+    alignSelf: "stretch",
+    display: "flex",
+    justifyContent: "center",
+    margin: 0,
+    // borderWidth: 1,
+    // borderRadius: 30,
+  },
+  ButtonRedBlack: {
+    fontSize: 35,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "gray",
   },
 });

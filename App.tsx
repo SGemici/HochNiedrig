@@ -2,7 +2,6 @@ import React from "react";
 import {
   Button,
   ColorPropType,
-  DevSettings,
   ImageSourcePropType,
   StyleSheet,
   Text,
@@ -13,6 +12,7 @@ import { cardProperties, cards } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
 import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";
+import { Popup } from "./components/Popup";
 import { TableModul } from "./components/Table";
 
 function getPlayer(
@@ -173,7 +173,7 @@ export default class App extends React.Component {
         currentPlayer.statisticDrinkNumber + 1;
       setTimeout(() => {
         this.continueGame();
-      }, 4000);
+      }, 4500);
     } else if (cardIndex == shuffleCards.length - 1) {
       this.setState({ showRestartPopup: true });
     }
@@ -198,6 +198,7 @@ export default class App extends React.Component {
     const displayPopup = this.state.showWrongActionPopup;
     //const displayPopup = true;
     const displayPopupEndgame = this.state.showRestartPopup;
+    //const displayPopupEndgame = true;
     const opacityValue = displayPopup || displayPopupEndgame ? 0.25 : 1;
 
     //const displayPopupEndgame = true;
@@ -246,58 +247,54 @@ export default class App extends React.Component {
         </View>
 
         {displayPopup && !displayPopupEndgame && (
-          <View style={styles.popup}>
-            <View style={styles.popupContent}>
-              <Text
-                style={[
-                  styles.popupText,
-                  {
-                    transform: [{ rotateZ: "180deg" }],
-                  },
-                ]}
-              >
-                FALSCH - TRINK🍺
-              </Text>
-              <TouchableOpacity onPress={() => this.continueGame()}>
-                <Text style={styles.popupPlay}>⏭</Text>
-              </TouchableOpacity>
-              <Text style={styles.popupText}>FALSCH TRINK 🍺</Text>
-            </View>
-          </View>
+          <Popup>
+            <Text
+              style={[
+                styles.popupText,
+                {
+                  transform: [{ rotateZ: "180deg" }],
+                },
+              ]}
+            >
+              FALSCH - TRINK🍺
+            </Text>
+            <TouchableOpacity onPress={() => this.continueGame()}>
+              <Text style={styles.popupPlay}>❎</Text>
+            </TouchableOpacity>
+            <Text style={styles.popupText}>FALSCH TRINK 🍺</Text>
+          </Popup>
         )}
 
         {displayPopupEndgame && (
-          <View style={styles.popup}>
-            <View style={styles.popupContent}>
-              <Text
-                style={[
-                  styles.popupText,
-                  {
-                    transform: [{ rotateZ: "180deg" }],
-                  },
-                ]}
-              >
-                Spiel beendet
-              </Text>
-              <Text
-                style={[
-                  styles.popupText,
-                  {
-                    transform: [{ rotateZ: "180deg" }],
-                  },
-                ]}
-              >
-                🍺 = {players[1].statisticDrinkNumber}
-              </Text>
-              <TouchableOpacity onPress={() => this.restart()}>
-                <Text style={styles.popupPlay}>🔄</Text>
-              </TouchableOpacity>
-              <Text style={styles.popupText}>
-                🍺 = {players[0].statisticDrinkNumber}
-              </Text>
-              <Text style={styles.popupText}>Spiel beendet</Text>
-            </View>
-          </View>
+          <Popup>
+            <Text
+              style={[
+                styles.popupText,
+                {
+                  transform: [{ rotateZ: "180deg" }],
+                },
+              ]}
+            >
+              Spiel beendet
+            </Text>
+            <Text
+              style={[
+                styles.popupText,
+                {
+                  transform: [{ rotateZ: "180deg" }],
+                },
+              ]}
+            >
+              🍺 = {players[1].statisticDrinkNumber}
+            </Text>
+            <TouchableOpacity onPress={() => this.restart()}>
+              <Text style={styles.popupPlay}>🔄</Text>
+            </TouchableOpacity>
+            <Text style={styles.popupText}>
+              🍺 = {players[0].statisticDrinkNumber}
+            </Text>
+            <Text style={styles.popupText}>Spiel beendet</Text>
+          </Popup>
         )}
       </View>
     );
@@ -314,23 +311,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     //borderColor: 'red',
     //borderWidth: 2
-  },
-  popup: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    opacity: 1,
-  },
-  popupContent: {
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderRadius: 30,
-    borderColor: "black",
-    borderWidth: 2,
-    backgroundColor: "#ADD8E6",
   },
   popupText: {
     fontSize: 30,

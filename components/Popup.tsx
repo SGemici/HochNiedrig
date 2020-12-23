@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { COLORS } from "../styles/colors";
 
 export function Popup(props: { children: React.ReactNode }) {
   const styles = StyleSheet.create({
@@ -17,9 +18,9 @@ export function Popup(props: { children: React.ReactNode }) {
       alignItems: "center",
       justifyContent: "space-between",
       borderRadius: 30,
-      borderColor: "black",
+      borderColor: COLORS.secondaryBorder,
       borderWidth: 2,
-      backgroundColor: "#ADD8E6",
+      backgroundColor: COLORS.appBackground,
     },
   });
 

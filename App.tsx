@@ -1,8 +1,5 @@
 import React from "react";
 import {
-  Button,
-  ColorPropType,
-  ImageSourcePropType,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,6 +11,7 @@ import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";
 import { Popup } from "./components/Popup";
 import { TableModul } from "./components/Table";
+import { COLORS } from "./styles/colors";
 
 function getPlayer(
   name: string,
@@ -365,17 +363,15 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     height: "100%",
-    backgroundColor: "#ADD8E6",
+    backgroundColor: COLORS.appBackground,
     alignItems: "center",
     padding: 20,
     flexDirection: "column",
-    //borderColor: 'red',
-    //borderWidth: 2
   },
   popupText: {
     fontSize: 30,
     margin: 30,
-    color: "red",
+    color: COLORS.popupText,
   },
   popupPlay: {
     fontSize: 80,
@@ -404,6 +400,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "gray",
+    borderColor: COLORS.primaryBorder,
   },
 });

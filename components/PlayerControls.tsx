@@ -1,8 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Player, PlayerAction } from "../business/types";
-import { GleichButton, HochButton, NiedrigerButton } from "./Buttons";
-
+import { TextButton } from "./atoms/TextButton";
 // STEUER-ELEMENT
 type ControlElementProps = {
   inverseOrder: boolean;
@@ -18,9 +17,6 @@ export class PlayerControls extends React.Component<ControlElementProps> {
       this.props.ownerPlayerOfTheControl == this.props.activePlayer
         ? true
         : false;
-
-    const disableButton =
-      this.props.gameState && ownerIsActivePlayer ? false : true;
 
     const opacityValue = this.props.gameState && ownerIsActivePlayer ? 1 : 0.2;
 
@@ -44,6 +40,9 @@ export class PlayerControls extends React.Component<ControlElementProps> {
 
     const flexDirection = this.props.inverseOrder ? "row-reverse" : "row";
     const rotate = this.props.transformRotateZ;
+
+    const buttonEnabled = this.props.gameState && ownerIsActivePlayer;
+
     return (
       <View
         style={[
@@ -54,28 +53,31 @@ export class PlayerControls extends React.Component<ControlElementProps> {
           },
         ]}
       >
-        {/* <NiedrigerButton GameState={this.props.gameState} /> */}
-        <NiedrigerButton
-          GameState={this.props.gameState}
-          handleClick={() =>
+        <TextButton
+          enabled={buttonEnabled}
+          onClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_LOWER)
           }
-          disabled={disableButton}
-        />
-        <GleichButton
-          GameState={this.props.gameState}
-          handleClick={() =>
+        >
+          ⬇️
+        </TextButton>
+        <TextButton
+          enabled={buttonEnabled}
+          withGradient={true}
+          onClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
           }
-          disabled={disableButton}
-        />
-        <HochButton
-          GameState={this.props.gameState}
-          handleClick={() =>
+        >
+          =
+        </TextButton>
+        <TextButton
+          enabled={buttonEnabled}
+          onClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_HIGHER)
           }
-          disabled={disableButton}
-        />
+        >
+          ⬆️
+        </TextButton>
       </View>
     );
   }

@@ -9,7 +9,7 @@ function getPlayer(name: string, statisticDrinkNumber: number): Player {
 }
 
 export class Game {
-  private players: Player[];
+  readonly players: Player[];
   private cards: Card[];
 
   activePlayer: Player;

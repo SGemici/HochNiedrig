@@ -27,9 +27,10 @@ const ButtonElementsStyle = StyleSheet.create({
 });
 
 type ButtonProps = {
-  enabled: boolean;
+  enabled?: boolean;
   onClick: Function;
   withGradient?: boolean;
+  style?: Object;
 };
 export class TextButton extends React.Component<ButtonProps> {
   // TODO fix eslint issue, seems like we are not the only ones
@@ -52,7 +53,9 @@ export class TextButton extends React.Component<ButtonProps> {
       : ButtonElementsStyle.ButtonStyle;
 
     const textElement = (
-      <Text style={[textStyle, {}]}>{this.props.children}</Text>
+      <Text style={[this.props.style || textStyle, {}]}>
+        {this.props.children}
+      </Text>
     );
 
     if (this.props.withGradient) {
@@ -63,9 +66,21 @@ export class TextButton extends React.Component<ButtonProps> {
   }
 
   render() {
+
+    // this sucks hard
+    // use default props
+    let enabled;
+    if (this.props.enabled === false) {
+      // enabled is undefined
+      // fallback to true
+      enabled = false;
+    } else {
+      enabled = true;
+    }
+
     return (
       <TouchableOpacity
-        disabled={!this.props.enabled}
+        disabled={!enabled}
         onPress={() => this.props.onClick()}
       >
         {this.getContent()}

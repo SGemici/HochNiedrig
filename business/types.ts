@@ -6,8 +6,12 @@ export enum PlayerAction {
   CHOOSE_BLACK,
 }
 
+export enum PlayerActionResult {
+  INCORRECT,
+  CORRECT,
+}
+
 export type Player = {
   name: string;
-  index: number;
   statisticDrinkNumber: number;
 };

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { cardProperties, cards, cardType } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
 import { PlayerControls } from "./components/PlayerControls";

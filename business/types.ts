@@ -3,7 +3,7 @@ export enum PlayerAction {
   CHOOSE_LOWER,
   CHOOSE_HIGHER,
   CHOOSE_RED,
-  CHOOSE_BLACK
+  CHOOSE_BLACK,
 }
 
 export type Player = {

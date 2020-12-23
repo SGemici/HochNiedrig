@@ -30,6 +30,7 @@ type ButtonProps = {
   enabled: boolean;
   onClick: Function;
   withGradient?: boolean;
+  style?: Object;
 };
 export class TextButton extends React.Component<ButtonProps> {
   // TODO fix eslint issue, seems like we are not the only ones
@@ -52,7 +53,7 @@ export class TextButton extends React.Component<ButtonProps> {
       : ButtonElementsStyle.ButtonStyle;
 
     const textElement = (
-      <Text style={[textStyle, {}]}>{this.props.children}</Text>
+      <Text style={[this.props.style || textStyle, {}]}>{this.props.children}</Text>
     );
 
     if (this.props.withGradient) {

@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { cardProperties, cards, cardType } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
+import { Emoji, EmojiButton } from "./components/atoms/EmojiButton";
+import { TextButton } from "./components/atoms/TextButton";
 import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";
 import { Popup } from "./components/Popup";
@@ -153,6 +155,22 @@ export default class App extends React.Component {
     // -----------
   }
 
+  // eslint-disable-next-line no-undef
+  withVeticalAlignment(el: JSX.Element, opacity: number) {
+    return (
+      <View
+        style={[
+          styles.PlayerSpecials,
+          {
+            opacity,
+          },
+        ]}
+      >
+        {el}
+      </View>
+    );
+  }
+
   onPlayerAction(action: PlayerAction, player: Player) {
     console.log("-------------------");
     console.log("Start Action");
@@ -232,26 +250,19 @@ export default class App extends React.Component {
           />
 
           <View style={styles.ContainerCenter}>
-            <View
-              style={[
-                styles.PlayerSpecials,
-                {
-                  opacity: opacityValuePlayerSpecials,
-                },
-              ]}
-            >
-              <TouchableOpacity
-                disabled={!this.state.game}
-                onPress={() =>
+            {this.withVeticalAlignment(
+              <EmojiButton
+                enabled={this.state.game}
+                emoji={Emoji.redCircle}
+                onClick={() =>
                   this.onPlayerAction(
                     PlayerAction.CHOOSE_RED,
                     this.state.activePlayer
                   )
                 }
-              >
-                <Text style={styles.ButtonRedBlack}>🔴</Text>
-              </TouchableOpacity>
-            </View>
+              />,
+              opacityValuePlayerSpecials
+            )}
 
             <TableModul
               game={this.state.game}
@@ -259,26 +270,18 @@ export default class App extends React.Component {
               card={this.state.activeCard.image}
             />
 
-            <View
-              style={[
-                styles.PlayerSpecials,
-                {
-                  opacity: opacityValuePlayerSpecials,
-                },
-              ]}
-            >
-              <TouchableOpacity
-                disabled={!this.state.game}
-                onPress={() =>
+            {this.withVeticalAlignment(
+              <EmojiButton
+                enabled={this.state.game}
+                emoji={Emoji.blackCircle}
+                onClick={() =>
                   this.onPlayerAction(
                     PlayerAction.CHOOSE_BLACK,
                     this.state.activePlayer
                   )
                 }
-              >
-                <Text style={styles.ButtonRedBlack}>⚫️</Text>
-              </TouchableOpacity>
-            </View>
+              />, opacityValuePlayerSpecials
+            )}
           </View>
 
           <PlayerStatistics
@@ -390,11 +393,5 @@ const styles = StyleSheet.create({
     margin: 0,
     // borderWidth: 1,
     // borderRadius: 30,
-  },
-  ButtonRedBlack: {
-    fontSize: 35,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: COLORS.primaryBorder,
   },
 });

@@ -27,7 +27,7 @@ const ButtonElementsStyle = StyleSheet.create({
 });
 
 type ButtonProps = {
-  enabled: boolean;
+  enabled?: boolean;
   onClick: Function;
   withGradient?: boolean;
   style?: Object;
@@ -66,7 +66,7 @@ export class TextButton extends React.Component<ButtonProps> {
   render() {
     return (
       <TouchableOpacity
-        disabled={!this.props.enabled}
+        disabled={!(this.props.enabled || true)}
         onPress={() => this.props.onClick()}
       >
         {this.getContent()}

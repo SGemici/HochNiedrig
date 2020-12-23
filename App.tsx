@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { cardProperties, cards, cardType } from "./business/cards";
 import { Player, PlayerAction } from "./business/types";
 import { Emoji, EmojiButton } from "./components/atoms/EmojiButton";
+import { RotatableText } from "./components/atoms/RotatableText";
 import { TextButton } from "./components/atoms/TextButton";
 import { PlayerControls } from "./components/PlayerControls";
 import { PlayerStatistics } from "./components/PlayerStatistics";
@@ -223,7 +224,7 @@ export default class App extends React.Component {
     const displayPopup = this.state.showWrongActionPopup;
     //const displayPopup = true;
     const displayPopupEndgame = this.state.showRestartPopup;
-    //const displayPopupEndgame = true;
+    // const displayPopupEndgame = true;
     const opacityValue = displayPopup || displayPopupEndgame ? 0.25 : 1;
     //const displayPopupEndgame = true;
 
@@ -280,7 +281,8 @@ export default class App extends React.Component {
                     this.state.activePlayer
                   )
                 }
-              />, opacityValuePlayerSpecials
+              />,
+              opacityValuePlayerSpecials
             )}
           </View>
 
@@ -304,52 +306,28 @@ export default class App extends React.Component {
 
         {displayPopup && !displayPopupEndgame && (
           <Popup>
-            <Text
-              style={[
-                styles.popupText,
-                {
-                  transform: [{ rotateZ: "180deg" }],
-                },
-              ]}
-            >
-              FALSCH - TRINK🍺
-            </Text>
-            <TouchableOpacity onPress={() => this.continueGame()}>
-              <Text style={styles.popupPlay}>❎</Text>
-            </TouchableOpacity>
-            <Text style={styles.popupText}>FALSCH TRINK 🍺</Text>
+            <RotatableText text="FALSCH - TRINK🍺" rotate={true} />
+            <TextButton onClick={() => this.restart()} style={styles.popupPlay}>
+              ❎
+            </TextButton>
+            <RotatableText text="FALSCH - TRINK🍺" />
           </Popup>
         )}
 
         {displayPopupEndgame && (
           <Popup>
-            <Text
-              style={[
-                styles.popupText,
-                {
-                  transform: [{ rotateZ: "180deg" }],
-                },
-              ]}
-            >
-              Spiel beendet
-            </Text>
-            <Text
-              style={[
-                styles.popupText,
-                {
-                  transform: [{ rotateZ: "180deg" }],
-                },
-              ]}
-            >
-              🍺 = {players[1].statisticDrinkNumber}
-            </Text>
-            <TouchableOpacity onPress={() => this.restart()}>
-              <Text style={styles.popupPlay}>🔄</Text>
-            </TouchableOpacity>
-            <Text style={styles.popupText}>
-              🍺 = {players[0].statisticDrinkNumber}
-            </Text>
-            <Text style={styles.popupText}>Spiel beendet</Text>
+            <RotatableText rotate={true} text="Spiel beendet" />
+            <RotatableText
+              rotate={true}
+              text={`🍺 = ${players[1].statisticDrinkNumber}`}
+            />
+
+            <TextButton onClick={() => this.restart()} style={styles.popupPlay}>
+              🔄
+            </TextButton>
+
+            <RotatableText text={`🍺 = ${players[0].statisticDrinkNumber}`} />
+            <RotatableText text="Spiel beendet" />
           </Popup>
         )}
       </View>
@@ -365,11 +343,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     flexDirection: "column",
-  },
-  popupText: {
-    fontSize: 30,
-    margin: 30,
-    color: COLORS.popupText,
   },
   popupPlay: {
     fontSize: 80,

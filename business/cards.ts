@@ -5,14 +5,14 @@ export enum cardType {
   black,
 }
 
-export type cardProperties = {
+export type Card = {
   image: ImageSourcePropType;
   rang: number;
   name: string;
   type: cardType;
 };
 
-export const cards = [
+export const cards: Card[] = [
   {
     image: require("../assets/cards/2_of_diamonds.png"),
     rang: 2,
@@ -325,4 +325,4 @@ export const cards = [
     name: "ace_of_spades",
     type: cardType.black,
   },
-] as cardProperties[]; //as ImageSourcePropType[];
+];

@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { cardProperties, cards, cardType } from "./business/cards";
-import { Player, PlayerAction } from "./business/types";
+import { StyleSheet, View } from "react-native";
+import { Card } from "./business/cards";
+import { Game } from "./business/game";
+import { Player, PlayerAction, PlayerActionResult } from "./business/types";
 import { Emoji, EmojiButton } from "./components/atoms/EmojiButton";
 import { RotatableText } from "./components/atoms/RotatableText";
 import { TextButton } from "./components/atoms/TextButton";
@@ -11,224 +12,130 @@ import { Popup } from "./components/Popup";
 import { TableModul } from "./components/Table";
 import { COLORS } from "./styles/colors";
 
-function getPlayer(
-  name: string,
-  index: number,
-  statisticDrinkNumber: number
-): Player {
-  return {
-    name: name,
-    index: index,
-    statisticDrinkNumber: statisticDrinkNumber,
-  };
+// eslint-disable-next-line no-undef
+function withVeticalAlignment(el: JSX.Element, opacity: number) {
+  return (
+    <View
+      style={[
+        styles.PlayerSpecials,
+        {
+          opacity,
+        },
+      ]}
+    >
+      {el}
+    </View>
+  );
 }
 
-const players = [getPlayer("clb", 0, 0), getPlayer("sgm", 1, 0)];
-var shuffleCards = cards;
-export default class App extends React.Component {
-  state = {
-    game: false,
-    activePlayer: players[0],
-    activeCard: shuffleCards[0],
-    previousCard: shuffleCards[0],
-    cardIndex: 0,
+type AppSate = {
+  gameStarted: boolean;
+  activePlayer: Player;
+  firstPlayer: Player;
+  secondPlayer: Player;
+  activeCard: Card;
+  previousCard: Card;
+  showWrongActionPopup: boolean;
+  showEndGamePopup: boolean;
+};
+
+function getInitialStateForGame(game: Game) {
+  return {gameStarted: false,
+    activePlayer: game.activePlayer,
+    firstPlayer: game.firstPlayer,
+    secondPlayer: game.secondPlayer,
+    activeCard: game.activeCard,
+    previousCard: game.previousCard,
     showWrongActionPopup: false,
-    showRestartPopup: false,
-  };
+    showEndGamePopup: false}
+}
+
+export default class App extends React.Component<{}, AppSate> {
+  // TODO: instantiation not required because reset() is called in constructor
+  game: Game = new Game();
+
+  constructor(props: {}) {
+    super(props);
+    this.state = getInitialStateForGame(this.game);
+  }
 
   //#region Start Game
-  resetStates() {
-    shuffleCards = this.shuffle(cards);
+  reset() {
+    this.game = new Game();
+    this.setState(getInitialStateForGame(this.game));
+  }
+
+  syncGameState() {
     this.setState({
-      game: false,
-      activePlayer: players[0],
-      activeCard: shuffleCards[0],
-      previousCard: shuffleCards[0],
-      cardIndex: 0,
-      showWrongActionPopup: false,
-      showRestartPopup: false,
+      activePlayer: this.game.activePlayer,
+      activeCard: this.game.activeCard,
+      previousCard: this.game.previousCard,
     });
   }
-  resetStatistics() {
-    var i;
-    for (i = 0; i < players.length; i++) {
-      players[i].statisticDrinkNumber = 0;
+
+  onPlayerAction(action: PlayerAction) {
+    const result = this.game.applyAction(action);
+    if (result === PlayerActionResult.INCORRECT) {
+      this.showIncorrectActionPopup().then(() => {
+        if (this.game.isOver()) {
+          this.endGame();
+        }
+      });
+    } else {
+      if (this.game.isOver()) {
+        this.endGame();
+      }
     }
+
+    this.syncGameState();
+  }
+
+  hideIncorrectActionPopup() {
+    console.log("hideIncorrectActionPopup");
+    this.setState({
+      showWrongActionPopup: false,
+    });
+    if (this.game.isOver()) {
+      this.endGame();
+    }
+  }
+
+  showIncorrectActionPopup() {
+    this.setState({
+      showWrongActionPopup: true,
+    });
+
+    return new Promise<void>((resolve) =>
+      setTimeout(() => {
+        this.setState({
+          showWrongActionPopup: false,
+        });
+        resolve();
+        // TODO add contant for 4500 millis
+      }, 4500)
+    );
   }
 
   startGame() {
-    if (!this.state.game) {
-      this.resetStates();
-    }
-    console.log(
-      "Start GAME =  current Card: ",
-      shuffleCards[this.state.cardIndex].name
-    );
-    this.setState({ game: true });
-  }
-  //#endregion
-
-  //#region Card Actions
-  shuffle(arra1: Array<cardProperties>) {
-    var ctr = arra1.length,
-      temp,
-      index;
-    // While there are elements in the array
-    while (ctr > 0) {
-      // Pick a random index
-      index = Math.floor(Math.random() * ctr);
-      // Decrease ctr by 1
-      ctr--;
-      // And swap the last element with it
-      temp = arra1[ctr];
-      arra1[ctr] = arra1[index];
-      arra1[index] = temp;
-    }
-    return arra1;
-  }
-  //#endregion
-
-  //#region Nächster Player
-  getNextPlayer() {
-    const currentPlayerIndex = this.state.activePlayer.index;
-    const maxLength = players.length - 1;
-    if (maxLength == currentPlayerIndex) {
-      return players[0];
-    } else {
-      return players[currentPlayerIndex + 1];
-    }
-  }
-  //#endregion
-
-  checkCards(
-    action: PlayerAction,
-    cardA: cardProperties,
-    cardB: cardProperties
-  ) {
-    // CARDA = PREVIOUSCARD
-    // CARDB = ACTIVE
-    // Wertzuweisung
-    let CorrectAction = false;
-    // Richtige Operationen
-    if (
-      // ( ACTION = CHOOSE_EQUAL ) && ( PreviousCard ==  activeCard )
-      action == PlayerAction.CHOOSE_EQUAL &&
-      cardB.rang == cardA.rang
-    ) {
-      CorrectAction = true;
-    } else if (
-      // ( ACTION = CHOOSE_LOWER ) && ( PreviousCard > activeCard )
-      action == PlayerAction.CHOOSE_LOWER &&
-      cardB.rang < cardA.rang
-    ) {
-      CorrectAction = true;
-    } else if (
-      // ( ACTION = CHOOSE_HIGHER ) && ( PreviousCard <  activeCard )
-      action == PlayerAction.CHOOSE_HIGHER &&
-      cardB.rang > cardA.rang
-    ) {
-      CorrectAction = true;
-    } else if (
-      // ACTION == CHOOSE_RED &&  activeCard.Type == red
-      action == PlayerAction.CHOOSE_RED &&
-      cardB.type == cardType.red
-    ) {
-      CorrectAction = true;
-    } else if (
-      // ACTION == CHOOSE_BLACK &&  activeCard.Type == BLACK
-      action == PlayerAction.CHOOSE_BLACK &&
-      cardB.type == cardType.black
-    ) {
-      CorrectAction = true;
-    }
-
-    // -----------
-    // Ausgabe wenn die Operation falsch war
-    console.log(
-      "Action from player: ",
-      CorrectAction,
-      " = PreviousCard: ",
-      cardA.name,
-      " - ActiveCard: ",
-      cardB.name
-    );
-    return CorrectAction;
-    // -----------
+    this.setState({ gameStarted: true });
   }
 
-  // eslint-disable-next-line no-undef
-  withVeticalAlignment(el: JSX.Element, opacity: number) {
-    return (
-      <View
-        style={[
-          styles.PlayerSpecials,
-          {
-            opacity,
-          },
-        ]}
-      >
-        {el}
-      </View>
-    );
-  }
-
-  onPlayerAction(action: PlayerAction, player: Player) {
-    console.log("-------------------");
-    console.log("Start Action");
-
-    console.log(
-      `Player: ${player.name} pressed Action: ` + PlayerAction[action]
-    ); // ${action});
-
-    const previousCard = shuffleCards[this.state.cardIndex];
-    const activeCard = shuffleCards[this.state.cardIndex + 1];
-    const cardIndex = this.state.cardIndex + 1;
-    const currentPlayer = this.state.activePlayer;
-    const activePlayer = this.getNextPlayer();
-
-    this.setState({
-      previousCard,
-      cardIndex,
-      activeCard,
-      activePlayer,
-    });
-
-    if (!this.checkCards(action, previousCard, activeCard)) {
-      this.setState({ showWrongActionPopup: true });
-      currentPlayer.statisticDrinkNumber =
-        currentPlayer.statisticDrinkNumber + 1;
-      setTimeout(() => {
-        this.continueGame();
-      }, 4500);
-    } else if (cardIndex == shuffleCards.length - 1) {
-      this.setState({ showRestartPopup: true });
-    }
-    console.log("End Action");
-    console.log("-------------------");
-  }
-
-  continueGame() {
-    if (this.state.cardIndex != shuffleCards.length - 1) {
-      this.setState({ showWrongActionPopup: false });
-    } else {
-      this.setState({ showWrongActionPopup: false, showRestartPopup: true });
-    }
-  }
-
-  restart() {
-    this.resetStatistics();
-    this.resetStates();
+  endGame() {
+    this.setState({ showEndGamePopup: true, gameStarted: false });
   }
 
   render() {
-    const displayPopup = this.state.showWrongActionPopup;
+
+    console.log(JSON.stringify(this.state, null, 4));
+
+    const showWrongActionPopup = this.state.showWrongActionPopup;
     //const displayPopup = true;
-    const displayPopupEndgame = this.state.showRestartPopup;
+    const showEndGamePopup = this.state.showEndGamePopup;
     // const displayPopupEndgame = true;
-    const opacityValue = displayPopup || displayPopupEndgame ? 0.25 : 1;
+    const opacityValue = showEndGamePopup || showWrongActionPopup ? 0.25 : 1;
     //const displayPopupEndgame = true;
 
-    const opacityValuePlayerSpecials = this.state.game ? 1 : 0.2;
+    const opacityValuePlayerSpecials = this.state.gameStarted ? 1 : 0.2;
 
     return (
       <View>
@@ -236,51 +143,37 @@ export default class App extends React.Component {
           <PlayerControls
             inverseOrder={false}
             transformRotateZ={"180deg"}
-            gameState={this.state.game}
-            handlePlayerAction={(action) =>
-              this.onPlayerAction(action, players[1])
-            }
-            activePlayer={players[1]}
-            ownerPlayerOfTheControl={this.state.activePlayer}
+            enabled={this.state.gameStarted && this.state.activePlayer === this.state.secondPlayer}
+            handlePlayerAction={(action) => this.onPlayerAction(action)}
           />
 
           <PlayerStatistics
             transformRotateZ={"180deg"}
-            GameState={this.state.game}
-            Player={players[1]}
+            GameState={this.state.gameStarted}
+            Player={this.state.secondPlayer}
           />
 
           <View style={styles.ContainerCenter}>
-            {this.withVeticalAlignment(
+            {withVeticalAlignment(
               <EmojiButton
-                enabled={this.state.game}
+                enabled={this.state.gameStarted}
                 emoji={Emoji.redCircle}
-                onClick={() =>
-                  this.onPlayerAction(
-                    PlayerAction.CHOOSE_RED,
-                    this.state.activePlayer
-                  )
-                }
+                onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
               />,
               opacityValuePlayerSpecials
             )}
 
             <TableModul
-              game={this.state.game}
+              game={this.state.gameStarted}
               handleCardClicked={() => this.startGame()}
               card={this.state.activeCard.image}
             />
 
-            {this.withVeticalAlignment(
+            {withVeticalAlignment(
               <EmojiButton
-                enabled={this.state.game}
+                enabled={this.state.gameStarted}
                 emoji={Emoji.blackCircle}
-                onClick={() =>
-                  this.onPlayerAction(
-                    PlayerAction.CHOOSE_BLACK,
-                    this.state.activePlayer
-                  )
-                }
+                onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
               />,
               opacityValuePlayerSpecials
             )}
@@ -288,45 +181,46 @@ export default class App extends React.Component {
 
           <PlayerStatistics
             transformRotateZ={"0deg"}
-            GameState={this.state.game}
-            Player={players[0]}
+            GameState={this.state.gameStarted}
+            Player={this.state.firstPlayer}
           />
 
           <PlayerControls
             inverseOrder={false}
             transformRotateZ={"0deg"}
-            gameState={this.state.game}
-            handlePlayerAction={(action) =>
-              this.onPlayerAction(action, players[0])
-            }
-            activePlayer={players[0]}
-            ownerPlayerOfTheControl={this.state.activePlayer}
+            handlePlayerAction={(action) => this.onPlayerAction(action)}
+            enabled={this.state.gameStarted && this.state.activePlayer === this.state.firstPlayer}
           />
         </View>
 
-        {displayPopup && !displayPopupEndgame && (
+        {showWrongActionPopup && (
           <Popup>
             <RotatableText text="FALSCH - TRINK🍺" rotate={true} />
-            <TextButton onClick={() => this.restart()} style={styles.popupPlay}>
+            <TextButton
+              onClick={() => this.hideIncorrectActionPopup()}
+              style={styles.popupPlay}
+            >
               ❎
             </TextButton>
             <RotatableText text="FALSCH - TRINK🍺" />
           </Popup>
         )}
 
-        {displayPopupEndgame && (
+        {showEndGamePopup && (
           <Popup>
             <RotatableText rotate={true} text="Spiel beendet" />
             <RotatableText
               rotate={true}
-              text={`🍺 = ${players[1].statisticDrinkNumber}`}
+              text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
             />
 
-            <TextButton onClick={() => this.restart()} style={styles.popupPlay}>
+            <TextButton onClick={() => this.reset()} style={styles.popupPlay}>
               🔄
             </TextButton>
 
-            <RotatableText text={`🍺 = ${players[0].statisticDrinkNumber}`} />
+            <RotatableText
+              text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
+            />
             <RotatableText text="Spiel beendet" />
           </Popup>
         )}

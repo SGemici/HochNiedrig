@@ -6,19 +6,13 @@ import { TextButton } from "./atoms/TextButton";
 type ControlElementProps = {
   inverseOrder: boolean;
   transformRotateZ: string;
-  gameState: boolean;
   handlePlayerAction: (action: PlayerAction) => void;
-  activePlayer: Player;
-  ownerPlayerOfTheControl: Player;
+  enabled: boolean;
 };
 export class PlayerControls extends React.Component<ControlElementProps> {
   render() {
-    const ownerIsActivePlayer =
-      this.props.ownerPlayerOfTheControl == this.props.activePlayer
-        ? true
-        : false;
-
-    const opacityValue = this.props.gameState && ownerIsActivePlayer ? 1 : 0.2;
+   
+    const opacityValue = this.props.enabled ? 1 : 0.2;
 
     const borderColor = "gray";
 
@@ -41,8 +35,6 @@ export class PlayerControls extends React.Component<ControlElementProps> {
     const flexDirection = this.props.inverseOrder ? "row-reverse" : "row";
     const rotate = this.props.transformRotateZ;
 
-    const buttonEnabled = this.props.gameState && ownerIsActivePlayer;
-
     return (
       <View
         style={[
@@ -54,7 +46,7 @@ export class PlayerControls extends React.Component<ControlElementProps> {
         ]}
       >
         <TextButton
-          enabled={buttonEnabled}
+          enabled={this.props.enabled}
           onClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_LOWER)
           }
@@ -62,7 +54,7 @@ export class PlayerControls extends React.Component<ControlElementProps> {
           ⬇️
         </TextButton>
         <TextButton
-          enabled={buttonEnabled}
+          enabled={this.props.enabled}
           withGradient={true}
           onClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
@@ -71,7 +63,7 @@ export class PlayerControls extends React.Component<ControlElementProps> {
           =
         </TextButton>
         <TextButton
-          enabled={buttonEnabled}
+          enabled={this.props.enabled}
           onClick={() =>
             this.props.handlePlayerAction(PlayerAction.CHOOSE_HIGHER)
           }

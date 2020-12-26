@@ -89,7 +89,6 @@ export class Game {
     const result = this.checkAction(action);
     if (result === PlayerActionResult.INCORRECT) {
       this.activePlayer.statisticDrinkNumber++;
-      setTimeout(function(){ alert("Hello"); }, 3000);
     }
 
     this.activePlayer = this.getNextPlayer();

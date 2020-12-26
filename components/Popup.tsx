@@ -2,31 +2,39 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { COLORS } from "../styles/colors";
 
-export function Popup(props: { children: React.ReactNode }) {
-  const styles = StyleSheet.create({
-    // Bild-Bereich
-    popup: {
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      opacity: 1,
-    },
-    popupContent: {
-      alignItems: "center",
-      justifyContent: "space-between",
-      borderRadius: 30,
-      borderColor: COLORS.secondaryBorder,
-      borderWidth: 2,
-      backgroundColor: COLORS.appBackground,
-    },
-  });
+type PopupProps = {
+  showBackgroundAlert?: COLORS;
+};
+// export function Popup(props: { children: React.ReactNode }) {
+export class Popup extends React.Component<PopupProps> {
+  render() {
+    const styles = StyleSheet.create({
+      // Bild-Bereich
+      // eslint-disable-next-line react-native/no-color-literals
+      popup: {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: 1,
+        backgroundColor: this.props.showBackgroundAlert,
+      },
+      popupContent: {
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderRadius: 30,
+        borderColor: COLORS.secondaryBorder,
+        borderWidth: 2,
+        backgroundColor: COLORS.appBackground,
+      },
+    });
 
-  return (
-    <View style={styles.popup}>
-      <View style={styles.popupContent}>{props.children}</View>
-    </View>
-  );
+    return (
+      <View style={styles.popup}>
+        <View style={styles.popupContent}>{this.props.children}</View>
+      </View>
+    );
+  }
 }

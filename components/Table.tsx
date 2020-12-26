@@ -5,6 +5,7 @@ import {
   Text,
   ImageSourcePropType,
 } from "react-native";
+import { COLORS } from "../styles/colors";
 import { CardDeck } from "./CardDeck";
 
 // Karte-Element
@@ -32,6 +33,7 @@ export class TableModul extends React.Component<{
       },
       TextStyle: {
         fontSize: 100,
+        color: COLORS.startTextColor,
       },
     });
 

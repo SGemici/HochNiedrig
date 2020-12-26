@@ -37,6 +37,8 @@ type AppSate = {
   previousCard: Card;
   showWrongActionPopup: boolean;
   showEndGamePopup: boolean;
+  showPopupBackgroundAlert: COLORS;
+  showBackgrounAlert: COLORS;
 };
 
 function getInitialStateForGame(game: Game) {
@@ -49,6 +51,8 @@ function getInitialStateForGame(game: Game) {
     previousCard: game.previousCard,
     showWrongActionPopup: false,
     showEndGamePopup: false,
+    showPopupBackgroundAlert: COLORS.transparent,
+    showBackgrounAlert: COLORS.appBackground,
   };
 }
 
@@ -86,9 +90,17 @@ export default class App extends React.Component<{}, AppSate> {
     } else {
       if (this.game.isOver()) {
         this.endGame();
+      } else {
+        this.setState({
+          showBackgrounAlert: COLORS.alertBackgroundGreen,
+        });
+        setTimeout(() => {
+          this.setState({
+            showBackgrounAlert: COLORS.appBackground,
+          });
+        }, 160);
       }
     }
-
     this.syncGameState();
   }
 
@@ -105,7 +117,13 @@ export default class App extends React.Component<{}, AppSate> {
   showIncorrectActionPopup() {
     this.setState({
       showWrongActionPopup: true,
+      showPopupBackgroundAlert: COLORS.alertBackgroundRed,
     });
+    setTimeout(() => {
+      this.setState({
+        showPopupBackgroundAlert: COLORS.transparent,
+      });
+    }, 160);
 
     return new Promise<void>((resolve) =>
       setTimeout(() => {
@@ -140,7 +158,15 @@ export default class App extends React.Component<{}, AppSate> {
 
     return (
       <View>
-        <View style={[styles.container, { opacity: opacityValue }]}>
+        <View
+          style={[
+            styles.container,
+            {
+              opacity: opacityValue,
+              backgroundColor: this.state.showBackgrounAlert,
+            },
+          ]}
+        >
           <PlayerControls
             inverseOrder={false}
             transformRotateZ={"180deg"}
@@ -201,7 +227,7 @@ export default class App extends React.Component<{}, AppSate> {
         </View>
 
         {showWrongActionPopup && (
-          <Popup>
+          <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
             <RotatableText text="FALSCH - TRINK🍺" rotate={true} />
             <TextButton
               onClick={() => this.hideIncorrectActionPopup()}

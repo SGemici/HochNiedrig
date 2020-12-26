@@ -40,14 +40,16 @@ type AppSate = {
 };
 
 function getInitialStateForGame(game: Game) {
-  return {gameStarted: false,
+  return {
+    gameStarted: false,
     activePlayer: game.activePlayer,
     firstPlayer: game.firstPlayer,
     secondPlayer: game.secondPlayer,
     activeCard: game.activeCard,
     previousCard: game.previousCard,
     showWrongActionPopup: false,
-    showEndGamePopup: false}
+    showEndGamePopup: false,
+  };
 }
 
 export default class App extends React.Component<{}, AppSate> {
@@ -125,13 +127,12 @@ export default class App extends React.Component<{}, AppSate> {
   }
 
   render() {
-
     console.log(JSON.stringify(this.state, null, 4));
 
     const showWrongActionPopup = this.state.showWrongActionPopup;
-    //const displayPopup = true;
+    //const showWrongActionPopup = true;
     const showEndGamePopup = this.state.showEndGamePopup;
-    // const displayPopupEndgame = true;
+    //const showEndGamePopup = true;
     const opacityValue = showEndGamePopup || showWrongActionPopup ? 0.25 : 1;
     //const displayPopupEndgame = true;
 
@@ -143,7 +144,10 @@ export default class App extends React.Component<{}, AppSate> {
           <PlayerControls
             inverseOrder={false}
             transformRotateZ={"180deg"}
-            enabled={this.state.gameStarted && this.state.activePlayer === this.state.secondPlayer}
+            enabled={
+              this.state.gameStarted &&
+              this.state.activePlayer === this.state.secondPlayer
+            }
             handlePlayerAction={(action) => this.onPlayerAction(action)}
           />
 
@@ -189,7 +193,10 @@ export default class App extends React.Component<{}, AppSate> {
             inverseOrder={false}
             transformRotateZ={"0deg"}
             handlePlayerAction={(action) => this.onPlayerAction(action)}
-            enabled={this.state.gameStarted && this.state.activePlayer === this.state.firstPlayer}
+            enabled={
+              this.state.gameStarted &&
+              this.state.activePlayer === this.state.firstPlayer
+            }
           />
         </View>
 

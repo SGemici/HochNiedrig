@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-color-literals */
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Player } from "../business/types";
@@ -25,6 +26,9 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
         marginTop: MarginTopValue,
         marginBottom: MarginBottomValue,
       },
+      TextModul: {
+        color: "white",
+      },
     });
     return (
       <View
@@ -33,7 +37,9 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
           { transform: [{ rotateZ: this.props.transformRotateZ }] },
         ]}
       >
-        <Text>🍺 {this.props.Player.statisticDrinkNumber} </Text>
+        <Text style={InfoStyle.TextModul}>
+          🍺 {this.props.Player.statisticDrinkNumber}{" "}
+        </Text>
       </View>
     );
   }

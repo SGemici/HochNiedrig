@@ -20,13 +20,13 @@ export class Game {
   cardIndex = 0;
 
   constructor() {
+    this.cards = this.shuffle(cards);
     this.players = [getPlayer("Player ONE", 0), getPlayer("Player TWO", 0)];
     this.activePlayer = this.players[0];
     this.firstPlayer = this.players[0];
     this.secondPlayer = this.players[1];
     this.activeCard = cards[0];
     this.previousCard = cards[0];
-    this.cards = this.shuffle(cards);
   }
 
   shuffle(arra1: Array<Card>) {
@@ -89,6 +89,7 @@ export class Game {
     const result = this.checkAction(action);
     if (result === PlayerActionResult.INCORRECT) {
       this.activePlayer.statisticDrinkNumber++;
+      setTimeout(function(){ alert("Hello"); }, 3000);
     }
 
     this.activePlayer = this.getNextPlayer();

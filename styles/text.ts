@@ -7,4 +7,7 @@ export const TextStyles = StyleSheet.create({
     margin: 30,
     color: COLORS.popupText,
   },
+  CardInfos: {
+    color: COLORS.startTextColor,
+  },
 });

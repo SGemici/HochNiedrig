@@ -39,6 +39,7 @@ type AppSate = {
   showEndGamePopup: boolean;
   showPopupBackgroundAlert: COLORS;
   showBackgrounAlert: COLORS;
+  laidsCards: number;
 };
 
 function getInitialStateForGame(game: Game) {
@@ -53,6 +54,7 @@ function getInitialStateForGame(game: Game) {
     showEndGamePopup: false,
     showPopupBackgroundAlert: COLORS.transparent,
     showBackgrounAlert: COLORS.appBackground,
+    laidsCards: 1,
   };
 }
 
@@ -76,6 +78,7 @@ export default class App extends React.Component<{}, AppSate> {
       activePlayer: this.game.activePlayer,
       activeCard: this.game.activeCard,
       previousCard: this.game.previousCard,
+      laidsCards: this.state.laidsCards + 1,
     });
   }
 
@@ -197,6 +200,7 @@ export default class App extends React.Component<{}, AppSate> {
               game={this.state.gameStarted}
               handleCardClicked={() => this.startGame()}
               card={this.state.activeCard.image}
+              laidsCards={this.state.laidsCards}
             />
 
             {withVeticalAlignment(

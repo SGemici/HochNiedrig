@@ -14,3 +14,18 @@ export class RotatableText extends React.Component<Props> {
     );
   }
 }
+
+export class RotatableTextTable extends React.Component<Props> {
+  render() {
+    const transform = this.props.rotate ? [{ rotateZ: "180deg" }] : [];
+    const marginRight = this.props.rotate ? 10 : 0;
+    const marginLeft = !this.props.rotate ? 10 : 0;
+    return (
+      <Text
+        style={[TextStyles.CardInfos, { transform, marginRight, marginLeft }]}
+      >
+        {this.props.text}
+      </Text>
+    );
+  }
+}

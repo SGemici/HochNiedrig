@@ -144,7 +144,7 @@ export default class App extends React.Component<{}, AppSate> {
   }
 
   endGame() {
-    this.setState({ showEndGamePopup: true, gameStarted: false });
+    this.setState({ showEndGamePopup: true, gameStarted: true });
   }
 
   render() {

@@ -41,6 +41,8 @@ export class BlinkView extends React.Component<ViewProps> {
       // <BlinkView blinking={blink}> before TABEL.tsx =return (<TouchableOpacity ...
       // Then it flashes continue but blink=False
       this.componentWillUnmount();
+    } else {
+      this.componentDidMount();
     }
 
     return (

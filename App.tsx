@@ -40,6 +40,7 @@ type AppSate = {
   showPopupBackgroundAlert: COLORS;
   showBackgrounAlert: COLORS;
   laidsCards: number;
+  PopupWrongActionTime: number;
 };
 
 function getInitialStateForGame(game: Game) {
@@ -55,10 +56,14 @@ function getInitialStateForGame(game: Game) {
     showPopupBackgroundAlert: COLORS.transparent,
     showBackgrounAlert: COLORS.appBackground,
     laidsCards: 1,
+    PopupWrongActionTime: 5,
   };
 }
 
 export default class App extends React.Component<{}, AppSate> {
+  PopuptimerIntevalId: any = null;
+  PopuptimerAlertId: any = null;
+
   // TODO: instantiation not required because reset() is called in constructor
   game: Game = new Game();
 
@@ -107,10 +112,21 @@ export default class App extends React.Component<{}, AppSate> {
     this.syncGameState();
   }
 
+  startPopuptimer() {
+    clearInterval(this.PopuptimerIntevalId);
+    clearTimeout(this.PopuptimerAlertId);
+    this.PopuptimerIntevalId = setInterval((): void => {
+      const PopupWrongActionTime = this.state.PopupWrongActionTime - 1;
+      this.setState({ PopupWrongActionTime });
+    }, 1000 + 1);
+  }
+
   hideIncorrectActionPopup() {
     console.log("hideIncorrectActionPopup");
+    clearInterval(this.PopuptimerIntevalId);
     this.setState({
       showWrongActionPopup: false,
+      PopupWrongActionTime: 5,
     });
     if (this.game.isOver()) {
       this.endGame();
@@ -128,14 +144,19 @@ export default class App extends React.Component<{}, AppSate> {
       });
     }, 160);
 
-    return new Promise<void>((resolve) =>
-      setTimeout(() => {
-        this.setState({
-          showWrongActionPopup: false,
-        });
-        resolve();
-        // TODO add contant for 4500 millis
-      }, 4500)
+    this.startPopuptimer();
+
+    return new Promise<void>(
+      (resolve) =>
+        (this.PopuptimerAlertId = setTimeout(() => {
+          clearInterval(this.PopuptimerIntevalId);
+          this.setState({
+            showWrongActionPopup: false,
+            PopupWrongActionTime: 5,
+          });
+          resolve();
+          // TODO add contant for 4500 millis
+        }, 5000))
     );
   }
 
@@ -159,6 +180,7 @@ export default class App extends React.Component<{}, AppSate> {
 
     const opacityValuePlayerSpecials = this.state.gameStarted ? 1 : 0.2;
 
+    const Popuptime = "" + this.state.PopupWrongActionTime;
     return (
       <View>
         <View
@@ -233,12 +255,16 @@ export default class App extends React.Component<{}, AppSate> {
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
             <RotatableText text="FALSCH - TRINK🍺" rotate={true} />
-            <TextButton
-              onClick={() => this.hideIncorrectActionPopup()}
-              style={styles.popupPlay}
-            >
-              ❎
-            </TextButton>
+            <View style={styles.PopupTime}>
+              <RotatableText text={Popuptime} rotate={true} />
+              <TextButton
+                onClick={() => this.hideIncorrectActionPopup()}
+                style={styles.popupPlay}
+              >
+                ❎
+              </TextButton>
+              <RotatableText text={Popuptime} />
+            </View>
             <RotatableText text="FALSCH - TRINK🍺" />
           </Popup>
         )}
@@ -297,5 +323,12 @@ const styles = StyleSheet.create({
     margin: 0,
     // borderWidth: 1,
     // borderRadius: 30,
+  },
+  PopupTime: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    alignSelf: "stretch",
   },
 });

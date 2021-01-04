@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   popupPlay: {
-    fontSize: 80,
+    fontSize: 65,
   },
 
   ContainerCenter: {

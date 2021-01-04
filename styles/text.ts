@@ -3,8 +3,8 @@ import { COLORS } from "./colors";
 
 export const TextStyles = StyleSheet.create({
   popup: {
-    fontSize: 30,
-    margin: 30,
+    fontSize: 29,
+    margin: 10,
     color: COLORS.popupText,
   },
   CardInfos: {

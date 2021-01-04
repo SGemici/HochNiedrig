@@ -18,7 +18,7 @@ export class Popup extends React.Component<PopupProps> {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        opacity: 1,
+        opacity: 0.93,
         backgroundColor: this.props.showBackgroundAlert,
       },
       popupContent: {

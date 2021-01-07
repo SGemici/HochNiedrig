@@ -4,14 +4,16 @@ import { TextStyles } from "../../styles/text";
 type Props = {
   text: string;
   rotate?: boolean;
+  style?: Object;
 };
 
 export class RotatableText extends React.Component<Props> {
   render() {
+    const styles =
+      this.props.style == undefined ? TextStyles.popup : this.props.style;
+
     const transform = this.props.rotate ? [{ rotateZ: "180deg" }] : [];
-    return (
-      <Text style={[TextStyles.popup, { transform }]}>{this.props.text}</Text>
-    );
+    return <Text style={[styles, { transform }]}>{this.props.text}</Text>;
   }
 }
 

@@ -2,7 +2,12 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "./business/cards";
 import { Game } from "./business/game";
-import { Player, PlayerAction, PlayerActionResult } from "./business/types";
+import {
+  GameView,
+  Player,
+  PlayerAction,
+  PlayerActionResult,
+} from "./business/types";
 import { Emoji, EmojiButton } from "./components/atoms/EmojiButton";
 import { RotatableText } from "./components/atoms/RotatableText";
 import { TextButton } from "./components/atoms/TextButton";
@@ -41,6 +46,7 @@ type AppSate = {
   showBackgrounAlert: COLORS;
   laidsCards: number;
   PopupWrongActionTime: number;
+  gameView: GameView;
 };
 
 function getInitialStateForGame(game: Game) {
@@ -57,6 +63,7 @@ function getInitialStateForGame(game: Game) {
     showBackgrounAlert: COLORS.appBackground,
     laidsCards: 1,
     PopupWrongActionTime: 5,
+    gameView: GameView.MAIN_VIEW,
   };
 }
 
@@ -168,6 +175,10 @@ export default class App extends React.Component<{}, AppSate> {
     this.setState({ showEndGamePopup: true, gameStarted: true });
   }
 
+  onGameTypeChoice(typ: GameView) {
+    this.setState({ gameView: GameView.TWO_PLAYER_VIEW });
+  }
+
   render() {
     console.log(JSON.stringify(this.state, null, 4));
 
@@ -181,76 +192,161 @@ export default class App extends React.Component<{}, AppSate> {
     const opacityValuePlayerSpecials = this.state.gameStarted ? 1 : 0.2;
 
     const Popuptime = "" + this.state.PopupWrongActionTime;
+
+    const showMainMenu =
+      this.state.gameView == GameView.MAIN_VIEW ? true : false;
+    const showTwoPlayerGame =
+      this.state.gameView == GameView.TWO_PLAYER_VIEW ? true : false;
+
     return (
       <View>
-        <View
-          style={[
-            styles.container,
-            {
-              opacity: opacityValue,
-              backgroundColor: this.state.showBackgrounAlert,
-            },
-          ]}
-        >
-          <PlayerControls
-            inverseOrder={false}
-            transformRotateZ={"180deg"}
-            enabled={
-              this.state.gameStarted &&
-              this.state.activePlayer === this.state.secondPlayer
-            }
-            handlePlayerAction={(action) => this.onPlayerAction(action)}
-          />
+        {showMainMenu && (
+          <View>
+            <View style={[styles.containerMainMenu, {}]}>
+              <View style={[styles.HOCHNIEDRIG_LOGO, {}]}>
+                <RotatableText
+                  text="Hoch-Niedrig"
+                  rotate={false}
+                  style={[
+                    styles.HOCHNIEDRIG_LOGO_TEXT,
+                    { fontSize: 50, width: "100%" },
+                  ]}
+                />
+              </View>
 
-          <PlayerStatistics
-            transformRotateZ={"180deg"}
-            GameState={this.state.gameStarted}
-            Player={this.state.secondPlayer}
-          />
+              <View style={[styles.MainGamePlayer, {}]}>
+                <View style={[styles.MainGamePlayerText, {}]}>
+                  <RotatableText
+                    text="Spieleranzahl"
+                    rotate={false}
+                    style={styles.MainGamePlayerText}
+                  />
+                </View>
+                <View style={[styles.MainGamePlayerChoice, {}]}>
+                  <TextButton
+                    enabled={false}
+                    onClick={() => this.reset()}
+                    style={styles.MainGamePlayerButtons}
+                  >
+                    1️⃣
+                  </TextButton>
+                  <TextButton
+                    onClick={() =>
+                      this.onGameTypeChoice(GameView.TWO_PLAYER_VIEW)
+                    }
+                    style={styles.MainGamePlayerButtons}
+                  >
+                    2️⃣
+                  </TextButton>
+                </View>
+                <View style={[styles.MainGamePlayerChoice, {}]}>
+                  <TextButton
+                    enabled={false}
+                    onClick={() => this.reset()}
+                    style={styles.MainGamePlayerButtons}
+                  >
+                    3️⃣
+                  </TextButton>
+                  <TextButton
+                    enabled={false}
+                    onClick={() => this.reset()}
+                    style={styles.MainGamePlayerButtons}
+                  >
+                    4️⃣
+                  </TextButton>
+                </View>
+              </View>
 
-          <View style={styles.ContainerCenter}>
-            {withVeticalAlignment(
-              <EmojiButton
-                enabled={this.state.gameStarted}
-                emoji={Emoji.redCircle}
-                onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
-              />,
-              opacityValuePlayerSpecials
-            )}
+              <View style={[styles.MainGameSettings, {}]}>
+                <TextButton
+                  enabled={false}
+                  onClick={() => this.reset()}
+                  style={styles.MainGameSettingsButtons}
+                >
+                  📖
+                </TextButton>
+                <TextButton
+                  enabled={false}
+                  onClick={() => this.reset()}
+                  style={styles.MainGameSettingsButtons}
+                >
+                  ⚙️
+                </TextButton>
+              </View>
+            </View>
+          </View>
+        )}
 
-            <TableModul
-              game={this.state.gameStarted}
-              handleCardClicked={() => this.startGame()}
-              card={this.state.activeCard.image}
-              laidsCards={this.state.laidsCards}
+        {showTwoPlayerGame && (
+          <View
+            style={[
+              styles.container,
+              {
+                opacity: opacityValue,
+                backgroundColor: this.state.showBackgrounAlert,
+              },
+            ]}
+          >
+            <PlayerControls
+              inverseOrder={false}
+              transformRotateZ={"180deg"}
+              enabled={
+                this.state.gameStarted &&
+                this.state.activePlayer === this.state.secondPlayer
+              }
+              handlePlayerAction={(action) => this.onPlayerAction(action)}
             />
 
-            {withVeticalAlignment(
-              <EmojiButton
-                enabled={this.state.gameStarted}
-                emoji={Emoji.blackCircle}
-                onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
-              />,
-              opacityValuePlayerSpecials
-            )}
+            <PlayerStatistics
+              transformRotateZ={"180deg"}
+              GameState={this.state.gameStarted}
+              Player={this.state.secondPlayer}
+            />
+
+            <View style={styles.ContainerCenter}>
+              {withVeticalAlignment(
+                <EmojiButton
+                  enabled={this.state.gameStarted}
+                  emoji={Emoji.redCircle}
+                  onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
+                />,
+                opacityValuePlayerSpecials
+              )}
+
+              <TableModul
+                game={this.state.gameStarted}
+                handleCardClicked={() => this.startGame()}
+                card={this.state.activeCard.image}
+                laidsCards={this.state.laidsCards}
+              />
+
+              {withVeticalAlignment(
+                <EmojiButton
+                  enabled={this.state.gameStarted}
+                  emoji={Emoji.blackCircle}
+                  onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
+                />,
+                opacityValuePlayerSpecials
+              )}
+            </View>
+
+            <PlayerStatistics
+              transformRotateZ={"0deg"}
+              GameState={this.state.gameStarted}
+              Player={this.state.firstPlayer}
+            />
+
+            <PlayerControls
+              inverseOrder={false}
+              transformRotateZ={"0deg"}
+              handlePlayerAction={(action) => this.onPlayerAction(action)}
+              enabled={
+                this.state.gameStarted &&
+                this.state.activePlayer === this.state.firstPlayer
+              }
+            />
           </View>
-
-          <PlayerStatistics
-            transformRotateZ={"0deg"}
-            GameState={this.state.gameStarted}
-            Player={this.state.firstPlayer}
-          />
-
-          <PlayerControls
-            inverseOrder={false}
-            transformRotateZ={"0deg"}
-            handlePlayerAction={(action) => this.onPlayerAction(action)}
-            enabled={
-              this.state.gameStarted &&
-              this.state.activePlayer === this.state.firstPlayer
-            }
-          />
-        </View>
+        )}
 
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
@@ -293,6 +389,87 @@ export default class App extends React.Component<{}, AppSate> {
 }
 
 const styles = StyleSheet.create({
+  containerMainMenu: {
+    display: "flex",
+    height: "100%",
+    backgroundColor: COLORS.appBackground,
+    alignItems: "center",
+    padding: 20,
+    justifyContent: "space-between",
+  },
+
+  HOCHNIEDRIG_LOGO: {
+    backgroundColor: "red",
+    alignSelf: "center",
+    marginTop: 40,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  HOCHNIEDRIG_LOGO_TEXT: {
+    color: COLORS.startTextColor,
+    fontSize: 30,
+    display: "flex",
+    alignItems: "center",
+    margin: 10,
+  },
+
+  MainGameSettingsButtons: {
+    margin: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+    borderWidth: 2,
+    borderRadius: 10,
+    fontSize: 40,
+    borderColor: COLORS.primaryBorder,
+    overflow: "hidden",
+  },
+  MainGamePlayer: {
+    // backgroundColor: COLORS.alertBackgroundGreen,
+    display: "flex",
+    flexGrow: 0.1,
+    margin: 20,
+    width: "80%",
+    borderWidth: 1,
+    borderRadius: 20,
+    alignContent: "center",
+    //flexDirection: "row",
+  },
+  MainGamePlayerChoice: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    margin: 10,
+  },
+  MainGamePlayerText: {
+    color: COLORS.startTextColor,
+    fontSize: 30,
+    display: "flex",
+    alignItems: "center",
+    margin: 10,
+    fontStyle: "italic",
+    textDecorationLine: "underline",
+    textDecorationStyle: "dotted",
+  },
+  MainGamePlayerButtons: {
+    // backgroundColor: "red",
+    margin: 5,
+    fontSize: 70,
+    color: COLORS.startTextColor,
+    overflow: "hidden",
+    borderColor: COLORS.primaryBorder,
+  },
+
+  MainGameSettings: {
+    margin: 30,
+    width: "100%",
+    // backgroundColor: COLORS.alertBackgroundRed,
+    borderRadius: 12,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
   container: {
     display: "flex",
     height: "100%",

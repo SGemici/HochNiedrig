@@ -13,8 +13,8 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
   render() {
     const OpacityValue = this.props.GameState ? 1 : 0.2;
 
-    const MarginTopValue = this.props.transformRotateZ == "0deg" ? 25 : 0;
-    const MarginBottomValue = this.props.transformRotateZ == "180deg" ? 25 : 0;
+    const MarginTopValue = this.props.transformRotateZ == "0deg" ? 7 : 0;
+    const MarginBottomValue = this.props.transformRotateZ == "180deg" ? 7 : 0;
 
     const InfoStyle = StyleSheet.create({
       InfoModul: {

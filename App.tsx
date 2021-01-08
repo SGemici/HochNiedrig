@@ -66,6 +66,22 @@ function getInitialStateForGame(game: Game) {
     gameView: GameView.MAIN_VIEW,
   };
 }
+function getInitialStateForNewGame(game: Game) {
+  return {
+    gameStarted: false,
+    activePlayer: game.activePlayer,
+    firstPlayer: game.firstPlayer,
+    secondPlayer: game.secondPlayer,
+    activeCard: game.activeCard,
+    previousCard: game.previousCard,
+    showWrongActionPopup: false,
+    showEndGamePopup: false,
+    showPopupBackgroundAlert: COLORS.transparent,
+    showBackgrounAlert: COLORS.appBackground,
+    laidsCards: 1,
+    PopupWrongActionTime: 5,
+  };
+}
 
 export default class App extends React.Component<{}, AppSate> {
   PopuptimerIntevalId: any = null;
@@ -83,6 +99,10 @@ export default class App extends React.Component<{}, AppSate> {
   reset() {
     this.game = new Game();
     this.setState(getInitialStateForGame(this.game));
+  }
+  restartGame() {
+    this.game = new Game();
+    this.setState(getInitialStateForNewGame(this.game));
   }
 
   syncGameState() {
@@ -345,6 +365,20 @@ export default class App extends React.Component<{}, AppSate> {
                 this.state.activePlayer === this.state.firstPlayer
               }
             />
+            <View style={styles.GameControlSettings}>
+              <TextButton
+                onClick={() => this.reset()}
+                style={styles.GameControlSettingsButtons}
+              >
+                ⏪
+              </TextButton>
+              <TextButton
+                onClick={() => this.restartGame()}
+                style={styles.GameControlSettingsButtons}
+              >
+                🔄
+              </TextButton>
+            </View>
           </View>
         )}
 
@@ -373,7 +407,10 @@ export default class App extends React.Component<{}, AppSate> {
               text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
             />
 
-            <TextButton onClick={() => this.reset()} style={styles.popupPlay}>
+            <TextButton
+              onClick={() => this.restartGame()}
+              style={styles.popupPlay}
+            >
               🔄
             </TextButton>
 
@@ -507,5 +544,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     alignSelf: "stretch",
+  },
+
+  GameControlSettings: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    width: "100%",
+  },
+  GameControlSettingsButtons: {
+    fontSize: 30,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });

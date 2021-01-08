@@ -8,18 +8,20 @@ type ControlElementProps = {
   transformRotateZ: string;
   handlePlayerAction: (action: PlayerAction) => void;
   enabled: boolean;
+  margin?: string;
 };
 export class PlayerControls extends React.Component<ControlElementProps> {
   render() {
-   
     const opacityValue = this.props.enabled ? 1 : 0.2;
 
     const borderColor = "gray";
 
+    const margin = this.props.margin == undefined ? "10%" : this.props.margin;
+
     const ControlElementsStyle = StyleSheet.create({
       // Steuer-Bereich
       controlModul: {
-        margin: "10%",
+        margin: margin,
         justifyContent: "space-evenly",
         width: "100%",
         flexDirection: "row",

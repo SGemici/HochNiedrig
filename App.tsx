@@ -16,6 +16,7 @@ import { PlayerStatistics } from "./components/PlayerStatistics";
 import { Popup } from "./components/Popup";
 import { TableModul } from "./components/Table";
 import { COLORS } from "./styles/colors";
+import { TextStyles } from "./styles/text";
 
 // eslint-disable-next-line no-undef
 function withVeticalAlignment(el: JSX.Element, opacity: number) {
@@ -47,6 +48,8 @@ type AppSate = {
   laidsCards: number;
   PopupWrongActionTime: number;
   gameView: GameView;
+  showRestartPopup: Boolean;
+  showExitGamePopup: Boolean;
 };
 
 function getInitialStateForGame(game: Game) {
@@ -64,6 +67,8 @@ function getInitialStateForGame(game: Game) {
     laidsCards: 1,
     PopupWrongActionTime: 5,
     gameView: GameView.MAIN_VIEW,
+    showRestartPopup: false,
+    showExitGamePopup: false,
   };
 }
 function getInitialStateForNewGame(game: Game) {
@@ -80,6 +85,8 @@ function getInitialStateForNewGame(game: Game) {
     showBackgrounAlert: COLORS.appBackground,
     laidsCards: 1,
     PopupWrongActionTime: 5,
+    showRestartPopup: false,
+    showExitGamePopup: false,
   };
 }
 
@@ -199,6 +206,28 @@ export default class App extends React.Component<{}, AppSate> {
     this.setState({ gameView: GameView.TWO_PLAYER_VIEW });
   }
 
+  onGameSettingsRestartButton() {
+    if (this.state.gameStarted) {
+      this.setState({ showRestartPopup: true });
+    }
+  }
+  onGameSettingsRestartYes() {
+    this.restartGame();
+  }
+  onGameSettingsRestartNo() {
+    this.setState({ showRestartPopup: false });
+  }
+
+  onGameSettingsExitGameButton() {
+    this.setState({ showExitGamePopup: true });
+  }
+  onGameSettingsExitYes() {
+    this.reset();
+  }
+  onGameSettingsExitNo() {
+    this.setState({ showExitGamePopup: false });
+  }
+
   render() {
     console.log(JSON.stringify(this.state, null, 4));
 
@@ -206,8 +235,25 @@ export default class App extends React.Component<{}, AppSate> {
     //const showWrongActionPopup = true;
     const showEndGamePopup = this.state.showEndGamePopup;
     //const showEndGamePopup = true;
-    const opacityValue = showEndGamePopup || showWrongActionPopup ? 0.25 : 1;
-    //const displayPopupEndgame = true;
+
+    const showRestartPopup = this.state.showRestartPopup;
+    //const showRestartPopup = true;
+    const showExitGamePopup = this.state.showExitGamePopup;
+    //const showExitGamePopup = true;
+    let showRestartOrMainTextPopup = "";
+    if (showRestartPopup) {
+      showRestartOrMainTextPopup = "Spiel neustarten?";
+    } else if (showExitGamePopup) {
+      showRestartOrMainTextPopup = "Spiel beenden?";
+    }
+
+    const opacityValue =
+      showEndGamePopup ||
+      showWrongActionPopup ||
+      showRestartPopup ||
+      showExitGamePopup
+        ? 0.25
+        : 1;
 
     const opacityValuePlayerSpecials = this.state.gameStarted ? 1 : 0.2;
 
@@ -246,7 +292,7 @@ export default class App extends React.Component<{}, AppSate> {
                   <TextButton
                     enabled={false}
                     onClick={() => this.reset()}
-                    style={styles.MainGamePlayerButtons}
+                    style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
                   >
                     1️⃣
                   </TextButton>
@@ -263,14 +309,14 @@ export default class App extends React.Component<{}, AppSate> {
                   <TextButton
                     enabled={false}
                     onClick={() => this.reset()}
-                    style={styles.MainGamePlayerButtons}
+                    style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
                   >
                     3️⃣
                   </TextButton>
                   <TextButton
                     enabled={false}
                     onClick={() => this.reset()}
-                    style={styles.MainGamePlayerButtons}
+                    style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
                   >
                     4️⃣
                   </TextButton>
@@ -281,14 +327,14 @@ export default class App extends React.Component<{}, AppSate> {
                 <TextButton
                   enabled={false}
                   onClick={() => this.reset()}
-                  style={styles.MainGameSettingsButtons}
+                  style={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
                 >
                   📖
                 </TextButton>
                 <TextButton
                   enabled={false}
                   onClick={() => this.reset()}
-                  style={styles.MainGameSettingsButtons}
+                  style={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
                 >
                   ⚙️
                 </TextButton>
@@ -364,17 +410,22 @@ export default class App extends React.Component<{}, AppSate> {
                 this.state.gameStarted &&
                 this.state.activePlayer === this.state.firstPlayer
               }
+              margin="5%"
             />
             <View style={styles.GameControlSettings}>
               <TextButton
-                onClick={() => this.reset()}
+                onClick={() => this.onGameSettingsExitGameButton()}
                 style={styles.GameControlSettingsButtons}
               >
                 ⏪
               </TextButton>
               <TextButton
-                onClick={() => this.restartGame()}
-                style={styles.GameControlSettingsButtons}
+                enabled={this.state.gameStarted}
+                onClick={() => this.onGameSettingsRestartButton()}
+                style={[
+                  styles.GameControlSettingsButtons,
+                  { opacity: opacityValuePlayerSpecials },
+                ]}
               >
                 🔄
               </TextButton>
@@ -418,6 +469,34 @@ export default class App extends React.Component<{}, AppSate> {
               text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
             />
             <RotatableText text="Spiel beendet" />
+          </Popup>
+        )}
+
+        {(showRestartPopup || showExitGamePopup) && (
+          <Popup>
+            <RotatableText text={showRestartOrMainTextPopup} />
+            <View style={styles.PopupRestartExit}>
+              <TextButton
+                onClick={() =>
+                  showRestartPopup
+                    ? this.onGameSettingsRestartYes()
+                    : this.onGameSettingsExitYes()
+                }
+                style={[styles.popupPlay, { marginRight: 15 }]}
+              >
+                ✅
+              </TextButton>
+              <TextButton
+                onClick={() =>
+                  showRestartPopup
+                    ? this.onGameSettingsRestartNo()
+                    : this.onGameSettingsExitNo()
+                }
+                style={[styles.popupPlay, { marginLeft: 15 }]}
+              >
+                ❎
+              </TextButton>
+            </View>
           </Popup>
         )}
       </View>
@@ -557,5 +636,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingLeft: 5,
     paddingRight: 5,
+  },
+
+  PopupRestartExit: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    flexDirection: "row",
+    margin: 10,
   },
 });

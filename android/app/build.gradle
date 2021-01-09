@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.hochniedrig"
+        applicationId "de.bianucci.hochniedrig"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

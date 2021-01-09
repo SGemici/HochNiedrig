@@ -1,5 +1,5 @@
 import { Player, PlayerAction, PlayerActionResult } from "./types";
-import { Card, cards, cardType } from "./cards";
+import { Card, cards as ALL_CARDS, cardType } from "./cards";
 
 function getPlayer(name: string, statisticDrinkNumber: number): Player {
   return {
@@ -20,27 +20,29 @@ export class Game {
   cardIndex = 0;
 
   constructor() {
-    this.cards = this.shuffle(cards);
+    this.cards = this.shuffle(ALL_CARDS);
+    // this.cards = [ALL_CARDS[1], ALL_CARDS[4], ALL_CARDS[8]];
     this.players = [getPlayer("Player ONE", 0), getPlayer("Player TWO", 0)];
     this.activePlayer = this.players[0];
     this.firstPlayer = this.players[0];
     this.secondPlayer = this.players[1];
-    this.activeCard = cards[0];
-    this.previousCard = cards[0];
+    this.activeCard = this.cards[0];
+    this.previousCard = this.cards[0];
   }
 
-  shuffle(arra1: Array<Card>) {
-    var ctr = arra1.length,
+  shuffle(source: Array<Card>) {
+    let list = [...source];
+    let ctr = list.length,
       temp,
       index;
     while (ctr > 0) {
       index = Math.floor(Math.random() * ctr);
       ctr--;
-      temp = arra1[ctr];
-      arra1[ctr] = arra1[index];
-      arra1[index] = temp;
+      temp = list[ctr];
+      list[ctr] = list[index];
+      list[index] = temp;
     }
-    return arra1;
+    return list;
   }
 
   checkAction(action: PlayerAction) {
@@ -83,8 +85,8 @@ export class Game {
 
   applyAction(action: PlayerAction): PlayerActionResult {
     this.cardIndex++;
-    this.activeCard = cards[this.cardIndex];
-    this.previousCard = cards[this.cardIndex - 1];
+    this.activeCard = this.cards[this.cardIndex];
+    this.previousCard = this.cards[this.cardIndex - 1];
 
     const result = this.checkAction(action);
     if (result === PlayerActionResult.INCORRECT) {

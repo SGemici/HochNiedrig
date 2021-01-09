@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   MainGamePlayer: {
-    // backgroundColor: COLORS.alertBackgroundGreen,
     display: "flex",
     flexGrow: 0.1,
     margin: 20,
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     alignContent: "center",
-    //flexDirection: "row",
   },
   MainGamePlayerChoice: {
     display: "flex",

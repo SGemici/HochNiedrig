@@ -2,11 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
-import {
-  Player,
-  PlayerAction,
-  PlayerActionResult,
-} from "../business/types";
+import { Player, PlayerAction, PlayerActionResult } from "../business/types";
 import { Emoji, EmojiButton } from "../components/atoms/EmojiButton";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
@@ -17,27 +13,15 @@ import { TableModul } from "../components/Table";
 import { COLORS } from "../styles/colors";
 
 // eslint-disable-next-line no-undef
-function withVeticalAlignment(el: JSX.Element, opacity: number) {
-  return (
-    <View
-      style={[
-        styles.PlayerSpecials,
-        {
-          opacity,
-        },
-      ]}
-    >
-      {el}
-    </View>
-  );
+function withVeticalAlignment(el: JSX.Element) {
+  return <View style={[styles.PlayerSpecials]}>{el}</View>;
 }
 
 type Props = {
-  handleExit: Function
-}
+  handleExit: Function;
+};
 
 type AppSate = {
-  gameStarted: boolean;
   activePlayer: Player;
   firstPlayer: Player;
   secondPlayer: Player;
@@ -71,30 +55,11 @@ function getInitialStateForGame(game: Game) {
     showExitGamePopup: false,
   };
 }
-function getInitialStateForNewGame(game: Game) {
-  return {
-    gameStarted: false,
-    activePlayer: game.activePlayer,
-    firstPlayer: game.firstPlayer,
-    secondPlayer: game.secondPlayer,
-    activeCard: game.activeCard,
-    previousCard: game.previousCard,
-    showWrongActionPopup: false,
-    showEndGamePopup: false,
-    showPopupBackgroundAlert: COLORS.transparent,
-    showBackgrounAlert: COLORS.appBackground,
-    laidsCards: 1,
-    PopupWrongActionTime: 5,
-    showRestartPopup: false,
-    showExitGamePopup: false,
-  };
-}
 
 export default class TwoPlayerGame extends React.Component<Props, AppSate> {
   popuptimerIntevalId?: number;
   popuptimerAlertId?: number;
 
-  // TODO: instantiation not required because reset() is called in constructor
   game: Game = new Game();
 
   constructor(props: Props) {
@@ -102,14 +67,9 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
     this.state = getInitialStateForGame(this.game);
   }
 
-  //#region Start Game
-  reset() {
-    this.game = new Game();
-    this.setState(getInitialStateForGame(this.game));
-  }
   restartGame() {
     this.game = new Game();
-    this.setState(getInitialStateForNewGame(this.game));
+    this.setState(getInitialStateForGame(this.game));
   }
 
   syncGameState() {
@@ -126,12 +86,12 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
     if (result === PlayerActionResult.INCORRECT) {
       this.showIncorrectActionPopup().then(() => {
         if (this.game.isOver()) {
-          this.endGame();
+          this.showEndGamePopup();
         }
       });
     } else {
       if (this.game.isOver()) {
-        this.endGame();
+        this.showEndGamePopup();
       } else {
         this.setState({
           showBackgrounAlert: COLORS.alertBackgroundGreen,
@@ -156,14 +116,13 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
   }
 
   hideIncorrectActionPopup() {
-    console.log("hideIncorrectActionPopup");
     clearInterval(this.popuptimerIntevalId);
     this.setState({
       showWrongActionPopup: false,
       PopupWrongActionTime: 5,
     });
     if (this.game.isOver()) {
-      this.endGame();
+      this.showEndGamePopup();
     }
   }
 
@@ -194,35 +153,16 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
     );
   }
 
-  startGame() {
-    this.setState({ gameStarted: true });
+  showEndGamePopup() {
+    this.setState({ showEndGamePopup: true });
   }
 
-  endGame() {
-    this.setState({ showEndGamePopup: true, gameStarted: true });
+  showRestartPopup(show: boolean) {
+    this.setState({ showRestartPopup: show });
   }
 
-  onGameSettingsRestartButton() {
-    if (this.state.gameStarted) {
-      this.setState({ showRestartPopup: true });
-    }
-  }
-
-  onGameSettingsRestartYes() {
-    this.restartGame();
-  }
-  onGameSettingsRestartNo() {
-    this.setState({ showRestartPopup: false });
-  }
-
-  onGameSettingsExitGameButton() {
-    this.setState({ showExitGamePopup: true });
-  }
-  onGameExit() {
-    this.props.handleExit();
-  }
-  onGameSettingsExitNo() {
-    this.setState({ showExitGamePopup: false });
+  showExitPopup(show: boolean) {
+    this.setState({ showExitGamePopup: show });
   }
 
   render() {
@@ -252,8 +192,6 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
         ? 0.25
         : 1;
 
-    const opacityValuePlayerSpecials = this.state.gameStarted ? 1 : 0.2;
-
     const Popuptime = "" + this.state.PopupWrongActionTime;
 
     return (
@@ -270,49 +208,40 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
           <PlayerControls
             inverseOrder={false}
             transformRotateZ={"180deg"}
-            enabled={
-              this.state.gameStarted &&
-              this.state.activePlayer === this.state.secondPlayer
-            }
+            enabled={this.state.activePlayer === this.state.secondPlayer}
             handlePlayerAction={(action) => this.onPlayerAction(action)}
           />
 
           <PlayerStatistics
             transformRotateZ={"180deg"}
-            GameState={this.state.gameStarted}
             Player={this.state.secondPlayer}
           />
 
           <View style={styles.ContainerCenter}>
             {withVeticalAlignment(
               <EmojiButton
-                enabled={this.state.gameStarted}
+                enabled={true}
                 emoji={Emoji.redCircle}
                 onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
-              />,
-              opacityValuePlayerSpecials
+              />
             )}
 
             <TableModul
-              game={this.state.gameStarted}
-              handleCardClicked={() => this.startGame()}
               card={this.state.activeCard.image}
               laidsCards={this.state.laidsCards}
             />
 
             {withVeticalAlignment(
               <EmojiButton
-                enabled={this.state.gameStarted}
+                enabled={true}
                 emoji={Emoji.blackCircle}
                 onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
-              />,
-              opacityValuePlayerSpecials
+              />
             )}
           </View>
 
           <PlayerStatistics
             transformRotateZ={"0deg"}
-            GameState={this.state.gameStarted}
             Player={this.state.firstPlayer}
           />
 
@@ -320,26 +249,20 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             inverseOrder={false}
             transformRotateZ={"0deg"}
             handlePlayerAction={(action) => this.onPlayerAction(action)}
-            enabled={
-              this.state.gameStarted &&
-              this.state.activePlayer === this.state.firstPlayer
-            }
+            enabled={this.state.activePlayer === this.state.firstPlayer}
             margin="5%"
           />
           <View style={styles.GameControlSettings}>
             <TextButton
-              onClick={() => this.onGameSettingsExitGameButton()}
+              onClick={() => this.showExitPopup(true)}
               style={styles.GameControlSettingsButtons}
             >
               ⏪
             </TextButton>
             <TextButton
-              enabled={this.state.gameStarted}
-              onClick={() => this.onGameSettingsRestartButton()}
-              style={[
-                styles.GameControlSettingsButtons,
-                { opacity: opacityValuePlayerSpecials },
-              ]}
+              enabled={true}
+              onClick={() => this.showRestartPopup(true)}
+              style={[styles.GameControlSettingsButtons]}
             >
               🔄
             </TextButton>
@@ -392,8 +315,8 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
               <TextButton
                 onClick={() =>
                   showRestartPopup
-                    ? this.onGameSettingsRestartYes()
-                    : this.onGameExit()
+                    ? this.restartGame()
+                    : this.props.handleExit()
                 }
                 style={[styles.popupPlay, { marginRight: 15 }]}
               >
@@ -402,8 +325,8 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
               <TextButton
                 onClick={() =>
                   showRestartPopup
-                    ? this.onGameSettingsRestartNo()
-                    : this.onGameSettingsExitNo()
+                    ? this.showRestartPopup(false)
+                    : this.showExitPopup(false)
                 }
                 style={[styles.popupPlay, { marginLeft: 15 }]}
               >

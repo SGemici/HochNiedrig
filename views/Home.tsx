@@ -6,8 +6,9 @@ import { TextButton } from "../components/atoms/TextButton";
 import { COLORS } from "../styles/colors";
 
 type Props = {
-  handleTwoPlayerGameStartIntent: Function
-}
+  handleOnePlayerGameStartIntent: Function;
+  handleTwoPlayerGameStartIntent: Function;
+};
 
 export default class Home extends React.Component<Props> {
   render() {
@@ -35,9 +36,8 @@ export default class Home extends React.Component<Props> {
             </View>
             <View style={[styles.MainGamePlayerChoice, {}]}>
               <TextButton
-                enabled={false}
-                onClick={() => console.log("1")}
-                style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
+                onClick={this.props.handleOnePlayerGameStartIntent}
+                style={styles.MainGamePlayerButtons}
               >
                 1️⃣
               </TextButton>
@@ -173,5 +173,5 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     margin: 0,
-  },  
+  },
 });

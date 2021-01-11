@@ -9,11 +9,15 @@ import { CardDeck } from "./CardDeck";
 export class TableModul extends React.Component<{
   card: ImageSourcePropType;
   laidsCards: number;
+  showBothSideLaids?: boolean;
 }> {
   render() {
     const borderColor = "transparent";
     const laidsCardsStr = this.props.laidsCards + "/" + cards.length;
-
+    const showBothSideLaids =
+      this.props.showBothSideLaids || this.props.showBothSideLaids == undefined
+        ? true
+        : false;
     const ImageModulStyles = StyleSheet.create({
       imageModul: {
         alignSelf: "stretch",
@@ -31,10 +35,12 @@ export class TableModul extends React.Component<{
     return (
       <View style={ImageModulStyles.imageModul}>
         <View>
-          <RotatableTextTable
-            text={laidsCardsStr}
-            rotate={true}
-          ></RotatableTextTable>
+          {showBothSideLaids && (
+            <RotatableTextTable
+              text={laidsCardsStr}
+              rotate={true}
+            ></RotatableTextTable>
+          )}
           <CardDeck card={this.props.card} />
           <RotatableTextTable text={laidsCardsStr}></RotatableTextTable>
         </View>

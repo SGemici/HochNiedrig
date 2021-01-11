@@ -15,3 +15,10 @@ export type Player = {
   name: string;
   statisticDrinkNumber: number;
 };
+
+export enum GameType {
+  ONE_PLAYER,
+  TWO_PLAYER,
+  THREE_PLAYER,
+  FOUR_PLAYER,
+}

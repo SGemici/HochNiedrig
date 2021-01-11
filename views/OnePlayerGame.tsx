@@ -61,7 +61,7 @@ function getInitialStateForGame(game: Game) {
   };
 }
 
-export default class TwoPlayerGame extends React.Component<Props, AppSate> {
+export default class OnePlayerGame extends React.Component<Props, AppSate> {
   popuptimerIntevalId?: number;
   popuptimerAlertId?: number;
 
@@ -69,7 +69,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
 
   constructor(props: Props) {
     super(props);
-    this.game.gameType = GameType.TWO_PLAYER;
+    this.game.gameType = GameType.ONE_PLAYER;
     this.state = getInitialStateForGame(this.game);
   }
 
@@ -211,17 +211,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             },
           ]}
         >
-          <PlayerControls
-            inverseOrder={false}
-            transformRotateZ={"180deg"}
-            enabled={this.state.activePlayer === this.state.secondPlayer}
-            handlePlayerAction={(action) => this.onPlayerAction(action)}
-          />
-
-          <PlayerStatistics
-            transformRotateZ={"180deg"}
-            Player={this.state.secondPlayer}
-          />
+          <View style={[{ margin: "16%" }]}></View>
 
           <View style={styles.ContainerCenter}>
             {withVeticalAlignment(
@@ -235,6 +225,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             <TableModul
               card={this.state.activeCard.image}
               laidsCards={this.state.laidsCards}
+              showBothSideLaids={false}
             />
 
             {withVeticalAlignment(
@@ -256,7 +247,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             transformRotateZ={"0deg"}
             handlePlayerAction={(action) => this.onPlayerAction(action)}
             enabled={this.state.activePlayer === this.state.firstPlayer}
-            margin="5%"
+            margin="15%"
           />
           <View style={styles.GameControlSettings}>
             <TextButton

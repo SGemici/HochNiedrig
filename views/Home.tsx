@@ -8,6 +8,8 @@ import { COLORS } from "../styles/colors";
 type Props = {
   handleOnePlayerGameStartIntent: Function;
   handleTwoPlayerGameStartIntent: Function;
+  handleThreePlayerGameStartIntent: Function;
+  handleFourPlayerGameStartIntent: Function;
 };
 
 export default class Home extends React.Component<Props> {
@@ -50,6 +52,8 @@ export default class Home extends React.Component<Props> {
             </View>
             <View style={[styles.MainGamePlayerChoice, {}]}>
               <TextButton
+                // onClick={this.props.handleThreePlayerGameStartIntent}
+                // style={styles.MainGamePlayerButtons}
                 enabled={false}
                 onClick={() => console.log("3")}
                 style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
@@ -60,6 +64,8 @@ export default class Home extends React.Component<Props> {
                 enabled={false}
                 onClick={() => console.log("4")}
                 style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
+                // onClick={this.props.handleFourPlayerGameStartIntent}
+                // style={styles.MainGamePlayerButtons}
               >
                 4️⃣
               </TextButton>

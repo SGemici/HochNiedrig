@@ -1,7 +1,9 @@
 import React from "react";
 import { Text, View } from "react-native";
+import FourPlayerGame from "./views/FourPlayerGame";
 import Home from "./views/Home";
 import OnePlayerGame from "./views/OnePlayerGame";
+import ThreePlayerGame from "./views/ThreePlayerGame";
 import TwoPlayerGame from "./views/TwoPlayerGame";
 
 export enum GameView {
@@ -38,6 +40,16 @@ export default class App extends React.Component<{}, AppSate> {
       <TwoPlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
     );
   }
+  getThreePlayerGameView() {
+    return (
+      <ThreePlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
+    );
+  }
+  getFourPlayerGameView() {
+    return (
+      <FourPlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
+    );
+  }
 
   getHomeView() {
     return (
@@ -47,6 +59,12 @@ export default class App extends React.Component<{}, AppSate> {
         }
         handleTwoPlayerGameStartIntent={() =>
           this.showView(GameView.TWO_PLAYER_VIEW)
+        }
+        handleThreePlayerGameStartIntent={() =>
+          this.showView(GameView.THREE_PLAYER_VIEW)
+        }
+        handleFourPlayerGameStartIntent={() =>
+          this.showView(GameView.FOUR_PLAYER_VIEW)
         }
       />
     );
@@ -62,6 +80,12 @@ export default class App extends React.Component<{}, AppSate> {
 
       case GameView.TWO_PLAYER_VIEW:
         return this.getTwoPlayerGameView();
+
+      case GameView.THREE_PLAYER_VIEW:
+        return this.getThreePlayerGameView();
+
+      case GameView.FOUR_PLAYER_VIEW:
+        return this.getFourPlayerGameView();
 
       default:
         return (

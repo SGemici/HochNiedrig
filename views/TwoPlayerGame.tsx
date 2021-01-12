@@ -73,6 +73,19 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
     this.state = getInitialStateForGame(this.game);
   }
 
+  componentWillUnmount(): void {
+    var id = window.setTimeout(function () {}, 0);
+
+    while (id--) {
+      window.clearTimeout(id); // will do nothing if no timeout with id is present
+    }
+    id = window.setInterval(function () {}, 0);
+
+    while (id--) {
+      window.clearInterval(id); // will do nothing if no timeout with id is present
+    }
+  }
+
   restartGame() {
     this.game = new Game();
     this.setState(getInitialStateForGame(this.game));
@@ -102,7 +115,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
         this.setState({
           showBackgrounAlert: COLORS.alertBackgroundGreen,
         });
-        setTimeout(() => {
+        window.setTimeout(() => {
           this.setState({
             showBackgrounAlert: COLORS.appBackground,
           });
@@ -137,7 +150,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
       showWrongActionPopup: true,
       showPopupBackgroundAlert: COLORS.alertBackgroundRed,
     });
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.setState({
         showPopupBackgroundAlert: COLORS.transparent,
       });

@@ -9,6 +9,7 @@ type ControlElementProps = {
   handlePlayerAction: (action: PlayerAction) => void;
   enabled: boolean;
   margin?: string;
+  visibleSameButton?: Boolean;
 };
 export class PlayerControls extends React.Component<ControlElementProps> {
   render() {
@@ -37,6 +38,11 @@ export class PlayerControls extends React.Component<ControlElementProps> {
     const flexDirection = this.props.inverseOrder ? "row-reverse" : "row";
     const rotate = this.props.transformRotateZ;
 
+    const visibleSameButton =
+      this.props.visibleSameButton === undefined
+        ? true
+        : this.props.visibleSameButton;
+
     return (
       <View
         style={[
@@ -55,15 +61,17 @@ export class PlayerControls extends React.Component<ControlElementProps> {
         >
           ⬇️
         </TextButton>
-        <TextButton
-          enabled={this.props.enabled}
-          withGradient={true}
-          onClick={() =>
-            this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
-          }
-        >
-          =
-        </TextButton>
+        {visibleSameButton && (
+          <TextButton
+            enabled={this.props.enabled}
+            withGradient={true}
+            onClick={() =>
+              this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
+            }
+          >
+            =
+          </TextButton>
+        )}
         <TextButton
           enabled={this.props.enabled}
           onClick={() =>

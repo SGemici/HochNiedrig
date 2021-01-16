@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import FourPlayerGame from "./views/FourPlayerGame";
 import Home from "./views/Home";
 import OnePlayerGame from "./views/OnePlayerGame";
+import Settings from "./views/Settings";
 import ThreePlayerGame from "./views/ThreePlayerGame";
 import TwoPlayerGame from "./views/TwoPlayerGame";
 
@@ -18,12 +19,21 @@ export enum GameView {
 
 type AppSate = {
   activeView: GameView;
+
+  sameButtonVisible: Boolean;
+  redblackButtonVisible: Boolean;
+  statisticVisible: Boolean;
+  popupWrongActionReduce: Boolean;
 };
 export default class App extends React.Component<{}, AppSate> {
   constructor(props: {}) {
     super(props);
     this.state = {
       activeView: GameView.HOME_VIEW,
+      sameButtonVisible: true,
+      redblackButtonVisible: true,
+      statisticVisible: true,
+      popupWrongActionReduce: false,
     };
   }
 
@@ -32,22 +42,76 @@ export default class App extends React.Component<{}, AppSate> {
   }
   getOnePlayerGameView() {
     return (
-      <OnePlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
+      <OnePlayerGame
+        handleExit={() => this.showView(GameView.HOME_VIEW)}
+        sameButtonVisible={this.state.sameButtonVisible}
+        redblackButtonVisible={this.state.redblackButtonVisible}
+        statisticVisible={this.state.statisticVisible}
+        popupWrongActionReduce={this.state.popupWrongActionReduce}
+      />
     );
   }
   getTwoPlayerGameView() {
     return (
-      <TwoPlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
+      <TwoPlayerGame
+        handleExit={() => this.showView(GameView.HOME_VIEW)}
+        sameButtonVisible={this.state.sameButtonVisible}
+        redblackButtonVisible={this.state.redblackButtonVisible}
+        statisticVisible={this.state.statisticVisible}
+        popupWrongActionReduce={this.state.popupWrongActionReduce}
+      />
     );
   }
   getThreePlayerGameView() {
     return (
-      <ThreePlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
+      <ThreePlayerGame
+        handleExit={() => this.showView(GameView.HOME_VIEW)}
+        sameButtonVisible={this.state.sameButtonVisible}
+        redblackButtonVisible={this.state.redblackButtonVisible}
+        statisticVisible={this.state.statisticVisible}
+        popupWrongActionReduce={this.state.popupWrongActionReduce}
+      />
     );
   }
   getFourPlayerGameView() {
     return (
-      <FourPlayerGame handleExit={() => this.showView(GameView.HOME_VIEW)} />
+      <FourPlayerGame
+        handleExit={() => this.showView(GameView.HOME_VIEW)}
+        sameButtonVisible={this.state.sameButtonVisible}
+        redblackButtonVisible={this.state.redblackButtonVisible}
+        statisticVisible={this.state.statisticVisible}
+        popupWrongActionReduce={this.state.popupWrongActionReduce}
+      />
+    );
+  }
+
+  changeSameButtonVisible() {
+    this.setState({ sameButtonVisible: !this.state.sameButtonVisible });
+  }
+  changeRedblackButtonVisible() {
+    this.setState({ redblackButtonVisible: !this.state.redblackButtonVisible });
+  }
+  changeStatisticsVisible() {
+    this.setState({ statisticVisible: !this.state.statisticVisible });
+  }
+  changePopupWrongActionReduce() {
+    this.setState({
+      popupWrongActionReduce: !this.state.popupWrongActionReduce,
+    });
+  }
+  getSettingsGameView() {
+    return (
+      <Settings
+        handleExit={() => this.showView(GameView.HOME_VIEW)}
+        changeSameButtonVisibleVar={this.state.sameButtonVisible}
+        changeSameButtonVisible={() => this.changeSameButtonVisible()}
+        changeRedblackButtonVisibleVar={this.state.redblackButtonVisible}
+        changeRedblackButtonVisible={() => this.changeRedblackButtonVisible()}
+        changeStatisticVisibleVar={this.state.statisticVisible}
+        changeStatisticVisible={() => this.changeStatisticsVisible()}
+        changePopupWrongActionReduceVar={this.state.popupWrongActionReduce}
+        changePopupWrongActionReduce={() => this.changePopupWrongActionReduce()}
+      />
     );
   }
 
@@ -65,6 +129,9 @@ export default class App extends React.Component<{}, AppSate> {
         }
         handleFourPlayerGameStartIntent={() =>
           this.showView(GameView.FOUR_PLAYER_VIEW)
+        }
+        handleSettingsGameStartIntent={() =>
+          this.showView(GameView.SETTINGS_VIEW)
         }
       />
     );
@@ -86,6 +153,9 @@ export default class App extends React.Component<{}, AppSate> {
 
       case GameView.FOUR_PLAYER_VIEW:
         return this.getFourPlayerGameView();
+
+      case GameView.SETTINGS_VIEW:
+        return this.getSettingsGameView();
 
       default:
         return (

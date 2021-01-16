@@ -10,6 +10,7 @@ type Props = {
   handleTwoPlayerGameStartIntent: Function;
   handleThreePlayerGameStartIntent: Function;
   handleFourPlayerGameStartIntent: Function;
+  handleSettingsGameStartIntent: Function;
 };
 
 export default class Home extends React.Component<Props> {
@@ -82,7 +83,7 @@ export default class Home extends React.Component<Props> {
             </TextButton>
             <TextButton
               enabled={false}
-              onClick={() => console.log("")}
+              onClick={this.props.handleSettingsGameStartIntent}
               style={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
             >
               ⚙️

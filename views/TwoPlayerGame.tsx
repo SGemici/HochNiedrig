@@ -24,6 +24,10 @@ function withVeticalAlignment(el: JSX.Element) {
 
 type Props = {
   handleExit: Function;
+  sameButtonVisible: Boolean;
+  redblackButtonVisible: Boolean;
+  statisticVisible: Boolean;
+  popupWrongActionReduce: Boolean;
 };
 
 type AppSate = {

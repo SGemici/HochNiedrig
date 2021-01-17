@@ -82,9 +82,9 @@ export default class Home extends React.Component<Props> {
               📖
             </TextButton>
             <TextButton
-              enabled={false}
+              enabled={true}
               onClick={this.props.handleSettingsGameStartIntent}
-              style={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
+              style={[styles.MainGameSettingsButtons, { opacity: 1 }]}
             >
               ⚙️
             </TextButton>

@@ -46,7 +46,7 @@ type AppSate = {
   showExitGamePopup: Boolean;
 };
 
-function getInitialStateForGame(game: Game) {
+function getInitialStateForGame(game: Game, popupTime: number) {
   return {
     gameStarted: false,
     activePlayer: game.activePlayer,
@@ -59,7 +59,7 @@ function getInitialStateForGame(game: Game) {
     showPopupBackgroundAlert: COLORS.transparent,
     showBackgrounAlert: COLORS.appBackground,
     laidsCards: 1,
-    PopupWrongActionTime: 5,
+    PopupWrongActionTime: popupTime,
     showRestartPopup: false,
     showExitGamePopup: false,
   };
@@ -71,10 +71,12 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
   game: Game = new Game();
 
+  popupTime = this.props.popupWrongActionReduce ? 1 : 5;
+
   constructor(props: Props) {
     super(props);
     this.game.gameType = GameType.ONE_PLAYER;
-    this.state = getInitialStateForGame(this.game);
+    this.state = getInitialStateForGame(this.game, this.popupTime);
   }
 
   componentWillUnmount(): void {
@@ -92,7 +94,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
   restartGame() {
     this.game = new Game();
-    this.setState(getInitialStateForGame(this.game));
+    this.setState(getInitialStateForGame(this.game, this.popupTime));
   }
 
   syncGameState() {
@@ -142,7 +144,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
     clearInterval(this.popuptimerIntevalId);
     this.setState({
       showWrongActionPopup: false,
-      PopupWrongActionTime: 5,
+      PopupWrongActionTime: this.popupTime,
     });
     if (this.game.isOver()) {
       this.showEndGamePopup();
@@ -168,11 +170,11 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
           clearInterval(this.popuptimerIntevalId);
           this.setState({
             showWrongActionPopup: false,
-            PopupWrongActionTime: 5,
+            PopupWrongActionTime: this.popupTime,
           });
           resolve();
           // TODO add contant for 4500 millis
-        }, 5000))
+        }, this.popupTime * 1000))
     );
   }
 
@@ -231,13 +233,14 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
           <View style={[{ margin: "16%" }]}></View>
 
           <View style={styles.ContainerCenter}>
-            {withVeticalAlignment(
-              <EmojiButton
-                enabled={true}
-                emoji={Emoji.redCircle}
-                onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
-              />
-            )}
+            {this.props.redblackButtonVisible &&
+              withVeticalAlignment(
+                <EmojiButton
+                  enabled={true}
+                  emoji={Emoji.redCircle}
+                  onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
+                />
+              )}
 
             <TableModul
               card={this.state.activeCard.image}
@@ -245,19 +248,21 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
               showBothSideLaids={false}
             />
 
-            {withVeticalAlignment(
-              <EmojiButton
-                enabled={true}
-                emoji={Emoji.blackCircle}
-                onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
-              />
-            )}
+            {this.props.redblackButtonVisible &&
+              withVeticalAlignment(
+                <EmojiButton
+                  enabled={true}
+                  emoji={Emoji.blackCircle}
+                  onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
+                />
+              )}
           </View>
-
-          <PlayerStatistics
-            transformRotateZ={"0deg"}
-            Player={this.state.firstPlayer}
-          />
+          {this.props.statisticVisible && (
+            <PlayerStatistics
+              transformRotateZ={"0deg"}
+              Player={this.state.firstPlayer}
+            />
+          )}
 
           <PlayerControls
             inverseOrder={false}
@@ -265,6 +270,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
             handlePlayerAction={(action) => this.onPlayerAction(action)}
             enabled={this.state.activePlayer === this.state.firstPlayer}
             margin="15%"
+            visibleSameButton={this.props.sameButtonVisible}
           />
           <View style={styles.GameControlSettings}>
             <TextButton
@@ -302,12 +308,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
         {showEndGamePopup && (
           <Popup>
-            <RotatableText rotate={true} text="Spiel beendet" />
-            <RotatableText
-              rotate={true}
-              text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
-            />
-
+            <RotatableText rotate={false} text="Spiel beendet" />
             <TextButton
               onClick={() => this.restartGame()}
               style={styles.popupPlay}

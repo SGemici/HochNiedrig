@@ -94,6 +94,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
 
   restartGame() {
     this.game = new Game();
+    this.game.gameType = GameType.TWO_PLAYER;
     this.setState(getInitialStateForGame(this.game, this.popupTime));
   }
 
@@ -320,10 +321,12 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
         {showEndGamePopup && (
           <Popup>
             <RotatableText rotate={true} text="Spiel beendet" />
-            <RotatableText
-              rotate={true}
-              text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
-            />
+            {this.props.statisticVisible && (
+              <RotatableText
+                rotate={true}
+                text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
+              />
+            )}
 
             <TextButton
               onClick={() => this.restartGame()}
@@ -331,10 +334,11 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             >
               🔄
             </TextButton>
-
-            <RotatableText
-              text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
-            />
+            {this.props.statisticVisible && (
+              <RotatableText
+                text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
+              />
+            )}
             <RotatableText text="Spiel beendet" />
           </Popup>
         )}

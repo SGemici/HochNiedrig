@@ -94,6 +94,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
   restartGame() {
     this.game = new Game();
+    this.game.gameType = GameType.ONE_PLAYER;
     this.setState(getInitialStateForGame(this.game, this.popupTime));
   }
 
@@ -315,10 +316,11 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
             >
               🔄
             </TextButton>
-
-            <RotatableText
-              text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
-            />
+            {this.props.statisticVisible && (
+              <RotatableText
+                text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
+              />
+            )}
             <RotatableText text="Spiel beendet" />
           </Popup>
         )}

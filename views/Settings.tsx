@@ -69,7 +69,7 @@ export default class Settings extends React.Component<Props> {
                 state={this.props.changePopupWrongActionReduceVar}
                 onClick={() => this.props.changePopupWrongActionReduce()}
               >
-                Falsche Aktion: Auf 1 Sekunde
+                Falsche Aktion: 1 Sekunde
               </CheckButton>
             </View>
           </View>

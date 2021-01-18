@@ -19,12 +19,17 @@ export class CheckButton extends React.Component<Props, {}> {
     const color = state
       ? COLORS.alertBackgroundGreen
       : COLORS.alertBackgroundRed;
+
+    const alignItems = state ? "flex-end" : "flex-start";
+
     const CheckButtonElement = (
       <View style={stylesCheckBox.Container}>
         <Text style={stylesText}>{this.props.children}</Text>
-        <View
-          style={[stylesCheckBox.ButtonView, { backgroundColor: color }]}
-        ></View>
+        <View style={[stylesCheckBox.ButtonView, { backgroundColor: color }]}>
+          <View style={[stylesCheckBox.ButtonPoint, { alignItems }]}>
+            <Text style={stylesCheckBox.ButtonPointText}></Text>
+          </View>
+        </View>
       </View>
     );
     return CheckButtonElement;
@@ -56,7 +61,7 @@ const stylesCheckBox = StyleSheet.create({
     justifyContent: "flex-start",
     alignContent: "flex-start",
     width: "100%",
-    padding: 5,
+    padding: 7,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: COLORS.primaryBorder,
@@ -69,7 +74,7 @@ const stylesCheckBox = StyleSheet.create({
     marginRight: 10,
     minWidth: "78%",
     maxWidth: "78%",
-    fontSize: 16,
+    fontSize: 17,
     color: COLORS.startTextColor,
     margin: 2,
   },
@@ -83,5 +88,22 @@ const stylesCheckBox = StyleSheet.create({
     marginTop: 2,
     marginBottom: 2,
     marginRight: 3,
+  },
+  ButtonPoint: {
+    width: "100%",
+    display: "flex",
+    alignItems: "flex-start",
+  },
+  ButtonPointText: {
+    borderWidth: 1,
+    borderRadius: 10,
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+
+    backgroundColor: COLORS.primaryBorder,
+    width: "50%",
+    overflow: "hidden",
+    margin: 1,
   },
 });

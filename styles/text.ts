@@ -8,6 +8,6 @@ export const TextStyles = StyleSheet.create({
     color: COLORS.popupText,
   },
   CardInfos: {
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
   },
 });

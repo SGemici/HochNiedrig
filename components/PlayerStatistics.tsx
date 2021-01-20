@@ -4,22 +4,16 @@ import { StyleSheet, View, Text } from "react-native";
 import { Player } from "../business/types";
 
 type InfoElementProps = {
-  transformRotateZ: string;
   Player: Player;
 };
 export class PlayerStatistics extends React.Component<InfoElementProps> {
   render() {
-    const MarginTopValue = this.props.transformRotateZ == "0deg" ? 7 : 0;
-    const MarginBottomValue = this.props.transformRotateZ == "180deg" ? 7 : 0;
-
     const InfoStyle = StyleSheet.create({
       InfoModul: {
         flexDirection: "row",
         justifyContent: "center",
         display: "flex",
         width: "100%",
-        marginTop: MarginTopValue,
-        marginBottom: MarginBottomValue,
       },
       TextModul: {
         color: "white",
@@ -27,10 +21,7 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
     });
     return (
       <View
-        style={[
-          InfoStyle.InfoModul,
-          { transform: [{ rotateZ: this.props.transformRotateZ }] },
-        ]}
+        style={InfoStyle.InfoModul}
       >
         <Text style={InfoStyle.TextModul}>
           🍺 {this.props.Player.statisticDrinkNumber}{" "}

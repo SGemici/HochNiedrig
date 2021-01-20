@@ -10,5 +10,5 @@ export enum COLORS {
 
     transparent = "transparent",
 
-    startTextColor = "white",
+    brightText = "white",
 }

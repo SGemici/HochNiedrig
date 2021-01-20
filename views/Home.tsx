@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   HOCHNIEDRIG_LOGO_TEXT: {
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
     fontSize: 30,
     display: "flex",
     alignItems: "center",
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   MainGamePlayerText: {
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
     fontSize: 30,
     display: "flex",
     alignItems: "center",
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     margin: 5,
     fontSize: 70,
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
     overflow: "hidden",
     borderColor: COLORS.primaryBorder,
   },

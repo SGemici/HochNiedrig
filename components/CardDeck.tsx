@@ -7,7 +7,7 @@ type Props = {
 
 export class CardDeck extends React.Component<Props> {
   render() {
-    const width = 238;
+    const width = 180;
 
     const ratio = 726 / 500;
     const height = width * ratio;

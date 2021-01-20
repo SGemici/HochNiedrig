@@ -1,13 +1,11 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { TextButton } from "./TextButton";
 import { COLORS } from "../../styles/colors";
 
-const ButtonElementsStyle = StyleSheet.create({
-  buttonStyle: {
+const styles = StyleSheet.create({
+  text: {
     fontSize: 35,
-    borderWidth: 1,
-    borderRadius: 5,
     borderColor: COLORS.primaryBorder,
   },
 });
@@ -21,6 +19,8 @@ type ButtonProps = {
   enabled: boolean;
   onClick: Function;
   emoji: Emoji;
+  textStyle?: TextStyle;
+  buttonStyle?: ViewStyle;
 };
 
 export class EmojiButton extends React.Component<ButtonProps> {
@@ -28,7 +28,8 @@ export class EmojiButton extends React.Component<ButtonProps> {
     return (
       <TextButton
         enabled={this.props.enabled}
-        style={ButtonElementsStyle.buttonStyle}
+        textStyle={(this.props.textStyle || {}, styles.text)}
+        buttonStyle={(this.props.buttonStyle)}
         onClick={() => this.props.onClick()}
       >
         {this.props.emoji}

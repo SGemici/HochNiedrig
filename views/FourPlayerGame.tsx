@@ -287,14 +287,14 @@ export default class FourPlayerGame extends React.Component<Props, AppSate> {
           <View style={styles.GameControlSettings}>
             <TextButton
               onClick={() => this.showExitPopup(true)}
-              style={styles.GameControlSettingsButtons}
+              textStyle={styles.GameControlSettingsButtons}
             >
               ⏪
             </TextButton>
             <TextButton
               enabled={true}
               onClick={() => this.showRestartPopup(true)}
-              style={[styles.GameControlSettingsButtons]}
+              textStyle={[styles.GameControlSettingsButtons]}
             >
               🔄
             </TextButton>
@@ -308,7 +308,7 @@ export default class FourPlayerGame extends React.Component<Props, AppSate> {
               <RotatableText text={Popuptime} rotate={true} />
               <TextButton
                 onClick={() => this.hideIncorrectActionPopup()}
-                style={styles.popupPlay}
+                textStyle={styles.popupPlay}
               >
                 ❎
               </TextButton>
@@ -330,7 +330,7 @@ export default class FourPlayerGame extends React.Component<Props, AppSate> {
 
             <TextButton
               onClick={() => this.restartGame()}
-              style={styles.popupPlay}
+              textStyle={styles.popupPlay}
             >
               🔄
             </TextButton>
@@ -353,7 +353,7 @@ export default class FourPlayerGame extends React.Component<Props, AppSate> {
                     ? this.restartGame()
                     : this.props.handleExit()
                 }
-                style={[styles.popupPlay, { marginRight: 15 }]}
+                textStyle={[styles.popupPlay, { marginRight: 15 }]}
               >
                 ✅
               </TextButton>
@@ -363,7 +363,7 @@ export default class FourPlayerGame extends React.Component<Props, AppSate> {
                     ? this.showRestartPopup(false)
                     : this.showExitPopup(false)
                 }
-                style={[styles.popupPlay, { marginLeft: 15 }]}
+                textStyle={[styles.popupPlay, { marginLeft: 15 }]}
               >
                 ❎
               </TextButton>

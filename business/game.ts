@@ -20,12 +20,17 @@ export class Game {
   activeCard: Card;
   previousCard: Card;
   cardIndex = 0;
-  gameType : GameType;
+  gameType: GameType;
 
   constructor() {
     this.cards = this.shuffle(ALL_CARDS);
     // this.cards = [ALL_CARDS[1], ALL_CARDS[4], ALL_CARDS[8]];
-    this.players = [getPlayer("Player ONE", 0), getPlayer("Player TWO", 0), getPlayer("Player THREE", 0), getPlayer("Player FOUR", 0)];
+    this.players = [
+      getPlayer("Player ONE", 0),
+      getPlayer("Player TWO", 0),
+      getPlayer("Player THREE", 0),
+      getPlayer("Player FOUR", 0),
+    ];
     this.activePlayer = this.players[0];
     this.firstPlayer = this.players[0];
     this.secondPlayer = this.players[1];
@@ -82,35 +87,35 @@ export class Game {
   }
 
   getNextPlayer() {
-    if (this.gameType == GameType.ONE_PLAYER){
-        return this.firstPlayer;
-    } else if (this.gameType == GameType.TWO_PLAYER){
+    if (this.gameType == GameType.ONE_PLAYER) {
+      return this.firstPlayer;
+    } else if (this.gameType == GameType.TWO_PLAYER) {
       if (this.activePlayer === this.firstPlayer) {
         return this.secondPlayer;
       } else {
         return this.firstPlayer;
       }
-    } else if (this.gameType === GameType.THREE_PLAYER){
+    } else if (this.gameType === GameType.THREE_PLAYER) {
       if (this.activePlayer === this.firstPlayer) {
         return this.secondPlayer;
-      } else if (this.activePlayer === this.secondPlayer)  {
+      } else if (this.activePlayer === this.secondPlayer) {
         return this.threePlayer;
       } else {
         return this.firstPlayer;
       }
-    } else if (this.gameType === GameType.FOUR_PLAYER){
+    } else if (this.gameType === GameType.FOUR_PLAYER) {
       if (this.activePlayer === this.firstPlayer) {
         return this.secondPlayer;
-      } else if (this.activePlayer === this.secondPlayer)  {
+      } else if (this.activePlayer === this.secondPlayer) {
         return this.threePlayer;
       } else if (this.activePlayer === this.threePlayer) {
         return this.fourPlayer;
-      }else {
+      } else {
         return this.firstPlayer;
       }
     } else {
       return this.firstPlayer;
-    } 
+    }
   }
 
   applyAction(action: PlayerAction): PlayerActionResult {

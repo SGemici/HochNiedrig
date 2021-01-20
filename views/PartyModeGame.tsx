@@ -68,7 +68,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
   constructor(props: Props) {
     super(props);
-    this.game.gameType = GameType.ONE_PLAYER;
+    this.game.gameType = GameType.FOUR_PLAYER;
     this.state = getInitialStateForGame(this.game);
   }
 
@@ -146,6 +146,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
   restartGame() {
     this.game = new Game();
     this.setState(getInitialStateForGame(this.game));
+    this.angleMainOffset = 0;
   }
 
   syncGameState() {
@@ -155,6 +156,27 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
       previousCard: this.game.previousCard,
       laidsCards: this.state.laidsCards + 1,
     });
+    switch (this.game.cardIndex % 4) {
+      case 0:
+        this.rotateForBottom();
+        break;
+      case 1:
+        this.rotateForLeft();
+        break;
+      case 2:
+        this.rotateForTop();
+        break;
+      case 3:
+        this.rotateForRight();
+        break;
+      default:
+        console.log("ERROR!");
+    }
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount");
+    this.syncGameState();
   }
 
   onPlayerAction(action: PlayerAction) {
@@ -328,15 +350,23 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
               },
             ]}
           >
+            <View>
+              <RotatableText text={this.state.activePlayer.name} />
+            </View>
             <PlayerStatistics Player={this.state.firstPlayer} />
             <PlayerControlsFull
-              handlePlayerAction={(action: PlayerAction) => this.onPlayerAction(action)}
+              handlePlayerAction={(action: PlayerAction) =>
+                this.onPlayerAction(action)
+              }
             />
           </Animated.View>
         </Animated.View>
 
         <View style={styles.gameControls}>
-          <TextButton onClick={() => this.showExitPopup(true)} textStyle={{ fontSize: 40 }}>
+          <TextButton
+            onClick={() => this.showExitPopup(true)}
+            textStyle={{ fontSize: 40 }}
+          >
             ⏪
           </TextButton>
           <TextButton

@@ -62,10 +62,8 @@ export default class Home extends React.Component<Props> {
                 3️⃣
               </TextButton>
               <TextButton
-                enabled={false}
-                onClick={() => console.log("4")}
-                buttonStyle={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
-                // onClick={this.props.handleFourPlayerGameStartIntent}
+                buttonStyle={styles.MainGamePlayerButtons}
+                onClick={this.props.handleFourPlayerGameStartIntent}
                 // style={styles.MainGamePlayerButtons}
               >
                 4️⃣

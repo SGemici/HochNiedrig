@@ -1,8 +1,8 @@
 import React from "react";
 import { Text, View } from "react-native";
-import FourPlayerGame from "./views/FourPlayerGame";
 import Home from "./views/Home";
 import OnePlayerGame from "./views/OnePlayerGame";
+import PartyModeGame from "./views/PartyModeGame";
 import Settings from "./views/Settings";
 import ThreePlayerGame from "./views/ThreePlayerGame";
 import TwoPlayerGame from "./views/TwoPlayerGame";
@@ -75,12 +75,8 @@ export default class App extends React.Component<{}, AppSate> {
   }
   getFourPlayerGameView() {
     return (
-      <FourPlayerGame
+      <PartyModeGame
         handleExit={() => this.showView(GameView.HOME_VIEW)}
-        sameButtonVisible={this.state.sameButtonVisible}
-        redblackButtonVisible={this.state.redblackButtonVisible}
-        statisticVisible={this.state.statisticVisible}
-        popupWrongActionReduce={this.state.popupWrongActionReduce}
       />
     );
   }

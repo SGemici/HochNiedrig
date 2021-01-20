@@ -36,8 +36,8 @@ type ButtonProps = {
   enabled?: boolean;
   onClick: Function;
   withGradient?: boolean;
-  textStyle?: TextStyle;
-  buttonStyle?: ViewStyle;
+  textStyle?: TextStyle | TextStyle[];
+  buttonStyle?: ViewStyle | ViewStyle[] ;
 };
 export class TextButton extends React.Component<ButtonProps> {
   // TODO fix eslint issue, seems like we are not the only ones
@@ -73,6 +73,7 @@ export class TextButton extends React.Component<ButtonProps> {
   }
 
   render() {
+
     // this sucks hard
     // use default props
     let enabled;

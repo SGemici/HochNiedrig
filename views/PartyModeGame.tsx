@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Animated } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
 import {
@@ -8,26 +8,16 @@ import {
   PlayerAction,
   PlayerActionResult,
 } from "../business/types";
-import { Emoji, EmojiButton } from "../components/atoms/EmojiButton";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
-import { PlayerControls } from "../components/PlayerControls";
+import { PlayerControlsFull } from "../components/PlayerControlsFull";
 import { PlayerStatistics } from "../components/PlayerStatistics";
 import { Popup } from "../components/Popup";
 import { TableModul } from "../components/Table";
 import { COLORS } from "../styles/colors";
 
-// eslint-disable-next-line no-undef
-function withVeticalAlignment(el: JSX.Element) {
-  return <View style={[styles.PlayerSpecials]}>{el}</View>;
-}
-
 type Props = {
   handleExit: Function;
-  sameButtonVisible: Boolean;
-  redblackButtonVisible: Boolean;
-  statisticVisible: Boolean;
-  popupWrongActionReduce: Boolean;
 };
 
 type AppSate = {
@@ -44,9 +34,11 @@ type AppSate = {
   PopupWrongActionTime: number;
   showRestartPopup: Boolean;
   showExitGamePopup: Boolean;
+  angleMain: Animated.Value;
+  anglePlayer: Animated.Value;
 };
 
-function getInitialStateForGame(game: Game, popupTime: number) {
+function getInitialStateForGame(game: Game) {
   return {
     gameStarted: false,
     activePlayer: game.activePlayer,
@@ -59,9 +51,11 @@ function getInitialStateForGame(game: Game, popupTime: number) {
     showPopupBackgroundAlert: COLORS.transparent,
     showBackgrounAlert: COLORS.appBackground,
     laidsCards: 1,
-    PopupWrongActionTime: popupTime,
+    PopupWrongActionTime: 5,
     showRestartPopup: false,
     showExitGamePopup: false,
+    angleMain: new Animated.Value(0),
+    anglePlayer: new Animated.Value(0),
   };
 }
 
@@ -70,13 +64,12 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
   popuptimerAlertId?: number;
 
   game: Game = new Game();
-
-  popupTime = this.props.popupWrongActionReduce ? 1 : 5;
+  angleMainOffset = -180;
 
   constructor(props: Props) {
     super(props);
     this.game.gameType = GameType.ONE_PLAYER;
-    this.state = getInitialStateForGame(this.game, this.popupTime);
+    this.state = getInitialStateForGame(this.game);
   }
 
   componentWillUnmount(): void {
@@ -92,10 +85,67 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
     }
   }
 
+  rotateForRight() {
+    console.log("right");
+    Animated.timing(this.state.angleMain, {
+      toValue: this.angleMainOffset,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(this.state.anglePlayer, {
+      toValue: 90,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  rotateForLeft() {
+    console.log("left");
+    Animated.timing(this.state.angleMain, {
+      toValue: this.angleMainOffset,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(this.state.anglePlayer, {
+      toValue: 90,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  rotateForTop() {
+    console.log("top");
+    this.angleMainOffset += 180;
+    Animated.timing(this.state.angleMain, {
+      toValue: this.angleMainOffset,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(this.state.anglePlayer, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  rotateForBottom() {
+    console.log("bottom");
+    this.angleMainOffset += 180;
+    Animated.timing(this.state.angleMain, {
+      toValue: this.angleMainOffset,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(this.state.anglePlayer, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }
+
   restartGame() {
     this.game = new Game();
-    this.game.gameType = GameType.ONE_PLAYER;
-    this.setState(getInitialStateForGame(this.game, this.popupTime));
+    this.setState(getInitialStateForGame(this.game));
   }
 
   syncGameState() {
@@ -145,7 +195,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
     clearInterval(this.popuptimerIntevalId);
     this.setState({
       showWrongActionPopup: false,
-      PopupWrongActionTime: this.popupTime,
+      PopupWrongActionTime: 5,
     });
     if (this.game.isOver()) {
       this.showEndGamePopup();
@@ -171,11 +221,11 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
           clearInterval(this.popuptimerIntevalId);
           this.setState({
             showWrongActionPopup: false,
-            PopupWrongActionTime: this.popupTime,
+            PopupWrongActionTime: 5,
           });
           resolve();
           // TODO add contant for 4500 millis
-        }, this.popupTime * 1000))
+        }, 5000))
     );
   }
 
@@ -221,83 +271,90 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
     const Popuptime = "" + this.state.PopupWrongActionTime;
 
     return (
-      <View>
-        <View
+      <View style={styles.body}>
+        <Animated.View
           style={[
-            styles.container,
+            styles.main,
             {
               opacity: opacityValue,
               backgroundColor: this.state.showBackgrounAlert,
             },
+            {
+              transform: [
+                {
+                  rotateZ: this.state.angleMain.interpolate({
+                    inputRange: [0, 360],
+                    outputRange: ["0deg", `360deg`],
+                  }),
+                },
+              ],
+            },
           ]}
         >
-          <View style={[{ margin: "16%" }]}></View>
-
-          <View style={styles.ContainerCenter}>
-            {this.props.redblackButtonVisible &&
-              withVeticalAlignment(
-                <EmojiButton
-                  enabled={true}
-                  emoji={Emoji.redCircle}
-                  onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_RED)}
-                />
-              )}
-
+          <Animated.View
+            style={[
+              styles.cardWrapper,
+              {
+                transform: [
+                  {
+                    rotateZ: this.state.anglePlayer.interpolate({
+                      inputRange: [0, 360],
+                      outputRange: ["0deg", `360deg`],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
             <TableModul
               card={this.state.activeCard.image}
               laidsCards={this.state.laidsCards}
               showBothSideLaids={false}
             />
+          </Animated.View>
 
-            {this.props.redblackButtonVisible &&
-              withVeticalAlignment(
-                <EmojiButton
-                  enabled={true}
-                  emoji={Emoji.blackCircle}
-                  onClick={() => this.onPlayerAction(PlayerAction.CHOOSE_BLACK)}
-                />
-              )}
-          </View>
-          {this.props.statisticVisible && (
-            <PlayerStatistics
-              transformRotateZ={"0deg"}
-              Player={this.state.firstPlayer}
+          <Animated.View
+            style={[
+              styles.playerControls,
+              {
+                transform: [
+                  {
+                    rotateZ: this.state.anglePlayer.interpolate({
+                      inputRange: [0, 360],
+                      outputRange: ["0deg", `360deg`],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          >
+            <PlayerStatistics Player={this.state.firstPlayer} />
+            <PlayerControlsFull
+              handlePlayerAction={(action: PlayerAction) => this.onPlayerAction(action)}
             />
-          )}
+          </Animated.View>
+        </Animated.View>
 
-          <PlayerControls
-            inverseOrder={false}
-            transformRotateZ={"0deg"}
-            handlePlayerAction={(action) => this.onPlayerAction(action)}
-            enabled={this.state.activePlayer === this.state.firstPlayer}
-            margin="15%"
-            visibleSameButton={this.props.sameButtonVisible}
-          />
-          <View style={styles.GameControlSettings}>
-            <TextButton
-              onClick={() => this.showExitPopup(true)}
-              buttonStyle={styles.GameControlSettingsButtons}
-            >
-              ⏪
-            </TextButton>
-            <TextButton
-              enabled={true}
-              onClick={() => this.showRestartPopup(true)}
-              buttonStyle={[styles.GameControlSettingsButtons]}
-            >
-              🔄
-            </TextButton>
-          </View>
+        <View style={styles.gameControls}>
+          <TextButton onClick={() => this.showExitPopup(true)} textStyle={{ fontSize: 40 }}>
+            ⏪
+          </TextButton>
+          <TextButton
+            enabled={true}
+            onClick={() => this.showRestartPopup(true)}
+            textStyle={{ fontSize: 40 }}
+          >
+            🔄
+          </TextButton>
         </View>
-
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
             <RotatableText text="FALSCH - TRINK🍺" rotate={true} />
-            <View style={styles.PopupTime}>
+            <View style={popupStyles.time}>
               <RotatableText text={Popuptime} rotate={true} />
               <TextButton
                 onClick={() => this.hideIncorrectActionPopup()}
-                textStyle={styles.popupPlay}
+                textStyle={popupStyles.play}
               >
                 ❎
               </TextButton>
@@ -309,18 +366,22 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
         {showEndGamePopup && (
           <Popup>
-            <RotatableText rotate={false} text="Spiel beendet" />
+            <RotatableText rotate={true} text="Spiel beendet" />
+            <RotatableText
+              rotate={true}
+              text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
+            />
+
             <TextButton
               onClick={() => this.restartGame()}
-              textStyle={styles.popupPlay}
+              textStyle={popupStyles.play}
             >
               🔄
             </TextButton>
-            {this.props.statisticVisible && (
-              <RotatableText
-                text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
-              />
-            )}
+
+            <RotatableText
+              text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
+            />
             <RotatableText text="Spiel beendet" />
           </Popup>
         )}
@@ -328,14 +389,14 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
         {(showRestartPopup || showExitGamePopup) && (
           <Popup>
             <RotatableText text={showRestartOrMainTextPopup} />
-            <View style={styles.PopupRestartExit}>
+            <View style={popupStyles.default}>
               <TextButton
                 onClick={() =>
                   showRestartPopup
                     ? this.restartGame()
                     : this.props.handleExit()
                 }
-                textStyle={[styles.popupPlay, { marginRight: 15 }]}
+                textStyle={[popupStyles.default, { marginRight: 15 }]}
               >
                 ✅
               </TextButton>
@@ -345,7 +406,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
                     ? this.showRestartPopup(false)
                     : this.showExitPopup(false)
                 }
-                textStyle={[styles.popupPlay, { marginLeft: 15 }]}
+                textStyle={[popupStyles.default, { marginLeft: 15 }]}
               >
                 ❎
               </TextButton>
@@ -358,34 +419,55 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    display: "flex",
+  body: {
     height: "100%",
+    width: "100%",
     backgroundColor: COLORS.appBackground,
-    alignItems: "center",
-    padding: 20,
-    flexDirection: "column",
-  },
-  popupPlay: {
-    fontSize: 65,
+    position: "relative",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 60,
+    paddingBottom: 60,
   },
 
-  ContainerCenter: {
-    alignSelf: "stretch",
-    flexGrow: 1,
+  main: {
+    height: "100%",
+    position: "relative",
+  },
+
+  gameControls: {
+    height: 60,
     display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    position: "absolute",
+    bottom: 0,
+    left: 20,
+    right: 20,
+    justifyContent: "space-between",
+    alignSelf: "flex-start",
     flexDirection: "row",
   },
 
-  PlayerSpecials: {
-    alignSelf: "stretch",
+  cardWrapper: {
+    height: "50%",
+    width: "100%",
     display: "flex",
     justifyContent: "center",
-    margin: 0,
   },
-  PopupTime: {
+
+  playerControls: {
+    height: "50%",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+  },
+});
+
+const popupStyles = StyleSheet.create({
+  play: {
+    fontSize: 65,
+  },
+
+  time: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -393,20 +475,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
 
-  GameControlSettings: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignSelf: "flex-start",
-    flexDirection: "row",
-    width: "100%",
-  },
-  GameControlSettingsButtons: {
-    fontSize: 30,
-    paddingLeft: 5,
-    paddingRight: 5,
-  },
-
-  PopupRestartExit: {
+  default: {
     display: "flex",
     justifyContent: "space-between",
     alignSelf: "center",

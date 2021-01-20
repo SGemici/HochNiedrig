@@ -137,7 +137,7 @@ export default class App extends React.Component<{}, AppSate> {
     );
   }
 
-  render() {    
+  render() {
     switch (this.state.activeView) {
       case GameView.HOME_VIEW:
         return this.getHomeView();

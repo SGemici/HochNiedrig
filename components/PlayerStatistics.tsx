@@ -4,6 +4,7 @@ import { StyleSheet, View, Text } from "react-native";
 import { Player } from "../business/types";
 
 type InfoElementProps = {
+  transformRotateZ?: string;
   Player: Player;
 };
 export class PlayerStatistics extends React.Component<InfoElementProps> {
@@ -21,7 +22,10 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
     });
     return (
       <View
-        style={InfoStyle.InfoModul}
+        style={[
+          InfoStyle.InfoModul,
+          { transform: [{ rotateZ: (this.props.transformRotateZ || "0deg") }] },
+        ]}
       >
         <Text style={InfoStyle.TextModul}>
           🍺 {this.props.Player.statisticDrinkNumber}{" "}

@@ -40,13 +40,13 @@ export default class Home extends React.Component<Props> {
             <View style={[styles.MainGamePlayerChoice, {}]}>
               <TextButton
                 onClick={this.props.handleOnePlayerGameStartIntent}
-                style={styles.MainGamePlayerButtons}
+                buttonStyle={styles.MainGamePlayerButtons}
               >
                 1️⃣
               </TextButton>
               <TextButton
                 onClick={this.props.handleTwoPlayerGameStartIntent}
-                style={styles.MainGamePlayerButtons}
+                buttonStyle={styles.MainGamePlayerButtons}
               >
                 2️⃣
               </TextButton>
@@ -57,14 +57,14 @@ export default class Home extends React.Component<Props> {
                 // style={styles.MainGamePlayerButtons}
                 enabled={false}
                 onClick={() => console.log("3")}
-                style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
+                buttonStyle={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
               >
                 3️⃣
               </TextButton>
               <TextButton
                 enabled={false}
                 onClick={() => console.log("4")}
-                style={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
+                buttonStyle={[styles.MainGamePlayerButtons, { opacity: 0.2 }]}
                 // onClick={this.props.handleFourPlayerGameStartIntent}
                 // style={styles.MainGamePlayerButtons}
               >
@@ -77,14 +77,14 @@ export default class Home extends React.Component<Props> {
             <TextButton
               enabled={false}
               onClick={() => console.log("tutorial")}
-              style={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
+              buttonStyle={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
             >
               📖
             </TextButton>
             <TextButton
               enabled={true}
               onClick={this.props.handleSettingsGameStartIntent}
-              style={[styles.MainGameSettingsButtons, { opacity: 1 }]}
+              buttonStyle={[styles.MainGameSettingsButtons, { opacity: 1 }]}
             >
               ⚙️
             </TextButton>

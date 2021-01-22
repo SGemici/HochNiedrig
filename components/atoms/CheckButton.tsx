@@ -75,7 +75,7 @@ const stylesCheckBox = StyleSheet.create({
     minWidth: "78%",
     maxWidth: "78%",
     fontSize: 17,
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
     margin: 2,
   },
 

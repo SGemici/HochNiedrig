@@ -77,6 +77,10 @@ export default class App extends React.Component<{}, AppSate> {
     return (
       <PartyModeGame
         handleExit={() => this.showView(GameView.HOME_VIEW)}
+        sameButtonVisible={this.state.sameButtonVisible}
+        redblackButtonVisible={this.state.redblackButtonVisible}
+        statisticVisible={this.state.statisticVisible}
+        popupWrongActionReduce={this.state.popupWrongActionReduce}
       />
     );
   }

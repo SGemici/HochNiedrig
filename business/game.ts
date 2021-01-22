@@ -24,12 +24,12 @@ export class Game {
 
   constructor() {
     this.cards = this.shuffle(ALL_CARDS);
-    // this.cards = [ALL_CARDS[1], ALL_CARDS[4], ALL_CARDS[8]];
+    //this.cards = [ALL_CARDS[1], ALL_CARDS[4], ALL_CARDS[8], ALL_CARDS[8], ALL_CARDS[8]];
     this.players = [
-      getPlayer("Player ONE", 0),
-      getPlayer("Player TWO", 0),
-      getPlayer("Player THREE", 0),
-      getPlayer("Player FOUR", 0),
+      getPlayer("Player 1", 0),
+      getPlayer("Player 2", 0),
+      getPlayer("Player 3", 0),
+      getPlayer("Player 4", 0),
     ];
     this.activePlayer = this.players[0];
     this.firstPlayer = this.players[0];

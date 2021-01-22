@@ -77,7 +77,7 @@ export default class Settings extends React.Component<Props> {
           <View style={[styles.SettingsBackView, {}]}>
             <TextButton
               onClick={() => this.props.handleExit()}
-              style={styles.GameControlSettingsButtons}
+              textStyle={styles.GameControlSettingsButtons}
             >
               ⏪
             </TextButton>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   HOCHNIEDRIG_LOGO_TEXT: {
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
     fontSize: 30,
     display: "flex",
     alignItems: "center",
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   SettingsViewText: {
-    color: COLORS.startTextColor,
+    color: COLORS.brightText,
     fontSize: 30,
     display: "flex",
     alignItems: "center",
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
 
   GameControlSettingsButtons: {
-    fontSize: 30,
+    fontSize: 45,
     paddingLeft: 5,
     paddingRight: 5,
   },

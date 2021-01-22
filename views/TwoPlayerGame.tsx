@@ -287,14 +287,16 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
           <View style={styles.GameControlSettings}>
             <TextButton
               onClick={() => this.showExitPopup(true)}
-              textStyle={styles.GameControlSettingsButtons}
+              //textStyle={styles.GameControlSettingsButtons}
+              textStyle={{ fontSize: 40 }}
             >
               ⏪
             </TextButton>
             <TextButton
               enabled={true}
               onClick={() => this.showRestartPopup(true)}
-              textStyle={[styles.GameControlSettingsButtons]}
+              //textStyle={[styles.GameControlSettingsButtons]}
+              textStyle={{ fontSize: 40 }}
             >
               🔄
             </TextButton>

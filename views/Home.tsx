@@ -73,13 +73,6 @@ export default class Home extends React.Component<Props> {
 
           <View style={[styles.MainGameSettings, {}]}>
             <TextButton
-              enabled={false}
-              onClick={() => console.log("tutorial")}
-              buttonStyle={[styles.MainGameSettingsButtons, { opacity: 0.2 }]}
-            >
-              📖
-            </TextButton>
-            <TextButton
               enabled={true}
               onClick={this.props.handleSettingsGameStartIntent}
               buttonStyle={[styles.MainGameSettingsButtons, { opacity: 1 }]}
@@ -169,7 +162,7 @@ const styles = StyleSheet.create({
     // backgroundColor: COLORS.alertBackgroundRed,
     borderRadius: 12,
 
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     justifyContent: "space-between",
   },
 

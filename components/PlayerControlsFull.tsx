@@ -6,9 +6,20 @@ import { TextButton } from "./atoms/TextButton";
 
 type ControlElementProps = {
   handlePlayerAction: (action: PlayerAction) => void;
+  visibleSameButton?: Boolean;
+  visibleRedBlackButton?: Boolean;
 };
 export class PlayerControlsFull extends React.Component<ControlElementProps> {
   render() {
+    const visibleSameButton =
+      this.props.visibleSameButton === undefined
+        ? true
+        : this.props.visibleSameButton;
+    const visibleRedBlackButton =
+      this.props.visibleRedBlackButton === undefined
+        ? true
+        : this.props.visibleRedBlackButton;
+
     const borderColor = "gray";
 
     const styles = StyleSheet.create({
@@ -24,9 +35,10 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
         borderRadius: 30,
         borderColor,
         flexDirection: "column",
+        marginTop: 5,
       },
       colorPicker: {
-        marginBottom: 10
+        marginBottom: 10,
       },
       orderPicker: {
         flexDirection: "row",
@@ -35,24 +47,28 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
 
     return (
       <View style={[styles.base, styles.wrapper]}>
-        <View style={[styles.base, styles.colorPicker]}>
-          <EmojiButton
-            enabled={true}
-            emoji={Emoji.blackCircle}
-            onClick={() =>
-              this.props.handlePlayerAction(PlayerAction.CHOOSE_BLACK)
-            }
-            buttonStyle={{ margin: 10, padding: 10 }}
-          />
-          <EmojiButton
-            enabled={true}
-            emoji={Emoji.redCircle}
-            onClick={() =>
-              this.props.handlePlayerAction(PlayerAction.CHOOSE_RED)
-            }
-            buttonStyle={{ margin: 10, padding: 10 }}
-          />
-        </View>
+        {visibleRedBlackButton && (
+          <View style={[styles.base, styles.colorPicker]}>
+            <EmojiButton
+              enabled={true}
+              emoji={Emoji.blackCircle}
+              onClick={() =>
+                this.props.handlePlayerAction(PlayerAction.CHOOSE_BLACK)
+              }
+              buttonStyle={{ margin: 10, padding: 10 }}
+            />
+
+            <EmojiButton
+              enabled={true}
+              emoji={Emoji.redCircle}
+              onClick={() =>
+                this.props.handlePlayerAction(PlayerAction.CHOOSE_RED)
+              }
+              buttonStyle={{ margin: 10, padding: 10 }}
+            />
+          </View>
+        )}
+
         <View style={[styles.base, styles.orderPicker]}>
           <TextButton
             onClick={() =>
@@ -61,14 +77,16 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
           >
             ⬇️
           </TextButton>
-          <TextButton
-            withGradient={true}
-            onClick={() =>
-              this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
-            }
-          >
-            =
-          </TextButton>
+          {visibleSameButton && (
+            <TextButton
+              withGradient={true}
+              onClick={() =>
+                this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
+              }
+            >
+              =
+            </TextButton>
+          )}
           <TextButton
             onClick={() =>
               this.props.handlePlayerAction(PlayerAction.CHOOSE_HIGHER)

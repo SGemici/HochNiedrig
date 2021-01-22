@@ -276,14 +276,14 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
           <View style={styles.GameControlSettings}>
             <TextButton
               onClick={() => this.showExitPopup(true)}
-              buttonStyle={styles.GameControlSettingsButtons}
+              textStyle={{ fontSize: 40 }}
             >
               ⏪
             </TextButton>
             <TextButton
               enabled={true}
               onClick={() => this.showRestartPopup(true)}
-              buttonStyle={[styles.GameControlSettingsButtons]}
+              textStyle={{ fontSize: 40 }}
             >
               🔄
             </TextButton>

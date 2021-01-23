@@ -28,7 +28,7 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
         ]}
       >
         <Text style={InfoStyle.TextModul}>
-          🍺 {this.props.Player.statisticDrinkNumber}{" "}
+          🍺 {this.props.Player.statisticDrinkNumber}
         </Text>
       </View>
     );

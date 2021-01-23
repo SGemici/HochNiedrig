@@ -5,12 +5,10 @@ import { COLORS } from "../styles/colors";
 type PopupProps = {
   showBackgroundAlert?: COLORS;
 };
-// export function Popup(props: { children: React.ReactNode }) {
+
 export class Popup extends React.Component<PopupProps> {
   render() {
     const styles = StyleSheet.create({
-      // Bild-Bereich
-      // eslint-disable-next-line react-native/no-color-literals
       popup: {
         position: "absolute",
         width: "100%",
@@ -28,6 +26,7 @@ export class Popup extends React.Component<PopupProps> {
         borderColor: COLORS.secondaryBorder,
         borderWidth: 2,
         backgroundColor: COLORS.appBackground,
+        padding: 15,
       },
     });
 

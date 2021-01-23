@@ -2,12 +2,7 @@ import React from "react";
 import { StyleSheet, View, Animated } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
-import {
-  GameType,
-  Player,
-  PlayerAction,
-  PlayerActionResult,
-} from "../business/types";
+import { Player, PlayerAction, PlayerActionResult } from "../business/types";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
 import { PlayerControlsFull } from "../components/PlayerControlsFull";
@@ -22,15 +17,11 @@ type Props = {
   redblackButtonVisible: Boolean;
   statisticVisible: Boolean;
   popupWrongActionReduce: Boolean;
-  PlayerMode: GameType;
+  numberOfPlayers: number;
 };
 
 type AppSate = {
   activePlayer: Player;
-  firstPlayer: Player;
-  secondPlayer: Player;
-  threePlayer: Player;
-  fourPlayer: Player;
   activeCard: Card;
   previousCard: Card;
   showWrongActionPopup: boolean;
@@ -49,10 +40,6 @@ function getInitialStateForGame(game: Game, popuptime: number) {
   return {
     gameStarted: false,
     activePlayer: game.activePlayer,
-    firstPlayer: game.firstPlayer,
-    secondPlayer: game.secondPlayer,
-    threePlayer: game.threePlayer,
-    fourPlayer: game.fourPlayer,
     activeCard: game.activeCard,
     previousCard: game.previousCard,
     showWrongActionPopup: false,
@@ -68,22 +55,17 @@ function getInitialStateForGame(game: Game, popuptime: number) {
   };
 }
 
-export default class OnePlayerGame extends React.Component<Props, AppSate> {
+export default class PartyModeGame extends React.Component<Props, AppSate> {
   popuptimerIntevalId?: number;
   popuptimerAlertId?: number;
 
-  game: Game = new Game();
+  game: Game = new Game(this.props.numberOfPlayers);
   angleMainOffset = -180;
 
   popupTime = this.props.popupWrongActionReduce ? 1 : 5;
 
-  playerMode = this.props.PlayerMode;
-
   constructor(props: Props) {
     super(props);
-    //this.game.gameType = GameType.FOUR_PLAYER;
-    console.log("PlayerMode: " + this.playerMode);
-    this.game.gameType = this.playerMode;
     this.state = getInitialStateForGame(this.game, this.popupTime);
   }
 
@@ -159,7 +141,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
   }
 
   restartGame() {
-    this.game = new Game();
+    this.game = new Game(this.props.numberOfPlayers);
     this.setState(getInitialStateForGame(this.game, this.popupTime));
     this.angleMainOffset = 0;
   }
@@ -173,34 +155,17 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
       previousCard: this.game.previousCard,
       laidsCards: this.state.laidsCards + 1,
     });
-    // switch (this.game.cardIndex % 4) {
-    //   case 0:
-    //     this.rotateForBottom();
-    //     break;
-    //   case 1:
-    //     this.rotateForLeft();
-    //     break;
-    //   case 2:
-    //     this.rotateForTop();
-    //     break;
-    //   case 3:
-    //     this.rotateForRight();
-    //     break;
-    //   default:
-    //     console.log("ERROR!");
-    // }
-
-    switch (activePlayer) {
-      case this.state.firstPlayer:
+    switch (this.game.cardIndex % this.props.numberOfPlayers) {
+      case 0:
         this.rotateForBottom();
         break;
-      case this.state.secondPlayer:
+      case 1:
         this.rotateForLeft();
         break;
-      case this.state.threePlayer:
+      case 2:
         this.rotateForTop();
         break;
-      case this.state.fourPlayer:
+      case 3:
         this.rotateForRight();
         break;
       default:
@@ -303,7 +268,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
     const showWrongActionPopup = this.state.showWrongActionPopup;
     //const showWrongActionPopup = true;
     const showEndGamePopup = this.state.showEndGamePopup;
-    //const showEndGamePopup = true;
+    // const showEndGamePopup = true;
 
     const showRestartPopup = this.state.showRestartPopup;
     //const showRestartPopup = true;
@@ -444,45 +409,23 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
         {showEndGamePopup && (
           <Popup>
-            <RotatableText rotate={true} text="Spiel beendet" />
-            {this.props.statisticVisible && (
-              <RotatableText
-                rotate={true}
-                text={`🍺 = ${this.state.threePlayer.statisticDrinkNumber}`}
-              />
-            )}
-            <View
-              style={[
-                { display: "flex", alignItems: "center", flexDirection: "row" },
-              ]}
-            >
-              {this.props.statisticVisible && (
-                <RotatableText
-                  text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
-                  rotate={true}
-                  rotateValue={"90deg"}
-                />
-              )}
-              <TextButton
-                onClick={() => this.restartGame()}
-                textStyle={popupStyles.play}
-              >
-                🔄
-              </TextButton>
-              {this.props.statisticVisible && (
-                <RotatableText
-                  text={`🍺 = ${this.state.fourPlayer.statisticDrinkNumber}`}
-                  rotate={true}
-                  rotateValue={"270deg"}
-                />
-              )}
-            </View>
-            {this.props.statisticVisible && (
-              <RotatableText
-                text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
-              />
-            )}
             <RotatableText text="Spiel beendet" />
+            {this.props.statisticVisible &&
+              this.game.getGameStatistics().map((statistic) => {
+                return (
+                  <RotatableText
+                    text={`${statistic.playerName} - 🍺 ${statistic.numberOfdrinks}`}
+                    style={popupStyles.statistic}
+                    key={statistic.playerName}
+                  />
+                );
+              })}
+            <TextButton
+              onClick={() => this.restartGame()}
+              textStyle={popupStyles.play}
+            >
+              🔄
+            </TextButton>
           </Popup>
         )}
 
@@ -565,6 +508,11 @@ const styles = StyleSheet.create({
 const popupStyles = StyleSheet.create({
   play: {
     fontSize: 65,
+  },
+
+  statistic: {
+    fontSize: 18,
+    color: COLORS.brightText,
   },
 
   time: {

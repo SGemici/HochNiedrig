@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
 import {
-  GameType,
   Player,
   PlayerAction,
   PlayerActionResult,
@@ -32,8 +31,6 @@ type Props = {
 
 type AppSate = {
   activePlayer: Player;
-  firstPlayer: Player;
-  secondPlayer: Player;
   activeCard: Card;
   previousCard: Card;
   showWrongActionPopup: boolean;
@@ -50,8 +47,6 @@ function getInitialStateForGame(game: Game, popupTime: number) {
   return {
     gameStarted: false,
     activePlayer: game.activePlayer,
-    firstPlayer: game.firstPlayer,
-    secondPlayer: game.secondPlayer,
     activeCard: game.activeCard,
     previousCard: game.previousCard,
     showWrongActionPopup: false,
@@ -69,13 +64,12 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
   popuptimerIntevalId?: number;
   popuptimerAlertId?: number;
 
-  game: Game = new Game();
+  game: Game = new Game(1);
 
   popupTime = this.props.popupWrongActionReduce ? 1 : 5;
 
   constructor(props: Props) {
     super(props);
-    this.game.gameType = GameType.ONE_PLAYER;
     this.state = getInitialStateForGame(this.game, this.popupTime);
   }
 
@@ -93,8 +87,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
   }
 
   restartGame() {
-    this.game = new Game();
-    this.game.gameType = GameType.ONE_PLAYER;
+    this.game = new Game(1);
     this.setState(getInitialStateForGame(this.game, this.popupTime));
   }
 
@@ -261,7 +254,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
           {this.props.statisticVisible && (
             <PlayerStatistics
               transformRotateZ={"0deg"}
-              Player={this.state.firstPlayer}
+              Player={this.state.activePlayer}
             />
           )}
 
@@ -269,7 +262,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
             inverseOrder={false}
             transformRotateZ={"0deg"}
             handlePlayerAction={(action) => this.onPlayerAction(action)}
-            enabled={this.state.activePlayer === this.state.firstPlayer}
+            enabled={this.state.activePlayer === this.state.activePlayer}
             margin="15%"
             visibleSameButton={this.props.sameButtonVisible}
           />
@@ -318,7 +311,7 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
             </TextButton>
             {this.props.statisticVisible && (
               <RotatableText
-                text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
+                text={`🍺 = ${this.state.activePlayer.statisticDrinkNumber}`}
               />
             )}
             <RotatableText text="Spiel beendet" />

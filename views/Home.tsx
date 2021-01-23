@@ -39,13 +39,13 @@ export default class Home extends React.Component<Props> {
             </View>
             <View style={[styles.MainGamePlayerChoice, {}]}>
               <TextButton
-                onClick={this.props.handleOnePlayerGameStartIntent}
+                onClick={() => this.props.handleOnePlayerGameStartIntent()}
                 buttonStyle={styles.MainGamePlayerButtons}
               >
                 1️⃣
               </TextButton>
               <TextButton
-                onClick={this.props.handleTwoPlayerGameStartIntent}
+                onClick={() => this.props.handleTwoPlayerGameStartIntent()}
                 buttonStyle={styles.MainGamePlayerButtons}
               >
                 2️⃣
@@ -53,15 +53,14 @@ export default class Home extends React.Component<Props> {
             </View>
             <View style={[styles.MainGamePlayerChoice, {}]}>
               <TextButton
-                onClick={this.props.handleThreePlayerGameStartIntent}
+                onClick={() => this.props.handleThreePlayerGameStartIntent()}
                 buttonStyle={styles.MainGamePlayerButtons}
               >
                 3️⃣
               </TextButton>
               <TextButton
                 buttonStyle={styles.MainGamePlayerButtons}
-                onClick={this.props.handleFourPlayerGameStartIntent}
-                // style={styles.MainGamePlayerButtons}
+                onClick={() => this.props.handleFourPlayerGameStartIntent()}
               >
                 4️⃣
               </TextButton>
@@ -72,7 +71,7 @@ export default class Home extends React.Component<Props> {
             <TextButton
               enabled={true}
               onClick={this.props.handleSettingsGameStartIntent}
-              buttonStyle={[styles.MainGameSettingsButtons, { opacity: 1 }]}
+              textStyle={styles.MainGameSettingsButtons}
             >
               ⚙️
             </TextButton>

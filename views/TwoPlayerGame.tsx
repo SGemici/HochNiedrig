@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
 import {
-  GameType,
   Player,
   PlayerAction,
   PlayerActionResult,
@@ -50,8 +49,8 @@ function getInitialStateForGame(game: Game, popupTime: number) {
   return {
     gameStarted: false,
     activePlayer: game.activePlayer,
-    firstPlayer: game.firstPlayer,
-    secondPlayer: game.secondPlayer,
+    firstPlayer: game.players[0],
+    secondPlayer: game.players[1],
     activeCard: game.activeCard,
     previousCard: game.previousCard,
     showWrongActionPopup: false,
@@ -69,13 +68,12 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
   popuptimerIntevalId?: number;
   popuptimerAlertId?: number;
 
-  game: Game = new Game();
+  game: Game = new Game(2);
 
   popupTime = this.props.popupWrongActionReduce ? 1 : 5;
 
   constructor(props: Props) {
     super(props);
-    this.game.gameType = GameType.TWO_PLAYER;
     this.state = getInitialStateForGame(this.game, this.popupTime);
   }
 
@@ -93,8 +91,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
   }
 
   restartGame() {
-    this.game = new Game();
-    this.game.gameType = GameType.TWO_PLAYER;
+    this.game = new Game(2);
     this.setState(getInitialStateForGame(this.game, this.popupTime));
   }
 

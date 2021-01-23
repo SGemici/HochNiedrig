@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { GameType } from "./business/types";
 import Home from "./views/Home";
 import OnePlayerGame from "./views/OnePlayerGame";
 import PartyModeGame from "./views/PartyModeGame";
@@ -63,13 +62,7 @@ export default class App extends React.Component<{}, AppSate> {
     );
   }
 
-  getPartyModeGameView(gameView: GameView) {
-    let Gametyp = GameType.ONE_PLAYER;
-    if (gameView == GameView.THREE_PLAYER_VIEW) {
-      Gametyp = GameType.THREE_PLAYER;
-    } else if (gameView == GameView.FOUR_PLAYER_VIEW) {
-      Gametyp = GameType.FOUR_PLAYER;
-    }
+  getPartyModeGameView(numberOfPlayers: number) {
     return (
       <PartyModeGame
         handleExit={() => this.showView(GameView.HOME_VIEW)}
@@ -77,7 +70,7 @@ export default class App extends React.Component<{}, AppSate> {
         redblackButtonVisible={this.state.redblackButtonVisible}
         statisticVisible={this.state.statisticVisible}
         popupWrongActionReduce={this.state.popupWrongActionReduce}
-        PlayerMode={Gametyp}
+        numberOfPlayers={numberOfPlayers}
       />
     );
   }
@@ -146,10 +139,10 @@ export default class App extends React.Component<{}, AppSate> {
         return this.getTwoPlayerGameView();
 
       case GameView.THREE_PLAYER_VIEW:
-        return this.getPartyModeGameView(GameView.THREE_PLAYER_VIEW);
+        return this.getPartyModeGameView(3);
 
       case GameView.FOUR_PLAYER_VIEW:
-        return this.getPartyModeGameView(GameView.FOUR_PLAYER_VIEW);
+        return this.getPartyModeGameView(4);
 
       case GameView.SETTINGS_VIEW:
         return this.getSettingsGameView();

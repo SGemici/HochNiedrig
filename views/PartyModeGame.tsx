@@ -22,6 +22,7 @@ type Props = {
   redblackButtonVisible: Boolean;
   statisticVisible: Boolean;
   popupWrongActionReduce: Boolean;
+  PlayerMode: GameType;
 };
 
 type AppSate = {
@@ -76,9 +77,13 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
 
   popupTime = this.props.popupWrongActionReduce ? 1 : 5;
 
+  playerMode = this.props.PlayerMode;
+
   constructor(props: Props) {
     super(props);
-    this.game.gameType = GameType.FOUR_PLAYER;
+    //this.game.gameType = GameType.FOUR_PLAYER;
+    console.log("PlayerMode: " + this.playerMode);
+    this.game.gameType = this.playerMode;
     this.state = getInitialStateForGame(this.game, this.popupTime);
   }
 
@@ -160,23 +165,42 @@ export default class OnePlayerGame extends React.Component<Props, AppSate> {
   }
 
   syncGameState() {
+    console.log("Active Player: ", this.game.activePlayer);
+    const activePlayer = this.game.activePlayer;
     this.setState({
-      activePlayer: this.game.activePlayer,
+      activePlayer: activePlayer,
       activeCard: this.game.activeCard,
       previousCard: this.game.previousCard,
       laidsCards: this.state.laidsCards + 1,
     });
-    switch (this.game.cardIndex % 4) {
-      case 0:
+    // switch (this.game.cardIndex % 4) {
+    //   case 0:
+    //     this.rotateForBottom();
+    //     break;
+    //   case 1:
+    //     this.rotateForLeft();
+    //     break;
+    //   case 2:
+    //     this.rotateForTop();
+    //     break;
+    //   case 3:
+    //     this.rotateForRight();
+    //     break;
+    //   default:
+    //     console.log("ERROR!");
+    // }
+
+    switch (activePlayer) {
+      case this.state.firstPlayer:
         this.rotateForBottom();
         break;
-      case 1:
+      case this.state.secondPlayer:
         this.rotateForLeft();
         break;
-      case 2:
+      case this.state.threePlayer:
         this.rotateForTop();
         break;
-      case 3:
+      case this.state.fourPlayer:
         this.rotateForRight();
         break;
       default:

@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
+import { GameType } from "./business/types";
 import Home from "./views/Home";
 import OnePlayerGame from "./views/OnePlayerGame";
 import PartyModeGame from "./views/PartyModeGame";
 import Settings from "./views/Settings";
-import ThreePlayerGame from "./views/ThreePlayerGame";
 import TwoPlayerGame from "./views/TwoPlayerGame";
 
 export enum GameView {
@@ -62,18 +62,14 @@ export default class App extends React.Component<{}, AppSate> {
       />
     );
   }
-  getThreePlayerGameView() {
-    return (
-      <ThreePlayerGame
-        handleExit={() => this.showView(GameView.HOME_VIEW)}
-        sameButtonVisible={this.state.sameButtonVisible}
-        redblackButtonVisible={this.state.redblackButtonVisible}
-        statisticVisible={this.state.statisticVisible}
-        popupWrongActionReduce={this.state.popupWrongActionReduce}
-      />
-    );
-  }
-  getFourPlayerGameView() {
+
+  getPartyModeGameView(gameView: GameView) {
+    let Gametyp = GameType.ONE_PLAYER;
+    if (gameView == GameView.THREE_PLAYER_VIEW) {
+      Gametyp = GameType.THREE_PLAYER;
+    } else if (gameView == GameView.FOUR_PLAYER_VIEW) {
+      Gametyp = GameType.FOUR_PLAYER;
+    }
     return (
       <PartyModeGame
         handleExit={() => this.showView(GameView.HOME_VIEW)}
@@ -81,6 +77,7 @@ export default class App extends React.Component<{}, AppSate> {
         redblackButtonVisible={this.state.redblackButtonVisible}
         statisticVisible={this.state.statisticVisible}
         popupWrongActionReduce={this.state.popupWrongActionReduce}
+        PlayerMode={Gametyp}
       />
     );
   }
@@ -149,10 +146,10 @@ export default class App extends React.Component<{}, AppSate> {
         return this.getTwoPlayerGameView();
 
       case GameView.THREE_PLAYER_VIEW:
-        return this.getThreePlayerGameView();
+        return this.getPartyModeGameView(GameView.THREE_PLAYER_VIEW);
 
       case GameView.FOUR_PLAYER_VIEW:
-        return this.getFourPlayerGameView();
+        return this.getPartyModeGameView(GameView.FOUR_PLAYER_VIEW);
 
       case GameView.SETTINGS_VIEW:
         return this.getSettingsGameView();

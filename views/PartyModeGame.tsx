@@ -392,7 +392,7 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
         </View>
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
-            <RotatableText text="FALSCH - TRINK🍺" rotate={true} />
+            <RotatableText text="FALSCH 🍺" rotate={true} />
             <View style={popupStyles.time}>
               <RotatableText text={Popuptime} rotate={true} />
               <TextButton
@@ -403,7 +403,7 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
               </TextButton>
               <RotatableText text={Popuptime} />
             </View>
-            <RotatableText text="FALSCH - TRINK🍺" />
+            <RotatableText text="FALSCH 🍺" />
           </Popup>
         )}
 

@@ -2,11 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
-import {
-  Player,
-  PlayerAction,
-  PlayerActionResult,
-} from "../business/types";
+import { Player, PlayerAction, PlayerActionResult } from "../business/types";
 import { Emoji, EmojiButton } from "../components/atoms/EmojiButton";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
@@ -302,7 +298,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
 
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
-            <RotatableText text="FALSCH 🍺" rotate={true} />
+            <RotatableText text="❌ FALSCH ❌" rotate={true} />
             <View style={styles.PopupTime}>
               <RotatableText text={Popuptime} rotate={true} />
               <TextButton
@@ -313,7 +309,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
               </TextButton>
               <RotatableText text={Popuptime} />
             </View>
-            <RotatableText text="FALSCH 🍺" />
+            <RotatableText text="❌ FALSCH ❌" />
           </Popup>
         )}
 
@@ -323,7 +319,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             {this.props.statisticVisible && (
               <RotatableText
                 rotate={true}
-                text={`🍺 = ${this.state.secondPlayer.statisticDrinkNumber}`}
+                text={`❌ = ${this.state.secondPlayer.statisticDrinkNumber}`}
               />
             )}
 
@@ -335,7 +331,7 @@ export default class TwoPlayerGame extends React.Component<Props, AppSate> {
             </TextButton>
             {this.props.statisticVisible && (
               <RotatableText
-                text={`🍺 = ${this.state.firstPlayer.statisticDrinkNumber}`}
+                text={`❌ = ${this.state.firstPlayer.statisticDrinkNumber}`}
               />
             )}
             <RotatableText text="Spiel beendet" />

@@ -24,11 +24,11 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
       <View
         style={[
           InfoStyle.InfoModul,
-          { transform: [{ rotateZ: (this.props.transformRotateZ || "0deg") }] },
+          { transform: [{ rotateZ: this.props.transformRotateZ || "0deg" }] },
         ]}
       >
         <Text style={InfoStyle.TextModul}>
-          🍺 {this.props.Player.statisticDrinkNumber}
+          ❌ {this.props.Player.statisticDrinkNumber}
         </Text>
       </View>
     );

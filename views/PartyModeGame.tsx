@@ -268,7 +268,7 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
     const showWrongActionPopup = this.state.showWrongActionPopup;
     //const showWrongActionPopup = true;
     const showEndGamePopup = this.state.showEndGamePopup;
-    // const showEndGamePopup = true;
+    //const showEndGamePopup = true;
 
     const showRestartPopup = this.state.showRestartPopup;
     //const showRestartPopup = true;
@@ -392,7 +392,7 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
         </View>
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
-            <RotatableText text="FALSCH 🍺" rotate={true} />
+            <RotatableText text="❌ FALSCH ❌" rotate={true} />
             <View style={popupStyles.time}>
               <RotatableText text={Popuptime} rotate={true} />
               <TextButton
@@ -403,7 +403,7 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
               </TextButton>
               <RotatableText text={Popuptime} />
             </View>
-            <RotatableText text="FALSCH 🍺" />
+            <RotatableText text="❌ FALSCH ❌" />
           </Popup>
         )}
 
@@ -414,7 +414,7 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
               this.game.getGameStatistics().map((statistic) => {
                 return (
                   <RotatableText
-                    text={`${statistic.playerName} - 🍺 ${statistic.numberOfdrinks}`}
+                    text={`${statistic.playerName} - ❌ ${statistic.numberOfdrinks}`}
                     style={popupStyles.statistic}
                     key={statistic.playerName}
                   />

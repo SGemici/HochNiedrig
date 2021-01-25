@@ -55,7 +55,7 @@ function getInitialStateForGame(game: Game, popuptime: number) {
   };
 }
 
-export default class PartyModeGame extends React.Component<Props, AppSate> {
+export default class GameView extends React.Component<Props, AppSate> {
   popuptimerIntevalId?: number;
   popuptimerAlertId?: number;
 
@@ -155,21 +155,38 @@ export default class PartyModeGame extends React.Component<Props, AppSate> {
       previousCard: this.game.previousCard,
       laidsCards: this.state.laidsCards + 1,
     });
-    switch (this.game.cardIndex % this.props.numberOfPlayers) {
-      case 0:
-        this.rotateForBottom();
-        break;
-      case 1:
-        this.rotateForLeft();
-        break;
-      case 2:
-        this.rotateForTop();
-        break;
-      case 3:
-        this.rotateForRight();
-        break;
-      default:
-        console.log("ERROR!");
+    if (this.props.numberOfPlayers === 1) {
+      // do nothing - no rotation required
+
+    } else if (this.props.numberOfPlayers === 2) {
+      switch (this.game.cardIndex % 2) {
+        case 0:
+          this.rotateForBottom();
+          break;
+        case 1:
+          this.rotateForTop();
+          break;
+        default:
+          console.log("ERROR!");
+      }
+
+    } else {
+      switch (this.game.cardIndex % this.props.numberOfPlayers) {
+        case 0:
+          this.rotateForBottom();
+          break;
+        case 1:
+          this.rotateForLeft();
+          break;
+        case 2:
+          this.rotateForTop();
+          break;
+        case 3:
+          this.rotateForRight();
+          break;
+        default:
+          console.log("ERROR!");
+      }
     }
   }
 

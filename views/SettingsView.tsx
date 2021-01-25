@@ -22,7 +22,7 @@ type Props = {
   changePopupWrongActionReduce: Function;
 };
 
-export default class Settings extends React.Component<Props> {
+export default class SettingsView extends React.Component<Props> {
   render() {
     return (
       <View>

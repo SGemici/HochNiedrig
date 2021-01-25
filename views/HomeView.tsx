@@ -13,7 +13,7 @@ type Props = {
   handleSettingsGameStartIntent: Function;
 };
 
-export default class Home extends React.Component<Props> {
+export default class HomeView extends React.Component<Props> {
   render() {
     return (
       <View>

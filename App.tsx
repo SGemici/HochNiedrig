@@ -1,10 +1,8 @@
 import React from "react";
 import { Text, View } from "react-native";
-import Home from "./views/Home";
-import OnePlayerGame from "./views/OnePlayerGame";
-import PartyModeGame from "./views/PartyModeGame";
-import Settings from "./views/Settings";
-import TwoPlayerGame from "./views/TwoPlayerGame";
+import HomeView from "./views/HomeView";
+import PartyModeGame from "./views/GameView";
+import SettingsView from "./views/SettingsView";
 
 export enum GameView {
   HOME_VIEW,
@@ -39,28 +37,6 @@ export default class App extends React.Component<{}, AppSate> {
   showView(activeView: GameView) {
     this.setState({ activeView });
   }
-  getOnePlayerGameView() {
-    return (
-      <OnePlayerGame
-        handleExit={() => this.showView(GameView.HOME_VIEW)}
-        sameButtonVisible={this.state.sameButtonVisible}
-        redblackButtonVisible={this.state.redblackButtonVisible}
-        statisticVisible={this.state.statisticVisible}
-        popupWrongActionReduce={this.state.popupWrongActionReduce}
-      />
-    );
-  }
-  getTwoPlayerGameView() {
-    return (
-      <TwoPlayerGame
-        handleExit={() => this.showView(GameView.HOME_VIEW)}
-        sameButtonVisible={this.state.sameButtonVisible}
-        redblackButtonVisible={this.state.redblackButtonVisible}
-        statisticVisible={this.state.statisticVisible}
-        popupWrongActionReduce={this.state.popupWrongActionReduce}
-      />
-    );
-  }
 
   getPartyModeGameView(numberOfPlayers: number) {
     return (
@@ -91,7 +67,7 @@ export default class App extends React.Component<{}, AppSate> {
   }
   getSettingsGameView() {
     return (
-      <Settings
+      <SettingsView
         handleExit={() => this.showView(GameView.HOME_VIEW)}
         changeSameButtonVisibleVar={this.state.sameButtonVisible}
         changeSameButtonVisible={() => this.changeSameButtonVisible()}
@@ -107,7 +83,7 @@ export default class App extends React.Component<{}, AppSate> {
 
   getHomeView() {
     return (
-      <Home
+      <HomeView
         handleOnePlayerGameStartIntent={() =>
           this.showView(GameView.ONE_PLAYER_VIEW)
         }
@@ -133,10 +109,10 @@ export default class App extends React.Component<{}, AppSate> {
         return this.getHomeView();
 
       case GameView.ONE_PLAYER_VIEW:
-        return this.getOnePlayerGameView();
+        return this.getPartyModeGameView(1);
 
       case GameView.TWO_PLAYER_VIEW:
-        return this.getTwoPlayerGameView();
+        return this.getPartyModeGameView(2);
 
       case GameView.THREE_PLAYER_VIEW:
         return this.getPartyModeGameView(3);

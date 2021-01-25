@@ -65,7 +65,7 @@ static void InitializeFlipper(UIApplication *application) {
 {
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:self.launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge moduleName:@"main" initialProperties:nil];
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  rootView.backgroundColor = [[UIColor alloc] initWithRed:0.0f green:61.0f/255.0f blue:102.0f/255.0f alpha:1];
 
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;

@@ -24,10 +24,11 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
 
     const styles = StyleSheet.create({
       base: {
-        width: "100%",
+        width: "92%",
         display: "flex",
         justifyContent: "space-evenly",
         flexDirection: "row",
+        alignSelf: "center",
       },
       wrapper: {
         padding: 10,

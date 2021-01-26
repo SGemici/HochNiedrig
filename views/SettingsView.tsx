@@ -20,6 +20,9 @@ type Props = {
 
   changePopupWrongActionReduceVar: Boolean;
   changePopupWrongActionReduce: Function;
+
+  changeShowPlayerPositionVar: Boolean;
+  changeShowPlayerPosition: Function;
 };
 
 export default class SettingsView extends React.Component<Props> {
@@ -70,6 +73,12 @@ export default class SettingsView extends React.Component<Props> {
                 onClick={() => this.props.changePopupWrongActionReduce()}
               >
                 Falsche Aktion: 1 Sekunde
+              </CheckButton>
+              <CheckButton
+                state={this.props.changeShowPlayerPositionVar}
+                onClick={() => this.props.changeShowPlayerPosition()}
+              >
+                Spielerposition anzeigen
               </CheckButton>
             </View>
           </View>

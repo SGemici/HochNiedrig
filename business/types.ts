@@ -6,6 +6,13 @@ export enum PlayerAction {
   CHOOSE_BLACK,
 }
 
+export enum PlayerPosition {
+  BOTTOM,
+  LEFT,
+  TOP,
+  RIGHT,
+}
+
 export enum PlayerActionResult {
   INCORRECT,
   CORRECT,

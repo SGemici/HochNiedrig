@@ -21,6 +21,7 @@ type AppSate = {
   redblackButtonVisible: Boolean;
   statisticVisible: Boolean;
   popupWrongActionReduce: Boolean;
+  showPlayerPosition: Boolean;
 };
 export default class App extends React.Component<{}, AppSate> {
   constructor(props: {}) {
@@ -31,6 +32,7 @@ export default class App extends React.Component<{}, AppSate> {
       redblackButtonVisible: true,
       statisticVisible: true,
       popupWrongActionReduce: false,
+      showPlayerPosition: true,
     };
   }
 
@@ -46,6 +48,7 @@ export default class App extends React.Component<{}, AppSate> {
         redblackButtonVisible={this.state.redblackButtonVisible}
         statisticVisible={this.state.statisticVisible}
         popupWrongActionReduce={this.state.popupWrongActionReduce}
+        showPlayerPosition={this.state.showPlayerPosition}
         numberOfPlayers={numberOfPlayers}
       />
     );
@@ -65,6 +68,9 @@ export default class App extends React.Component<{}, AppSate> {
       popupWrongActionReduce: !this.state.popupWrongActionReduce,
     });
   }
+  changeShowPlayerPosition() {
+    this.setState({ showPlayerPosition: !this.state.showPlayerPosition });
+  }
   getSettingsGameView() {
     return (
       <SettingsView
@@ -77,6 +83,8 @@ export default class App extends React.Component<{}, AppSate> {
         changeStatisticVisible={() => this.changeStatisticsVisible()}
         changePopupWrongActionReduceVar={this.state.popupWrongActionReduce}
         changePopupWrongActionReduce={() => this.changePopupWrongActionReduce()}
+        changeShowPlayerPositionVar={this.state.showPlayerPosition}
+        changeShowPlayerPosition={() => this.changeShowPlayerPosition()}
       />
     );
   }

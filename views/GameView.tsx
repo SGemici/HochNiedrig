@@ -2,10 +2,16 @@ import React from "react";
 import { StyleSheet, View, Animated } from "react-native";
 import { Card } from "../business/cards";
 import { Game } from "../business/game";
-import { Player, PlayerAction, PlayerActionResult } from "../business/types";
+import {
+  Player,
+  PlayerAction,
+  PlayerActionResult,
+  PlayerPosition,
+} from "../business/types";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
 import { PlayerControlsFull } from "../components/PlayerControlsFull";
+import { PlayerPositions } from "../components/PlayerPositions";
 import { PlayerStatistics } from "../components/PlayerStatistics";
 import { Popup } from "../components/Popup";
 import { TableModul } from "../components/Table";
@@ -18,6 +24,7 @@ type Props = {
   statisticVisible: Boolean;
   popupWrongActionReduce: Boolean;
   numberOfPlayers: number;
+  showPlayerPosition: Boolean;
 };
 
 type AppSate = {
@@ -34,9 +41,15 @@ type AppSate = {
   showExitGamePopup: Boolean;
   angleMain: Animated.Value;
   anglePlayer: Animated.Value;
+  showPlayerInstruction: Boolean;
+  opacityPlayerinstruction: number;
 };
 
-function getInitialStateForGame(game: Game, popuptime: number) {
+function getInitialStateForGame(
+  game: Game,
+  popuptime: number,
+  showPlayerInstruction: Boolean
+) {
   return {
     gameStarted: false,
     activePlayer: game.activePlayer,
@@ -52,6 +65,8 @@ function getInitialStateForGame(game: Game, popuptime: number) {
     showExitGamePopup: false,
     angleMain: new Animated.Value(0),
     anglePlayer: new Animated.Value(0),
+    showPlayerInstruction,
+    opacityPlayerinstruction: 1,
   };
 }
 
@@ -66,7 +81,11 @@ export default class GameView extends React.Component<Props, AppSate> {
 
   constructor(props: Props) {
     super(props);
-    this.state = getInitialStateForGame(this.game, this.popupTime);
+    this.state = getInitialStateForGame(
+      this.game,
+      this.popupTime,
+      this.props.showPlayerPosition
+    );
   }
 
   componentWillUnmount(): void {
@@ -142,7 +161,7 @@ export default class GameView extends React.Component<Props, AppSate> {
 
   restartGame() {
     this.game = new Game(this.props.numberOfPlayers);
-    this.setState(getInitialStateForGame(this.game, this.popupTime));
+    this.setState(getInitialStateForGame(this.game, this.popupTime, false));
     this.angleMainOffset = 0;
   }
 
@@ -157,7 +176,6 @@ export default class GameView extends React.Component<Props, AppSate> {
     });
     if (this.props.numberOfPlayers === 1) {
       // do nothing - no rotation required
-
     } else if (this.props.numberOfPlayers === 2) {
       switch (this.game.cardIndex % 2) {
         case 0:
@@ -169,7 +187,6 @@ export default class GameView extends React.Component<Props, AppSate> {
         default:
           console.log("ERROR!");
       }
-
     } else {
       switch (this.game.cardIndex % this.props.numberOfPlayers) {
         case 0:
@@ -279,6 +296,49 @@ export default class GameView extends React.Component<Props, AppSate> {
     this.setState({ showExitGamePopup: show });
   }
 
+  showExitPlayerInstruction() {
+    let interval = window.setInterval(() => {
+      let opacityPlayerinstructionValue = this.state.opacityPlayerinstruction;
+      opacityPlayerinstructionValue = opacityPlayerinstructionValue - 0.18;
+      this.setState({
+        opacityPlayerinstruction: opacityPlayerinstructionValue,
+      });
+      if (this.state.opacityPlayerinstruction <= 0) {
+        this.setState({
+          showPlayerInstruction: false,
+          opacityPlayerinstruction: 1,
+        });
+      }
+    }, 110);
+  }
+  getPlayerPosition(position: PlayerPosition) {
+    if (this.game.players.length == 2) {
+      if (position == PlayerPosition.BOTTOM) {
+        return this.game.players[0].name;
+      } else if (position == PlayerPosition.TOP) {
+        return this.game.players[1].name;
+      }
+    } else if (this.game.players.length == 3) {
+      if (position == PlayerPosition.BOTTOM) {
+        return this.game.players[0].name;
+      } else if (position == PlayerPosition.LEFT) {
+        return this.game.players[1].name;
+      } else if (position == PlayerPosition.TOP) {
+        return this.game.players[2].name;
+      }
+    } else if (this.game.players.length == 4) {
+      if (position == PlayerPosition.BOTTOM) {
+        return this.game.players[0].name;
+      } else if (position == PlayerPosition.LEFT) {
+        return this.game.players[1].name;
+      } else if (position == PlayerPosition.TOP) {
+        return this.game.players[2].name;
+      } else if (position == PlayerPosition.RIGHT) {
+        return this.game.players[3].name;
+      }
+    }
+  }
+
   render() {
     //console.log(JSON.stringify(this.state, null, 4));
 
@@ -308,7 +368,13 @@ export default class GameView extends React.Component<Props, AppSate> {
 
     const Popuptime = "" + this.state.PopupWrongActionTime;
 
+    const showPlayerPosition =
+      this.state.showPlayerInstruction && this.game.players.length != 1;
+    //const showPlayerPosition = true;
+
     return (
+      // STEUERUNG-Setting
+
       <View>
         <View
           style={[
@@ -401,12 +467,27 @@ export default class GameView extends React.Component<Props, AppSate> {
             <TextButton
               enabled={true}
               onClick={() => this.showRestartPopup(true)}
-              textStyle={{ fontSize: 40 }}
+              textStyle={{ fontSize: 40, margin: 5 }}
             >
               🔄
             </TextButton>
           </View>
         </View>
+
+        {showPlayerPosition && (
+          <PlayerPositions
+            handleExit={() => this.showExitPlayerInstruction()}
+            //handleExit={() => console.log("asd")}
+            numberSecondsShowAnimation={200}
+            //showBottom={this.game.players[0].name}
+            showBottom={this.getPlayerPosition(PlayerPosition.BOTTOM)}
+            showLeft={this.getPlayerPosition(PlayerPosition.LEFT)}
+            showTop={this.getPlayerPosition(PlayerPosition.TOP)}
+            showRight={this.getPlayerPosition(PlayerPosition.RIGHT)}
+            opacity={this.state.opacityPlayerinstruction}
+          ></PlayerPositions>
+        )}
+
         {showWrongActionPopup && (
           <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
             <RotatableText text="❌ FALSCH ❌" rotate={true} />
@@ -496,15 +577,17 @@ const styles = StyleSheet.create({
   },
 
   gameControls: {
-    height: 60,
     display: "flex",
     position: "absolute",
     bottom: 0,
-    left: 20,
-    right: 20,
+    left: 0,
+    right: 0,
     justifyContent: "space-between",
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
     flexDirection: "row",
+
+    backgroundColor: "rgb(36,36,38)",
+    padding: 5,
   },
 
   cardWrapper: {

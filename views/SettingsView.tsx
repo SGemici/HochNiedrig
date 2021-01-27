@@ -59,13 +59,15 @@ export default class SettingsViewIos extends React.Component<Props> {
             subtitle="Anzeigen der Spielerstatistik"
           ></CheckButton>
         </CheckBoxGroup>
-        <CheckBoxGroup groupName="Popup">
+        <CheckBoxGroup groupName="Spielverhalten">
           <CheckButton
             state={this.props.changePopupWrongActionReduceVar}
             onClick={() => this.props.changePopupWrongActionReduce()}
             title="1 Sekunde"
             subtitle="Dauer einer falschen Aktion reduzieren"
           ></CheckButton>
+        </CheckBoxGroup>
+        <CheckBoxGroup groupName="Anleitung">
           <CheckButton
             state={this.props.changeShowPlayerPositionVar}
             onClick={() => this.props.changeShowPlayerPosition()}

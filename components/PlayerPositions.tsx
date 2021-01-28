@@ -32,8 +32,8 @@ function getInitialStateForGame() {
 }
 
 export class PlayerPositions extends React.Component<Props, AppSate> {
-  intervalId?: number;
-  intervalSpeed = 1000;
+  timeoutid?: number;
+  timeoutspeed = 1000;
 
   constructor(props: Props) {
     super(props);
@@ -53,10 +53,10 @@ export class PlayerPositions extends React.Component<Props, AppSate> {
     const showBottom = this.props.showBottom;
     if (showBottom != "" && showBottom != undefined) {
       this.setState({ showBottom });
-      this.intervalId = window.setInterval((): void => {
+      this.timeoutid = window.setTimeout((): void => {
         this.setState({ showBottom: "" });
         this.doAnimationLeft();
-      }, this.intervalSpeed);
+      }, this.timeoutspeed);
     } else {
       this.doAnimationLeft();
     }
@@ -66,10 +66,10 @@ export class PlayerPositions extends React.Component<Props, AppSate> {
     const showLeft = this.props.showLeft;
     if (showLeft != "" && showLeft != undefined) {
       this.setState({ showLeft });
-      this.intervalId = window.setInterval((): void => {
+      this.timeoutid = window.setTimeout((): void => {
         this.setState({ showLeft: "" });
         this.doAnimationTop();
-      }, this.intervalSpeed);
+      }, this.timeoutspeed);
     } else {
       this.doAnimationTop();
     }
@@ -78,10 +78,10 @@ export class PlayerPositions extends React.Component<Props, AppSate> {
     const showTop = this.props.showTop;
     if (showTop != "" && showTop != undefined) {
       this.setState({ showTop });
-      this.intervalId = window.setInterval((): void => {
+      this.timeoutid = window.setTimeout((): void => {
         this.setState({ showTop: "" });
         this.doAnimationRight();
-      }, this.intervalSpeed);
+      }, this.timeoutspeed);
     } else {
       this.doAnimationRight();
     }
@@ -90,10 +90,10 @@ export class PlayerPositions extends React.Component<Props, AppSate> {
     const showRight = this.props.showRight;
     if (showRight != "" && showRight != undefined) {
       this.setState({ showRight });
-      this.intervalId = window.setInterval((): void => {
+      this.timeoutid = window.setTimeout((): void => {
         this.setState({ showRight: "" });
         this.props.handleExit();
-      }, this.intervalSpeed);
+      }, this.timeoutspeed);
     } else {
       this.props.handleExit();
     }
@@ -104,6 +104,8 @@ export class PlayerPositions extends React.Component<Props, AppSate> {
   }
 
   componentWillUnmount(): void {
+    window.clearTimeout(this.timeoutid);
+
     var id = window.setTimeout(function () {}, 0);
 
     while (id--) {

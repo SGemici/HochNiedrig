@@ -7,7 +7,6 @@ type Props = {
   onClick: Function;
   title: String;
   subtitle: String;
-  enabled?: Boolean;
 };
 
 export class CheckButton extends React.Component<Props, {}> {
@@ -20,15 +19,23 @@ export class CheckButton extends React.Component<Props, {}> {
     const borderColor = state ? COLORS.iosSystemGreen : COLORS.iosSystemGray4;
     // Toogle = false
     const left = state ? 0 : 0.8;
+
+    const textColor = state ? COLORS.brightText : COLORS.iosSystemGray2;
+
     const CheckButtonElement = (
       <View style={stylesCheckBox.container}>
         <View style={stylesCheckBox.textView}>
-          <Text style={stylesCheckBox.text1}>{this.props.title}</Text>
-          <Text style={stylesCheckBox.text2}>{this.props.subtitle}</Text>
+          <Text style={[stylesCheckBox.text1, { color: textColor }]}>
+            {this.props.title}
+          </Text>
+          <Text style={[stylesCheckBox.text2, { color: textColor }]}>
+            {this.props.subtitle}
+          </Text>
         </View>
 
         <View style={stylesCheckBox.buttonView}>
-          <View
+          <TouchableOpacity
+            onPress={() => this.props.onClick()}
             style={[
               stylesCheckBox.buttonPoint,
               { backgroundColor: color, borderColor },
@@ -42,7 +49,7 @@ export class CheckButton extends React.Component<Props, {}> {
             {!state && (
               <View style={[stylesCheckBox.toogle, { alignSelf, left }]}></View>
             )}
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -50,23 +57,7 @@ export class CheckButton extends React.Component<Props, {}> {
   }
 
   render() {
-    let enabled = true;
-    if (this.props.enabled != undefined) {
-      if (this.props.enabled === false) {
-        enabled = false;
-      } else {
-        enabled = true;
-      }
-    }
-
-    return (
-      <TouchableOpacity
-        disabled={!enabled}
-        onPress={() => this.props.onClick()}
-      >
-        {this.getContent(this.props.state)}
-      </TouchableOpacity>
-    );
+    return this.getContent(this.props.state);
   }
 }
 
@@ -113,15 +104,16 @@ const stylesCheckBox = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 0.5,
     borderColor: COLORS.iosSystemGray4,
-    width: "59%",
-    height: "49%",
+    width: "60%",
+    height: "46%",
     backgroundColor: COLORS.iosSystemGray2,
+    right: 23,
   },
   toogle: {
     position: "absolute",
     borderRadius: 60,
     borderColor: COLORS.iosSystemGray2,
-    width: "56%",
+    width: "50%",
     height: "88%",
     backgroundColor: COLORS.brightText,
     display: "flex",

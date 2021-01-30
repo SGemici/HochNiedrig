@@ -58,7 +58,7 @@ function getInitialStateForGame(
     showWrongActionPopup: false,
     showEndGamePopup: false,
     showPopupBackgroundAlert: COLORS.transparent,
-    showBackgrounAlert: COLORS.appBackground,
+    showBackgrounAlert: COLORS.appBackgroundGame,
     laidsCards: 1,
     PopupWrongActionTime: popuptime,
     showRestartPopup: false,
@@ -229,7 +229,7 @@ export default class GameView extends React.Component<Props, AppSate> {
         });
         window.setTimeout(() => {
           this.setState({
-            showBackgrounAlert: COLORS.appBackground,
+            showBackgrounAlert: COLORS.appBackgroundGame,
           });
         }, 160);
       }
@@ -441,9 +441,9 @@ export default class GameView extends React.Component<Props, AppSate> {
                 },
               ]}
             >
-              <View>
+              {/* <View>
                 <RotatableText text={this.state.activePlayer.name} />
-              </View>
+              </View> */}
               {this.props.statisticVisible && (
                 <PlayerStatistics Player={this.state.activePlayer} />
               )}
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
   body: {
     height: "100%",
     width: "100%",
-    backgroundColor: COLORS.appBackground,
+    backgroundColor: COLORS.appBackgroundGame,
     position: "relative",
     paddingLeft: 20,
     paddingRight: 20,

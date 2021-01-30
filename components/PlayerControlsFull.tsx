@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { PlayerAction } from "../business/types";
+import { COLORS } from "../styles/colors";
 import { Emoji, EmojiButton } from "./atoms/EmojiButton";
 import { TextButton } from "./atoms/TextButton";
 
@@ -29,10 +30,11 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
         justifyContent: "space-evenly",
         flexDirection: "row",
         alignSelf: "center",
+        backgroundColor: COLORS.appBackground,
       },
       wrapper: {
         padding: 10,
-        borderWidth: 2,
+        borderWidth: 1,
         borderRadius: 30,
         borderColor,
         flexDirection: "column",

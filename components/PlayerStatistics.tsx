@@ -2,6 +2,7 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Player } from "../business/types";
+import { COLORS } from "../styles/colors";
 
 type InfoElementProps = {
   transformRotateZ?: string;
@@ -12,12 +13,23 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
     const InfoStyle = StyleSheet.create({
       InfoModul: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-around",
         display: "flex",
-        width: "100%",
+        width: "92%",
+        alignItems: "stretch",
+        alignSelf: "center",
       },
-      TextModul: {
-        color: "white",
+      TextModulName: {
+        color: COLORS.iosSystemGray6,
+        fontSize: 25,
+        display: "flex",
+        alignSelf: "flex-end",
+      },
+      TextModulStatistic: {
+        color: COLORS.iosSystemGray6,
+        fontSize: 20,
+        display: "flex",
+        alignSelf: "flex-end",
       },
     });
     return (
@@ -27,7 +39,8 @@ export class PlayerStatistics extends React.Component<InfoElementProps> {
           { transform: [{ rotateZ: this.props.transformRotateZ || "0deg" }] },
         ]}
       >
-        <Text style={InfoStyle.TextModul}>
+        <Text style={InfoStyle.TextModulName}>{this.props.Player.name}</Text>
+        <Text style={InfoStyle.TextModulStatistic}>
           ❌ {this.props.Player.statisticDrinkNumber}
         </Text>
       </View>

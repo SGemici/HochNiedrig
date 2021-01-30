@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { TextButton } from "../components/atoms/TextButton";
+import { TextButton } from "./atoms/TextButton";
 
 import { COLORS } from "../styles/colors";
+import Spacings from "../styles/spacings";
 
 type Props = {
   exitName: string;
@@ -14,15 +15,14 @@ type Props = {
   handleOption?: Function;
 };
 
-export default class MenubarView extends React.Component<Props> {
+export default class WithMenubar extends React.Component<Props> {
   render() {
     const optionName = this.props.optionName != undefined ? true : false;
     const optionFunction =
       this.props.optionName != undefined ? this.props.handleOption : null;
     return (
-      <View style={styles.menubar}>
-        <View style={styles.menubarTop}></View>
-        <View style={styles.menubarBottom}>
+      <View>
+        <View style={styles.menubar}>
           <TextButton
             onClick={() => this.props.handleExit()}
             textStyle={styles.menubarreturn}
@@ -41,41 +41,44 @@ export default class MenubarView extends React.Component<Props> {
             </TextButton>
           )}
         </View>
+        <View style={styles.childrenWrapper}>{this.props.children}</View>
       </View>
     );
   }
 }
 
+const menuBarHeight = 80;
+
 const styles = StyleSheet.create({
-  menubar: {
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    marginBottom: 30,
-    width: "100%",
-    height: "11%",
-    minHeight: "11%",
-    maxHeight: "11%",
-    backgroundColor: COLORS.appBackground,
+  childrenWrapper: {
+    paddingTop: menuBarHeight,
+    zIndex: 0,
   },
 
-  menubarTop: {
-    display: "flex",
-    height: "50%",
-    backgroundColor: COLORS.iosSystemGray6,
-  },
-  menubarBottom: {
+  menubar: {
+    position: "absolute",
+    zIndex: 1,
     display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     width: "100%",
-    height: "50%",
+    height: menuBarHeight,
+    minHeight: menuBarHeight,
+    maxHeight: menuBarHeight,
     backgroundColor: COLORS.iosSystemGray6,
+    paddingBottom: Spacings.Small,
+    paddingTop: 45,
+  },
+  menubaroptions: {
+    fontSize: 17,
+    textAlign: "right",
+    minWidth: "30%",
+    color: COLORS.iosSystemBlue,
+    paddingRight: Spacings.Small,
   },
   menubarreturn: {
+    paddingLeft: Spacings.Small,
     fontSize: 17,
     color: COLORS.iosSystemBlue,
-    paddingLeft: 10,
     minWidth: "30%",
   },
   menubartitle: {
@@ -84,12 +87,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.brightText,
     minWidth: "40%",
-  },
-  menubaroptions: {
-    fontSize: 17,
-    textAlign: "right",
-    paddingRight: 10,
-    minWidth: "30%",
-    color: COLORS.iosSystemBlue,
   },
 });

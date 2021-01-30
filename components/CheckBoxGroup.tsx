@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { COLORS } from "../styles/colors";
+import Spacings from "../styles/spacings";
 
 type Props = {
   groupName: string;
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
 
-    marginBottom: 30,
+    marginBottom: Spacings.Medium,
     width: "100%",
   },
 

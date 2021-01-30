@@ -15,6 +15,7 @@ import { PlayerPositions } from "../components/PlayerPositions";
 import { PlayerStatistics } from "../components/PlayerStatistics";
 import { Popup } from "../components/Popup";
 import { TableModul } from "../components/Table";
+import WithMenubar from "../components/WithMenubar";
 import { COLORS } from "../styles/colors";
 
 type Props = {
@@ -292,7 +293,7 @@ export default class GameView extends React.Component<Props, AppSate> {
     this.setState({ showRestartPopup: show });
   }
 
-  showExitPopup(show: boolean) {
+  showExitPopup(show = true) {
     this.setState({ showExitGamePopup: show });
   }
 
@@ -339,7 +340,7 @@ export default class GameView extends React.Component<Props, AppSate> {
     }
   }
 
-  render() {
+  renderContent() {
     //console.log(JSON.stringify(this.state, null, 4));
 
     const showWrongActionPopup = this.state.showWrongActionPopup;
@@ -456,22 +457,6 @@ export default class GameView extends React.Component<Props, AppSate> {
               />
             </Animated.View>
           </Animated.View>
-
-          <View style={styles.gameControls}>
-            <TextButton
-              onClick={() => this.showExitPopup(true)}
-              textStyle={{ fontSize: 40 }}
-            >
-              ⏪
-            </TextButton>
-            <TextButton
-              enabled={true}
-              onClick={() => this.showRestartPopup(true)}
-              textStyle={{ fontSize: 40, margin: 5 }}
-            >
-              🔄
-            </TextButton>
-          </View>
         </View>
 
         {showPlayerPosition && (
@@ -555,6 +540,20 @@ export default class GameView extends React.Component<Props, AppSate> {
           </Popup>
         )}
       </View>
+    );
+  }
+
+  render() {
+    return (
+      <WithMenubar
+        exitName="Zurück"
+        handleExit={() => this.showExitPopup()}
+        titleName={`${this.props.numberOfPlayers} Spieler`}
+        optionName="Neustart"
+        handleOption={() => this.showRestartPopup(true)}
+      >
+        {this.renderContent()}
+      </WithMenubar>
     );
   }
 }

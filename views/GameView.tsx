@@ -297,20 +297,27 @@ export default class GameView extends React.Component<Props, AppSate> {
     this.setState({ showExitGamePopup: show });
   }
 
-  showExitPlayerInstruction() {
-    let interval = window.setInterval(() => {
-      let opacityPlayerinstructionValue = this.state.opacityPlayerinstruction;
-      opacityPlayerinstructionValue = opacityPlayerinstructionValue - 0.18;
-      this.setState({
-        opacityPlayerinstruction: opacityPlayerinstructionValue,
-      });
-      if (this.state.opacityPlayerinstruction <= 0) {
+  showExitPlayerInstruction(slow = true) {
+    if (slow) {
+      let interval = window.setInterval(() => {
+        let opacityPlayerinstructionValue = this.state.opacityPlayerinstruction;
+        opacityPlayerinstructionValue = opacityPlayerinstructionValue - 0.18;
         this.setState({
-          showPlayerInstruction: false,
-          opacityPlayerinstruction: 1,
+          opacityPlayerinstruction: opacityPlayerinstructionValue,
         });
-      }
-    }, 110);
+        if (this.state.opacityPlayerinstruction <= 0) {
+          this.setState({
+            showPlayerInstruction: false,
+            opacityPlayerinstruction: 1,
+          });
+        }
+      }, 110);
+    } else {
+      this.setState({
+        showPlayerInstruction: false,
+        opacityPlayerinstruction: 1,
+      });
+    }
   }
   getPlayerPosition(position: PlayerPosition) {
     if (this.game.players.length == 2) {
@@ -474,7 +481,7 @@ export default class GameView extends React.Component<Props, AppSate> {
         )}
 
         {showWrongActionPopup && (
-          <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
+          <Popup>
             <RotatableText text="❌ FALSCH ❌" rotate={true} />
             <View style={popupStyles.time}>
               <RotatableText text={Popuptime} rotate={true} />
@@ -543,18 +550,37 @@ export default class GameView extends React.Component<Props, AppSate> {
     );
   }
 
+  getMenubarAndContent() {
+    const showPlayerInstructionMenubar = this.state.showPlayerInstruction
+      ? true
+      : false;
+    if (showPlayerInstructionMenubar) {
+      return (
+        <WithMenubar
+          exitName="Zum Spiel"
+          handleExit={() => this.showExitPlayerInstruction(false)}
+          titleName={`Spielanleitung`}
+        >
+          {this.renderContent()}
+        </WithMenubar>
+      );
+    } else {
+      return (
+        <WithMenubar
+          exitName="Beenden"
+          handleExit={() => this.showExitPopup()}
+          titleName={`${this.props.numberOfPlayers} Spieler`}
+          optionName="Neustart"
+          handleOption={() => this.showRestartPopup(true)}
+        >
+          {this.renderContent()}
+        </WithMenubar>
+      );
+    }
+  }
+
   render() {
-    return (
-      <WithMenubar
-        exitName="Zurück"
-        handleExit={() => this.showExitPopup()}
-        titleName={`${this.props.numberOfPlayers} Spieler`}
-        optionName="Neustart"
-        handleOption={() => this.showRestartPopup(true)}
-      >
-        {this.renderContent()}
-      </WithMenubar>
-    );
+    return this.getMenubarAndContent();
   }
 }
 

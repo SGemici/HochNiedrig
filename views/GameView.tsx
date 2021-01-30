@@ -80,12 +80,17 @@ export default class GameView extends React.Component<Props, AppSate> {
 
   popupTime = this.props.popupWrongActionReduce ? 1 : 5;
 
+  showPlayerPosition =
+    this.props.showPlayerPosition && this.props.numberOfPlayers > 1
+      ? true
+      : false;
+
   constructor(props: Props) {
     super(props);
     this.state = getInitialStateForGame(
       this.game,
       this.popupTime,
-      this.props.showPlayerPosition
+      this.showPlayerPosition
     );
   }
 
@@ -301,7 +306,7 @@ export default class GameView extends React.Component<Props, AppSate> {
     if (slow) {
       let interval = window.setInterval(() => {
         let opacityPlayerinstructionValue = this.state.opacityPlayerinstruction;
-        opacityPlayerinstructionValue = opacityPlayerinstructionValue - 0.18;
+        opacityPlayerinstructionValue = opacityPlayerinstructionValue - 0.2;
         this.setState({
           opacityPlayerinstruction: opacityPlayerinstructionValue,
         });

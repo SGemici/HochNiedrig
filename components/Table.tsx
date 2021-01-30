@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, ImageSourcePropType, View } from "react-native";
 import { cards } from "../business/cards";
+import { Shadows } from "../styles/shadows";
 import { RotatableTextTable } from "./atoms/RotatableText";
 import { CardDeck } from "./CardDeck";
 
@@ -12,7 +13,6 @@ export class TableModul extends React.Component<{
   showBothSideLaids?: boolean;
 }> {
   render() {
-    const borderColor = "transparent";
     const laidsCardsStr = this.props.laidsCards + "/" + cards.length;
     const showBothSideLaids =
       this.props.showBothSideLaids || this.props.showBothSideLaids == undefined
@@ -26,14 +26,11 @@ export class TableModul extends React.Component<{
         justifyContent: "center",
         alignItems: "center",
         margin: 3,
-        borderWidth: 2,
-        borderRadius: 30,
-        borderColor,
       },
     });
 
     return (
-      <View style={ImageModulStyles.imageModul}>
+      <View style={[ImageModulStyles.imageModul, Shadows.default]}>
         <View>
           {showBothSideLaids && (
             <RotatableTextTable

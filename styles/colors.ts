@@ -1,5 +1,6 @@
 export enum COLORS {
-  popupText = "red",
+  popupText = "white",
+  popupBackground = "rgba(0, 0, 0, 0.7)",
   primaryBorder = "gray",
   secondaryBorder = "black",
   //appBackground = "#032F64",

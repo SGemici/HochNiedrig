@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { PlayerAction } from "../business/types";
 import { COLORS } from "../styles/colors";
+import { Shadows } from "../styles/shadows";
 import { Emoji, EmojiButton } from "./atoms/EmojiButton";
 import { TextButton } from "./atoms/TextButton";
 
@@ -34,9 +35,7 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
       },
       wrapper: {
         padding: 10,
-        borderWidth: 1,
         borderRadius: 30,
-        borderColor,
         flexDirection: "column",
         marginTop: 5,
       },
@@ -49,7 +48,7 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
     });
 
     return (
-      <View style={[styles.base, styles.wrapper]}>
+      <View style={[styles.base, styles.wrapper, Shadows.default]}>
         {visibleRedBlackButton && (
           <View style={[styles.base, styles.colorPicker]}>
             <EmojiButton

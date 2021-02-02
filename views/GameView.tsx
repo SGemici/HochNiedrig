@@ -8,6 +8,7 @@ import {
   PlayerActionResult,
   PlayerPosition,
 } from "../business/types";
+import { CircularButton } from "../components/atoms/CircularButon";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
 import { PlayerControlsFull } from "../components/PlayerControlsFull";
@@ -474,7 +475,7 @@ export default class GameView extends React.Component<Props, AppSate> {
         )}
 
         {showWrongActionPopup && (
-          <Popup showBackgroundAlert={this.state.showPopupBackgroundAlert}>
+          <Popup>
             <RotatableText text="❌ FALSCH ❌" rotate={true} />
             <View style={popupStyles.time}>
               <RotatableText text={Popuptime} rotate={true} />
@@ -516,26 +517,25 @@ export default class GameView extends React.Component<Props, AppSate> {
           <Popup>
             <RotatableText text={showRestartOrMainTextPopup} />
             <View style={popupStyles.default}>
-              <TextButton
+              <CircularButton
                 onClick={() =>
                   showRestartPopup
                     ? this.restartGame()
                     : this.props.handleExit()
                 }
-                textStyle={[popupStyles.play, { marginRight: 15 }]}
-              >
-                ✅
-              </TextButton>
-              <TextButton
+                upsideDown={false}
+                symbol="✓"
+              />
+              <View style={{ width: 30 }}></View>
+              <CircularButton
                 onClick={() =>
                   showRestartPopup
                     ? this.showRestartPopup(false)
                     : this.showExitPopup(false)
                 }
-                textStyle={[popupStyles.play, { marginLeft: 15 }]}
-              >
-                ❎
-              </TextButton>
+                upsideDown={false}
+                symbol="⨯"
+              />
             </View>
           </Popup>
         )}

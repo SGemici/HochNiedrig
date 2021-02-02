@@ -6,5 +6,9 @@
     "slug": "HochNiedrig",
     "version": "1.0.0",
     "assetBundlePatterns": ["**/*"]
+  },
+  "ios": {
+    "bundleIdentifier": "de.bianucci.HochNiedrig",
+    "supportsTablet": true
   }
 }

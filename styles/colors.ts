@@ -24,4 +24,7 @@ export enum COLORS {
   iosSystemGray4 = "rgb(58,58,60)",
   iosSystemGray5 = "rgb(44,44,46)",
   iosSystemGray6 = "rgb(28,28,30)",
+
+  red = "rgba(255, 0, 0, 0.7)",
+  black = "rgba(0, 0, 0, 0.8)",
 }

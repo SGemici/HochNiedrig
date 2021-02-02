@@ -3,6 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { PlayerAction } from "../business/types";
 import { COLORS } from "../styles/colors";
 import { Shadows } from "../styles/shadows";
+import { CircularButton } from "./atoms/CircularButon";
+import { ColoredCircularButton } from "./atoms/ColoredCircularButon";
 import { Emoji, EmojiButton } from "./atoms/EmojiButton";
 import { TextButton } from "./atoms/TextButton";
 
@@ -22,11 +24,10 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
         ? true
         : this.props.visibleRedBlackButton;
 
-    const borderColor = "gray";
-
     const styles = StyleSheet.create({
       base: {
         width: "92%",
+        maxWidth: 500,
         display: "flex",
         justifyContent: "space-evenly",
         flexDirection: "row",
@@ -34,13 +35,13 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
         backgroundColor: COLORS.appBackground,
       },
       wrapper: {
-        padding: 10,
+        padding: 20,
         borderRadius: 30,
         flexDirection: "column",
         marginTop: 5,
       },
       colorPicker: {
-        marginBottom: 10,
+        marginBottom: 30,
       },
       orderPicker: {
         flexDirection: "row",
@@ -51,51 +52,46 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
       <View style={[styles.base, styles.wrapper, Shadows.default]}>
         {visibleRedBlackButton && (
           <View style={[styles.base, styles.colorPicker]}>
-            <EmojiButton
-              enabled={true}
-              emoji={Emoji.blackCircle}
-              onClick={() =>
-                this.props.handlePlayerAction(PlayerAction.CHOOSE_BLACK)
-              }
-              buttonStyle={{ margin: 10, padding: 10 }}
-            />
-
-            <EmojiButton
-              enabled={true}
-              emoji={Emoji.redCircle}
+            <ColoredCircularButton
               onClick={() =>
                 this.props.handlePlayerAction(PlayerAction.CHOOSE_RED)
               }
-              buttonStyle={{ margin: 10, padding: 10 }}
+              color="red"
+            />
+            <ColoredCircularButton
+              onClick={() =>
+                this.props.handlePlayerAction(PlayerAction.CHOOSE_BLACK)
+              }
+              color="black"
             />
           </View>
         )}
 
         <View style={[styles.base, styles.orderPicker]}>
-          <TextButton
+          <CircularButton
             onClick={() =>
               this.props.handlePlayerAction(PlayerAction.CHOOSE_LOWER)
             }
-          >
-            ⬇️
-          </TextButton>
+            upsideDown={true}
+            // symbol="⇩"
+            symbol="⇧"
+          />
           {visibleSameButton && (
-            <TextButton
-              withGradient={true}
+            <CircularButton
               onClick={() =>
                 this.props.handlePlayerAction(PlayerAction.CHOOSE_EQUAL)
               }
-            >
-              =
-            </TextButton>
+              upsideDown={false}
+              symbol="="
+            />
           )}
-          <TextButton
+          <CircularButton
             onClick={() =>
               this.props.handlePlayerAction(PlayerAction.CHOOSE_HIGHER)
             }
-          >
-            ⬆️
-          </TextButton>
+            upsideDown={false}
+            symbol="⇧"
+          />
         </View>
       </View>
     );

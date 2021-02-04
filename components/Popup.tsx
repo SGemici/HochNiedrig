@@ -15,6 +15,7 @@ export class Popup extends React.Component<{}> {
         backgroundColor: COLORS.popupBackground,
       },
       popupContent: {
+        position: "relative",
         alignItems: "center",
         justifyContent: "space-between",
         borderRadius: 30,

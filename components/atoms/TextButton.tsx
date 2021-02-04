@@ -7,6 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Shadows } from "../../styles/shadows";
 
 const color = "white";
 
@@ -37,7 +38,7 @@ type ButtonProps = {
   onClick: Function;
   withGradient?: boolean;
   textStyle?: TextStyle | TextStyle[];
-  buttonStyle?: ViewStyle | ViewStyle[] ;
+  buttonStyle?: ViewStyle | ViewStyle[];
 };
 export class TextButton extends React.Component<ButtonProps> {
   // TODO fix eslint issue, seems like we are not the only ones
@@ -60,7 +61,7 @@ export class TextButton extends React.Component<ButtonProps> {
       : ButtonElementsStyle.ButtonStyle;
 
     const textElement = (
-      <Text style={[this.props.textStyle || textStyle, {}]}>
+      <Text style={[this.props.textStyle || textStyle, Shadows.default]}>
         {this.props.children}
       </Text>
     );
@@ -73,7 +74,6 @@ export class TextButton extends React.Component<ButtonProps> {
   }
 
   render() {
-
     // this sucks hard
     // use default props
     let enabled;
@@ -89,7 +89,7 @@ export class TextButton extends React.Component<ButtonProps> {
       <TouchableOpacity
         disabled={!enabled}
         onPress={() => this.props.onClick()}
-        style={this.props.buttonStyle}
+        style={[this.props.buttonStyle, Shadows.default]}
       >
         {this.getContent()}
       </TouchableOpacity>

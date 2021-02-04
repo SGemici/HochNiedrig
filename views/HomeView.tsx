@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { CircularButton } from "../components/atoms/CircularButon";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
+import SettingsIcon from "../components/icons/SettingsIcon";
 
 import { COLORS } from "../styles/colors";
 import { Shadows } from "../styles/shadows";
@@ -42,90 +43,69 @@ export default class HomeView extends React.Component<Props> {
             </View>
             <TextButton
               onClick={() => this.props.handleOnePlayerGameStartIntent()}
-              buttonStyle={{
-                borderWidth: 2,
-                borderColor: COLORS.brightText,
-                borderRadius: 30,
-                marginBottom: 15,
-                padding: 5,
-              }}
-              textStyle={{
-                color: COLORS.brightText,
-                fontSize: 30,
-                width: "100%",
-                textAlign: "center",
-              }}
+              buttonStyle={buttonStyles.wrapper}
+              textStyle={buttonStyles.text}
             >
               1 Spieler
             </TextButton>
             <TextButton
               onClick={() => this.props.handleTwoPlayerGameStartIntent()}
-              buttonStyle={{
-                borderWidth: 2,
-                borderColor: COLORS.brightText,
-                borderRadius: 30,
-                marginBottom: 15,
-                padding: 5,
-              }}
-              textStyle={{
-                color: COLORS.brightText,
-                fontSize: 30,
-                width: "100%",
-                textAlign: "center",
-              }}
+              buttonStyle={buttonStyles.wrapper}
+              textStyle={buttonStyles.text}
             >
               2 Spieler
             </TextButton>
             <TextButton
               onClick={() => this.props.handleThreePlayerGameStartIntent()}
-              buttonStyle={{
-                borderWidth: 2,
-                borderColor: COLORS.brightText,
-                borderRadius: 30,
-                marginBottom: 15,
-                padding: 5,
-              }}
-              textStyle={{
-                color: COLORS.brightText,
-                fontSize: 30,
-                width: "100%",
-                textAlign: "center",
-              }}
+              buttonStyle={buttonStyles.wrapper}
+              textStyle={buttonStyles.text}
             >
               3 Spieler
             </TextButton>
             <TextButton
               onClick={() => this.props.handleFourPlayerGameStartIntent()}
-              buttonStyle={{
-                borderWidth: 2,
-                borderColor: COLORS.brightText,
-                borderRadius: 30,
-                marginBottom: 15,
-                padding: 5,
-              }}
-              textStyle={{
-                color: COLORS.brightText,
-                fontSize: 30,
-                width: "100%",
-                textAlign: "center",
-              }}
+              buttonStyle={buttonStyles.wrapper}
+              textStyle={buttonStyles.text}
             >
               4 Spieler
             </TextButton>
           </View>
 
           <View style={[styles.MainGameSettings, {}]}>
-            <CircularButton
-              onClick={() => this.props.handleSettingsGameStartIntent()}
-              symbol="⚙️"
-              upsideDown={false}
-            />
+            {/* TODO: this should be a reusable component */}
+            <TouchableOpacity
+              style={{
+                borderColor: "white",
+                borderWidth: 2,
+                padding: 5,
+                borderRadius: 30,
+              }}
+              onPress={() => this.props.handleSettingsGameStartIntent()}
+            >
+              <SettingsIcon />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
     );
   }
 }
+
+const buttonStyles = StyleSheet.create({
+  wrapper: {
+    borderWidth: 2,
+    borderColor: COLORS.brightText,
+    borderRadius: 30,
+    marginBottom: 15,
+    padding: 5,
+  },
+  text: {
+    color: COLORS.brightText,
+    fontSize: 30,
+    width: "100%",
+    textAlign: "center",
+  },
+});
 
 const styles = StyleSheet.create({
   containerMainMenu: {
@@ -172,20 +152,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
   },
-  MainGamePlayerButtons: {
-    // backgroundColor: "red",
-    margin: 5,
-    fontSize: 70,
-    color: COLORS.brightText,
-    overflow: "hidden",
-  },
-
   MainGameSettings: {
     margin: 30,
     width: "100%",
     // backgroundColor: COLORS.alertBackgroundRed,
     borderRadius: 12,
-
     flexDirection: "row-reverse",
     justifyContent: "space-between",
   },

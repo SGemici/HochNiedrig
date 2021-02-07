@@ -61,7 +61,7 @@ function getInitialStateForGame(
     showEndGamePopup: false,
     showPopupBackgroundAlert: COLORS.transparent,
     showBackgrounAlert: COLORS.appBackgroundGame,
-    laidsCards: 1,
+    laidsCards: game.cardIndex + 1, //1,
     PopupWrongActionTime: popuptime,
     showRestartPopup: false,
     showExitGamePopup: false,
@@ -179,7 +179,8 @@ export default class GameView extends React.Component<Props, AppSate> {
       activePlayer: activePlayer,
       activeCard: this.game.activeCard,
       previousCard: this.game.previousCard,
-      laidsCards: this.state.laidsCards + 1,
+      //laidsCards: this.state.laidsCards + 1,
+      laidsCards: this.game.cardIndex + 1,
     });
     if (this.props.numberOfPlayers === 1) {
       // do nothing - no rotation required
@@ -296,11 +297,11 @@ export default class GameView extends React.Component<Props, AppSate> {
   }
 
   showRestartPopup(show: boolean) {
-    this.setState({ showRestartPopup: show });
+    this.setState({ showRestartPopup: show, showExitGamePopup: false });
   }
 
   showExitPopup(show = true) {
-    this.setState({ showExitGamePopup: show });
+    this.setState({ showExitGamePopup: show, showRestartPopup: false });
   }
 
   showExitPlayerInstruction(slow = true) {
@@ -357,7 +358,7 @@ export default class GameView extends React.Component<Props, AppSate> {
     //console.log(JSON.stringify(this.state, null, 4));
 
     const showWrongActionPopup = this.state.showWrongActionPopup;
-    //const showWrongActionPopup = true;
+    //const showWrongActionPopup = false;
     const showEndGamePopup = this.state.showEndGamePopup;
     //const showEndGamePopup = true;
 
@@ -366,6 +367,7 @@ export default class GameView extends React.Component<Props, AppSate> {
     const showExitGamePopup = this.state.showExitGamePopup;
     //const showExitGamePopup = true;
     let showRestartOrMainTextPopup = "";
+
     if (showRestartPopup) {
       showRestartOrMainTextPopup = "Spiel neustarten?";
     } else if (showExitGamePopup) {

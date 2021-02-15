@@ -5,8 +5,6 @@ import { COLORS } from "../styles/colors";
 import { Shadows } from "../styles/shadows";
 import { CircularButton } from "./atoms/CircularButon";
 import { ColoredCircularButton } from "./atoms/ColoredCircularButon";
-import { Emoji, EmojiButton } from "./atoms/EmojiButton";
-import { TextButton } from "./atoms/TextButton";
 
 type ControlElementProps = {
   handlePlayerAction: (action: PlayerAction) => void;

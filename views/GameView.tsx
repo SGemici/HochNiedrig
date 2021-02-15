@@ -437,6 +437,7 @@ export default class GameView extends React.Component<Props, AppSate> {
             >
               <TableModul
                 card={this.state.activeCard.image}
+                previouscard={this.state.previousCard.image}
                 laidsCards={this.state.laidsCards}
                 showBothSideLaids={false}
               />

@@ -11,6 +11,7 @@ export class TableModul extends React.Component<{
   card: ImageSourcePropType;
   laidsCards: number;
   showBothSideLaids?: boolean;
+  previouscard?: ImageSourcePropType;
 }> {
   render() {
     const laidsCardsStr = this.props.laidsCards + "/" + cards.length;
@@ -38,7 +39,10 @@ export class TableModul extends React.Component<{
               rotate={true}
             ></RotatableTextTable>
           )}
-          <CardDeck card={this.props.card} />
+          <CardDeck
+            card={this.props.card}
+            previouscard={this.props.previouscard}
+          />
           <RotatableTextTable text={laidsCardsStr}></RotatableTextTable>
         </View>
       </View>

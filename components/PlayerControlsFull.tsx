@@ -26,7 +26,7 @@ export class PlayerControlsFull extends React.Component<ControlElementProps> {
 
     const styles = StyleSheet.create({
       base: {
-        width: "92%",
+        width: "90%",
         maxWidth: 500,
         display: "flex",
         justifyContent: "space-evenly",

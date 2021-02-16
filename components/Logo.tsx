@@ -28,16 +28,16 @@ export class Logo extends React.Component {
 
         <View style={[styles.ImagesView, Shadows.default]}>
           <View style={styles.ImageView1}>
-            <Image source={cardLogo1} style={[styles.image, Shadows.default]} />
+            <Image source={cardLogo1} style={styles.image} />
           </View>
           <View style={styles.ImageView2}>
-            <Image source={cardLogo2} style={[styles.image, Shadows.default]} />
+            <Image source={cardLogo2} style={styles.image} />
           </View>
           <View style={styles.ImageView3}>
-            <Image source={cardLogo3} style={[styles.image, Shadows.default]} />
+            <Image source={cardLogo3} style={styles.image} />
           </View>
           <View style={styles.ImageView4}>
-            <Image source={cardLogo4} style={[styles.image, Shadows.default]} />
+            <Image source={cardLogo4} style={styles.image} />
           </View>
         </View>
 

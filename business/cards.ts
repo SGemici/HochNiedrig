@@ -12,6 +12,13 @@ export type Card = {
   type: cardType;
 };
 
+export const cardLogo1: ImageSourcePropType = require("../assets/cards/ace_of_clubs.png"); 
+export const cardLogo2: ImageSourcePropType = require("../assets/cards/ace_of_diamonds.png");
+export const cardLogo3: ImageSourcePropType = require("../assets/cards/ace_of_spades.png");
+export const cardLogo4: ImageSourcePropType = require("../assets/cards/ace_of_hearts.png");
+
+
+
 export const cards: Card[] = [
   {
     image: require("../assets/cards/2_of_diamonds.png"),

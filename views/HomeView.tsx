@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { RotatableText } from "../components/atoms/RotatableText";
 import { TextButton } from "../components/atoms/TextButton";
 import SettingsIcon from "../components/icons/SettingsIcon";
+import { Logo } from "../components/Logo";
 
 import { COLORS } from "../styles/colors";
 import { Shadows } from "../styles/shadows";
@@ -21,7 +22,7 @@ export default class HomeView extends React.Component<Props> {
     return (
       <View style={Shadows.default}>
         <View style={[styles.containerMainMenu, Shadows.default]}>
-          <View style={[styles.HOCHNIEDRIG_LOGO, Shadows.default]}>
+          {/* <View style={[styles.HOCHNIEDRIG_LOGO, Shadows.default]}>
             <RotatableText
               text="Hoch-Niedrig"
               rotate={false}
@@ -31,7 +32,8 @@ export default class HomeView extends React.Component<Props> {
                 Shadows.default,
               ]}
             />
-          </View>
+          </View> */}
+          <Logo />
 
           <View style={[styles.MainGamePlayer, Shadows.default]}>
             <View style={[styles.MainGamePlayerText, {}]}>
